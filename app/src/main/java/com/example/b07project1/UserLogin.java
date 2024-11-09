@@ -2,10 +2,11 @@ package com.example.b07project1;
 
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class UserLogin{
-    private String email;
-    private String passwd;
+    final private String email;
+    final private String passwd;
 
     final FirebaseAuth mAuth;
 
@@ -16,9 +17,15 @@ public class UserLogin{
     }
 
 
-    public boolean BeginAuthenticate() {
-        AuthenticationModule auth = new AuthenticationModule(mAuth);
-        return auth.Authenticate_caller(this.email, this.passwd);
+    public FirebaseUser BeginAuthenticate() {
+        //AuthenticationModule auth = new AuthenticationModule(mAuth);
+        //return auth.authenticate_Caller(this.email, this.passwd);
+        //FirebaseUser res = null;
+        ServerCommunicator socket = new ServerCommunicator(mAuth);
+        if (socket.attempt(this.email, this.passwd))
+            return mAuth.getCurrentUser();
+        else
+            return null;
     }
 
 

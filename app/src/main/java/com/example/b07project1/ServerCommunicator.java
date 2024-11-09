@@ -1,16 +1,10 @@
 package com.example.b07project1;
 
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-class ServerCommunicator extends Fragment {
+
+class ServerCommunicator{
     //final private String url;
     final FirebaseAuth mAuth;
 
@@ -21,21 +15,23 @@ class ServerCommunicator extends Fragment {
 
     boolean attempt(String email, String passwd) {
         final boolean[] ret = {false};
-        mAuth.signInWithEmailAndPassword(email, passwd)
-                .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
-                            ret[0] = true;
-                        }
-                        else {
-                            //updateUI(null);
-                            ret[0] = false;
-                        }
-                    }
-                });
+        mAuth.signInWithEmailAndPassword(email, passwd).addOnCompleteListener(task-> {
+            ret[0] = task.isSuccessful();
+        });
+//                .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()) {
+//                            FirebaseUser user = mAuth.getCurrentUser();
+//                            //updateUI(user);
+//                            ret[0] = true;
+//                        }
+//                        else {
+//                            //updateUI(null);
+//                            ret[0] = false;
+//                        }
+//                    }
+//                });
         return ret[0];
     }
 
