@@ -2,6 +2,10 @@ package com.example.b07project1;
 
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 
 class ServerCommunicator{
@@ -33,6 +37,20 @@ class ServerCommunicator{
 //                    }
 //                });
         return ret[0];
+    }
+
+    int rest_passwd(String email) {
+        final int [] res = {1};
+        mAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            res[0] = 0;
+                        }
+                    }
+                });
+        return res[0];
     }
 
 //    private void updateUI(FirebaseUser user) {
