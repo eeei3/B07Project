@@ -39,7 +39,7 @@ public class LoginFragment extends Fragment {
         textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // new screen needed prolly
+                loadFragment(new ForgotPasswordFragment());
             }
         });
 
@@ -71,6 +71,14 @@ public class LoginFragment extends Fragment {
             Toast.makeText(getContext(),"Invalid email address or password", Toast.LENGTH_SHORT).show();
         }
         */
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
 }
