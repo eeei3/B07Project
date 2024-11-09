@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class LoginFragment extends Fragment {
     private EditText editTextUserEmail, editTextUserPassword;
 
@@ -60,16 +62,8 @@ public class LoginFragment extends Fragment {
             Toast.makeText(getContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        /*
-        UserLogin user = new UserLogin(email, password, DatabaseUrl);
-
-        if (user.BeginAuthenticate()) {
-            // change to dashboard layout?
-        } else {
-            Toast.makeText(getContext(),"Invalid email address or password", Toast.LENGTH_SHORT).show();
-        }
-        */
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        UserLogin auth = new UserLogin(email, password, mAuth);
     }
 
 }
