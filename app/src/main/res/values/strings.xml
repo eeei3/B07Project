@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">B07Project1</string>
+    <string name="app_name">LoginModule</string>
     <string name="enter_email">\ Enter email here</string>
     <string name="enter_pass">\ Enter password here</string>
     <string name="logo_desc">Planetze\'s Logo</string>
