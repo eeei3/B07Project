@@ -1,4 +1,4 @@
-package com.example.loginmodule;
+package com.example.b07project1;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

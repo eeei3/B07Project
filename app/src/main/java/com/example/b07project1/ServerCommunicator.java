@@ -1,6 +1,9 @@
 package com.example.b07project1;
 
 
+import android.widget.Toast;
+
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,9 +22,16 @@ class ServerCommunicator{
 
     boolean attempt(String email, String passwd) {
         final boolean[] ret = {false};
-        mAuth.signInWithEmailAndPassword(email, passwd).addOnCompleteListener(task-> {
-            ret[0] = task.isSuccessful();
-        });
+        mAuth.signInWithEmailAndPassword(email, passwd)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        ret[0] = task.isSuccessful();
+                    }
+                });
+//                .addOnCompleteListener(task-> {
+//            ret[0] = task.isSuccessful();
+//        });
 //                .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
 //                    @Override
 //                    public void onComplete(@NonNull Task<AuthResult> task) {
@@ -39,7 +49,7 @@ class ServerCommunicator{
         return ret[0];
     }
 
-    int rest_passwd(String email) {
+    int reset_passwd(String email) {
         final int [] res = {1};
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
