@@ -13,7 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
+import androidx.fragment.app.FragmentTransaction;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginFragment extends Fragment {
@@ -40,7 +40,7 @@ public class LoginFragment extends Fragment {
         textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // new screen needed prolly
+                loadFragment(new ForgotPasswordFragment());
             }
         });
 
@@ -64,6 +64,14 @@ public class LoginFragment extends Fragment {
         }
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         UserLogin auth = new UserLogin(email, password, mAuth);
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
 }

@@ -6,4 +6,7 @@
     <string name="sign_in">Sign in</string>
     <string name="back_btn">Go back to previous screen</string>
     <string name="forgot_pass">Forgot password?</string>
+    <string name="reset_pass">Reset Password</string>
+    <string name="forgot_password_frame_desc">reset password panel</string>
+    <string name="reset">Reset</string>
 </resources>
