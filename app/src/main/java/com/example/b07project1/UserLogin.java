@@ -8,12 +8,12 @@ public class UserLogin{
     final private String email;
     final private String passwd;
 
-    final FirebaseAuth mAuth;
+//    final FirebaseAuth mAuth;
 
-    public UserLogin(String email, String passwd, FirebaseAuth mAuth) {
+    public UserLogin(String email, String passwd) {
         this.email = email;
         this.passwd = passwd;
-        this.mAuth = mAuth;
+//        this.mAuth = mAuth;
     }
 
 
@@ -21,11 +21,8 @@ public class UserLogin{
         //AuthenticationModule auth = new AuthenticationModule(mAuth);
         //return auth.authenticate_Caller(this.email, this.passwd);
         //FirebaseUser res = null;
-        ServerCommunicator socket = new ServerCommunicator(mAuth);
-        if (socket.attempt(this.email, this.passwd))
-            return mAuth.getCurrentUser();
-        else
-            return null;
+        ServerCommunicator socket = new ServerCommunicator();
+        return socket.attempt(this.email, this.passwd);
     }
 
 

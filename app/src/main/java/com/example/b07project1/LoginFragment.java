@@ -61,6 +61,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void verifyCredentials() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         String email = editTextUserEmail.getText().toString().trim();
         String password = editTextUserPassword.getText().toString().trim();
 
@@ -68,19 +69,20 @@ public class LoginFragment extends Fragment {
             Toast.makeText(getContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
             return;
         }
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getContext(), "User creation worked", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Toast.makeText(getContext(), "User creation failed", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//        mAuth.createUserWithEmailAndPassword(email, password)
+//                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()) {
+//                            Toast.makeText(getContext(), "User creation worked", Toast.LENGTH_SHORT).show();
+//                        }
+//                        else {
+//                            Toast.makeText(getContext(), "User creation failed", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//        FirebaseAuth.getInstance().signOut();
 //                .addOnCompleteListener(getContext(), new OnCompleteListener<AuthResult>() {
 //                    @Override
 //                    public void onComplete(@NonNull Task<AuthResult> task) {
@@ -94,13 +96,20 @@ public class LoginFragment extends Fragment {
 //                        }
 //                    }
 //                });
-        UserLogin auth = new UserLogin(email, password, mAuth);
+        UserLogin auth = new UserLogin(email, password);
         FirebaseUser user = auth.BeginAuthenticate();
-        if (user== null) {
-            Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Toast.makeText(getContext(), "Login Success", Toast.LENGTH_SHORT).show();
+        FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (user != null) {
+                    Toast.makeText(getContext(), "Login Success", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        mAuth.addAuthStateListener(mAuthListener);
         FirebaseAuth.getInstance().signOut();
     }
 

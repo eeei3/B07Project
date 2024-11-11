@@ -1,35 +1,55 @@
 package com.example.b07project1;
 
 
-import android.widget.Toast;
-
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import java.util.concurrent.TimeUnit;
 
 
-class ServerCommunicator{
+class ServerCommunicator extends Fragment {
     //final private String url;
     final FirebaseAuth mAuth;
 
-    public ServerCommunicator(FirebaseAuth mAuth){
+    public ServerCommunicator(){
         //url = "https://b07projecttest-default-rtdb.firebaseio.com/";
-        this.mAuth = mAuth;
+        this.mAuth = FirebaseAuth.getInstance();
     }
 
-    boolean attempt(String email, String passwd) {
-        final boolean[] ret = {false};
-        mAuth.signInWithEmailAndPassword(email, passwd)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        ret[0] = task.isSuccessful();
-                    }
-                });
-//                .addOnCompleteListener(task-> {
+    boolean login(String email, String passwd) {
+        final boolean[] ret = {false, true};
+        int a = 0;
+        Task<AuthResult> task =  mAuth.signInWithEmailAndPassword(email, passwd);
+        task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                ret[0] = task.isSuccessful();
+            }
+        });
+        return true;
+    }
+
+    FirebaseUser attempt(String email, String passwd) {
+        if (login(email, passwd)) {
+            return mAuth.getCurrentUser();
+        }
+        return null;
+
+
+//        mAuth.signInWithEmailAndPassword(email, passwd)
+//                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        ret[1] = false;
+//                        ret[0] = task.isSuccessful();
+//                    }
+//                });
+//                .addOnCompleteListener(task -> {
+//                    ret[1] = false;
 //            ret[0] = task.isSuccessful();
 //        });
 //                .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
@@ -46,7 +66,7 @@ class ServerCommunicator{
 //                        }
 //                    }
 //                });
-        return ret[0];
+
     }
 
     int reset_passwd(String email) {
