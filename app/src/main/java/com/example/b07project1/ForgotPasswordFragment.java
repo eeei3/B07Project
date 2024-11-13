@@ -1,7 +1,6 @@
 package com.example.b07project1;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +8,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 public class ForgotPasswordFragment extends Fragment {
     private EditText editTextUserEmail;
@@ -38,10 +35,10 @@ public class ForgotPasswordFragment extends Fragment {
                 btnProgressReset.setVisibility(View.VISIBLE);
                 String email = editTextUserEmail.getText().toString().trim();
                 ServerCommunicator socket = new ServerCommunicator();
-                MailMan watcher = new MailMan();
-                socket.setEmailListener(new ServerCommunicator.EmailListener() {
+                SuccessListener watcher = new SuccessListener();
+                socket.setEmailListener(new ServerCommunicator.outcomeListener() {
                     @Override
-                    public void onObjectReady(MailMan watcher) {
+                    public void onObjectReady(SuccessListener watcher) {
                         if (watcher.success) {
                             Toast.makeText(getContext(), "Email sent", Toast.LENGTH_SHORT).show();
                         }
@@ -81,11 +78,11 @@ public class ForgotPasswordFragment extends Fragment {
             }}, 5000);
     }
 
-    private void loadFragment(Fragment fragment) {
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
+//    private void loadFragment(Fragment fragment) {
+//        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+//        transaction.replace(R.id.fragment_container, fragment);
+//        transaction.addToBackStack(null);
+//        transaction.commit();
+//    }
 
 }

@@ -66,13 +66,18 @@ public class LoginFragment extends Fragment {
             Toast.makeText(getContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
             return;
         }
-        UserLogin auth = new UserLogin(email, password);
-        FirebaseUser user = auth.BeginAuthenticate();
         FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
+            private FirebaseUser user;
+            boolean signed_in = false;
+
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (user != null) {
+                if ((mAuth.getCurrentUser() != null) && (signed_in == false)) {
                     Toast.makeText(getContext(), "Login Success", Toast.LENGTH_SHORT).show();
+                    signed_in = true;
+                }
+                else if (signed_in == true) {
+                    ;
                 }
                 else {
                     Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
@@ -80,6 +85,9 @@ public class LoginFragment extends Fragment {
             }
         };
         mAuth.addAuthStateListener(mAuthListener);
+        UserLogin auth = new UserLogin(email, password);
+//        FirebaseUser user = null;
+        auth.BeginAuthenticate();
         FirebaseAuth.getInstance().signOut();
     }
 

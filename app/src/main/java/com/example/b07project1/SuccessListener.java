@@ -1,19 +1,13 @@
 package com.example.b07project1;
 
-import com.google.common.util.concurrent.Service;
-
-public class MailMan {
+public class SuccessListener {
     boolean success;
 
-    public MailMan() {
+    public SuccessListener() {
         this.success = false;
     }
 
     public void setSuccess(boolean success) {
         this.success = success;
-    }
-
-    public boolean getSuccess() {
-        return this.success;
     }
 }

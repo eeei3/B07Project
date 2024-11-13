@@ -10,35 +10,31 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import android.util.Log;
 
 
 class ServerCommunicator extends Fragment {
     final FirebaseAuth mAuth;
-    int res;
     boolean successful;
-    private EmailListener listener;
+    private outcomeListener listener;
 
-    public interface EmailListener {
-        public void onObjectReady(MailMan betweener);
+    public interface outcomeListener {
+        void onObjectReady(SuccessListener betweener);
     }
 
 
-    public ServerCommunicator(){
+    public ServerCommunicator() {
         this.mAuth = FirebaseAuth.getInstance();
-        this.res = 1;
         this.successful = false;
         this.listener = null;
     }
 
 
-    public void setEmailListener(EmailListener listener) {
+    public void setEmailListener(outcomeListener listener) {
         this.listener = listener;
     }
 
     boolean login(String email, String passwd) {
-        final boolean[] ret = {false, true};
-        int a = 0;
+        final boolean[] ret = {false};
         Task<AuthResult> task =  mAuth.signInWithEmailAndPassword(email, passwd);
         task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -46,7 +42,7 @@ class ServerCommunicator extends Fragment {
                 ret[0] = task.isSuccessful();
             }
         });
-        return true;
+        return ret[0];
     }
 
     FirebaseUser attempt(String email, String passwd) {
@@ -57,7 +53,7 @@ class ServerCommunicator extends Fragment {
 
     }
 
-    int reset_passwd(String email, MailMan watcher) {
+    void reset_passwd(String email, SuccessListener watcher) {
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -73,7 +69,7 @@ class ServerCommunicator extends Fragment {
                         }
                     }
                 });
-        Log.e("Res Tag", "value of res is:" + this.res);
-        return res;
+//        Log.e("Res Tag", "value of res is:" + this.res);
+//        return res;
     }
 }
