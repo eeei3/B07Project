@@ -1,6 +1,8 @@
 package com.example.b07project1;
 
 
+
+
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
@@ -8,16 +10,30 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import java.util.concurrent.TimeUnit;
+import android.util.Log;
 
 
 class ServerCommunicator extends Fragment {
-    //final private String url;
     final FirebaseAuth mAuth;
+    int res;
+    boolean successful;
+    private EmailListener listener;
+
+    public interface EmailListener {
+        public void onObjectReady(MailMan betweener);
+    }
+
 
     public ServerCommunicator(){
-        //url = "https://b07projecttest-default-rtdb.firebaseio.com/";
         this.mAuth = FirebaseAuth.getInstance();
+        this.res = 1;
+        this.successful = false;
+        this.listener = null;
+    }
+
+
+    public void setEmailListener(EmailListener listener) {
+        this.listener = listener;
     }
 
     boolean login(String email, String passwd) {
@@ -39,80 +55,25 @@ class ServerCommunicator extends Fragment {
         }
         return null;
 
-
-//        mAuth.signInWithEmailAndPassword(email, passwd)
-//                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        ret[1] = false;
-//                        ret[0] = task.isSuccessful();
-//                    }
-//                });
-//                .addOnCompleteListener(task -> {
-//                    ret[1] = false;
-//            ret[0] = task.isSuccessful();
-//        });
-//                .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if (task.isSuccessful()) {
-//                            FirebaseUser user = mAuth.getCurrentUser();
-//                            //updateUI(user);
-//                            ret[0] = true;
-//                        }
-//                        else {
-//                            //updateUI(null);
-//                            ret[0] = false;
-//                        }
-//                    }
-//                });
-
     }
 
-    int reset_passwd(String email) {
-        final int [] res = {1};
+    int reset_passwd(String email, MailMan watcher) {
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            res[0] = 0;
+//                            ServerCommunicator.this.res = 0;
+                            watcher.setSuccess(true);
+                            listener.onObjectReady(watcher);
+                        }
+                        else {
+                            watcher.setSuccess(false);
+                            listener.onObjectReady(watcher);
                         }
                     }
                 });
-        return res[0];
+        Log.e("Res Tag", "value of res is:" + this.res);
+        return res;
     }
-
-//    private void updateUI(FirebaseUser user) {
-//
-//    }
-
-//    User fetch(String email, String passwd) {
-//        final User [] data = {
-//                new User()
-//        };
-//        final DatabaseReference user = FirebaseDatabase.getInstance(url).getReference("users");
-//        user.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                data[0] = snapshot.getValue(User.class);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//            }
-//        });
-//        return data[0];
-//        //        user.child(this.email).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-////            @Override
-////            public void onComplete(@NonNull Task<DataSnapshot> task) {
-////                if (!task.isSuccessful()) {
-////                    Log.e("test", "Failed to retrieve user", task.getException());
-////                } else {
-////                    Log.i("test", task.getResult().getValue().toString());
-////                }
-////            }
-////
-////        });
-//    }
 }
