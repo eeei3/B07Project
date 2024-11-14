@@ -4,7 +4,6 @@ package com.example.b07project1;
 
 
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -17,6 +16,7 @@ class ServerCommunicator extends Fragment {
     boolean successful;
     private outcomeListener listener;
 
+//    This is our custom  listener
     public interface outcomeListener {
         void onObjectReady(SuccessListener betweener);
     }
@@ -29,29 +29,30 @@ class ServerCommunicator extends Fragment {
     }
 
 
-    public void setEmailListener(outcomeListener listener) {
+    public void setListener(outcomeListener listener) {
         this.listener = listener;
     }
 
-    boolean login(String email, String passwd) {
-        final boolean[] ret = {false};
+    void login(String email, String passwd, SuccessListener watcher) {
+//        final boolean[] ret = {false};
         Task<AuthResult> task =  mAuth.signInWithEmailAndPassword(email, passwd);
         task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                ret[0] = task.isSuccessful();
+                watcher.setSuccess(task.isSuccessful());
+                listener.onObjectReady(watcher);
             }
-        });
-        return ret[0];
+            }
+        );
     }
 
-    FirebaseUser attempt(String email, String passwd) {
-        if (login(email, passwd)) {
-            return mAuth.getCurrentUser();
-        }
-        return null;
-
-    }
+//    FirebaseUser attempt(String email, String passwd) {
+//        if (login(email, passwd)) {
+//            return mAuth.getCurrentUser();
+//        }
+//        return null;
+//
+//    }
 
     void reset_passwd(String email, SuccessListener watcher) {
         mAuth.sendPasswordResetEmail(email)

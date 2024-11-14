@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 
 public class LoginFragment extends Fragment {
@@ -58,36 +57,48 @@ public class LoginFragment extends Fragment {
     }
 
     private void verifyCredentials() {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         String email = editTextUserEmail.getText().toString().trim();
         String password = editTextUserPassword.getText().toString().trim();
-
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(getContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
             return;
         }
-        FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
-            private FirebaseUser user;
-            boolean signed_in = false;
-
+//        FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
+//            private FirebaseUser user;
+//            boolean signed_in = false;
+//
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                if ((mAuth.getCurrentUser() != null) && (signed_in == false)) {
+//                    Toast.makeText(getContext(), "Login Success", Toast.LENGTH_SHORT).show();
+//                    signed_in = true;
+//                }
+//                else if (signed_in == true) {
+//                    ;
+//                }
+//                else {
+//                    Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        };
+        ServerCommunicator socket = new ServerCommunicator();
+        SuccessListener watcher = new SuccessListener();
+        socket.setListener(new ServerCommunicator.outcomeListener() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if ((mAuth.getCurrentUser() != null) && (signed_in == false)) {
+            public void onObjectReady(SuccessListener watcher) {
+                Toast.makeText(getContext(), "Fired", Toast.LENGTH_SHORT).show();
+                if (watcher.success) {
                     Toast.makeText(getContext(), "Login Success", Toast.LENGTH_SHORT).show();
-                    signed_in = true;
-                }
-                else if (signed_in == true) {
-                    ;
                 }
                 else {
-                    Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Login Failed", Toast.LENGTH_SHORT).show();
                 }
             }
-        };
-        mAuth.addAuthStateListener(mAuthListener);
-        UserLogin auth = new UserLogin(email, password);
-//        FirebaseUser user = null;
-        auth.BeginAuthenticate();
+        });
+//        mAuth.addAuthStateListener(mAuthListener);
+        LoginPresenter auth = new LoginPresenter(email, password);
+        auth.BeginAuthenticate(socket, watcher);
         FirebaseAuth.getInstance().signOut();
     }
 

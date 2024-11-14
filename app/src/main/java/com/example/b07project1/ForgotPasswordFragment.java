@@ -36,7 +36,8 @@ public class ForgotPasswordFragment extends Fragment {
                 String email = editTextUserEmail.getText().toString().trim();
                 ServerCommunicator socket = new ServerCommunicator();
                 SuccessListener watcher = new SuccessListener();
-                socket.setEmailListener(new ServerCommunicator.outcomeListener() {
+                LoginPresenter auth = new LoginPresenter(email, null);
+                socket.setListener(new ServerCommunicator.outcomeListener() {
                     @Override
                     public void onObjectReady(SuccessListener watcher) {
                         if (watcher.success) {
@@ -47,7 +48,7 @@ public class ForgotPasswordFragment extends Fragment {
                         }
                     }
                 });
-                socket.reset_passwd(email, watcher);
+                auth.BeginReset(socket, watcher);
 //                if (socket.reset_passwd(email, watcher) == 0) {
 ////                    Log.d("tag2", "value of res is:" + (socket.reset_passwd(email)));
 //                    Toast.makeText(getContext(), "Email sent", Toast.LENGTH_SHORT).show();
