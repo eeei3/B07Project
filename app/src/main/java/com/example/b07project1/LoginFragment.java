@@ -1,6 +1,7 @@
 package com.example.b07project1;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,37 +58,23 @@ public class LoginFragment extends Fragment {
     }
 
     private void verifyCredentials() {
-//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        // Retrieve the email the User entered
         String email = editTextUserEmail.getText().toString().trim();
+        // Retrieve the password the User entered
         String password = editTextUserPassword.getText().toString().trim();
+        // Check for invalid input
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(getContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
             return;
         }
-//        FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
-//            private FirebaseUser user;
-//            boolean signed_in = false;
-//
-//            @Override
-//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//                if ((mAuth.getCurrentUser() != null) && (signed_in == false)) {
-//                    Toast.makeText(getContext(), "Login Success", Toast.LENGTH_SHORT).show();
-//                    signed_in = true;
-//                }
-//                else if (signed_in == true) {
-//                    ;
-//                }
-//                else {
-//                    Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        };
-        ServerCommunicator socket = new ServerCommunicator();
+        // Create communication channel with the Presenter
+        LoginPresenter socket = new LoginPresenter(email, password);
+        // Create object to hold if operation is successful or not
         SuccessListener watcher = new SuccessListener();
-        socket.setListener(new ServerCommunicator.outcomeListener() {
+        // Create Listener to check if password reset successful or not.
+        socket.setViewPipe(new LoginPresenter.PresenterViewPipe() {
             @Override
             public void onObjectReady(SuccessListener watcher) {
-                Toast.makeText(getContext(), "Fired", Toast.LENGTH_SHORT).show();
                 if (watcher.success) {
                     Toast.makeText(getContext(), "Login Success", Toast.LENGTH_SHORT).show();
                 }
@@ -96,9 +83,8 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
-//        mAuth.addAuthStateListener(mAuthListener);
-        LoginPresenter auth = new LoginPresenter(email, password);
-        auth.BeginAuthenticate(socket, watcher);
+        // Log in user
+        socket.BeginAuthenticate(watcher);
         FirebaseAuth.getInstance().signOut();
     }
 

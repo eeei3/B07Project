@@ -33,11 +33,14 @@ public class ForgotPasswordFragment extends Fragment {
             public void onClick(View v) {
                 btnResetPassword.setVisibility(View.GONE);
                 btnProgressReset.setVisibility(View.VISIBLE);
+                // Retrieve the email the User entered
                 String email = editTextUserEmail.getText().toString().trim();
-                ServerCommunicator socket = new ServerCommunicator();
+                // Create communication channel with the Presenter
+                LoginPresenter socket = new LoginPresenter(email);
+                // Create object to hold if operation is successful or not
                 SuccessListener watcher = new SuccessListener();
-                LoginPresenter auth = new LoginPresenter(email, null);
-                socket.setListener(new ServerCommunicator.outcomeListener() {
+                // Create Listener to check if password reset successful or not.
+                socket.setViewPipe(new LoginPresenter.PresenterViewPipe() {
                     @Override
                     public void onObjectReady(SuccessListener watcher) {
                         if (watcher.success) {
@@ -48,14 +51,8 @@ public class ForgotPasswordFragment extends Fragment {
                         }
                     }
                 });
-                auth.BeginReset(socket, watcher);
-//                if (socket.reset_passwd(email, watcher) == 0) {
-////                    Log.d("tag2", "value of res is:" + (socket.reset_passwd(email)));
-//                    Toast.makeText(getContext(), "Email sent", Toast.LENGTH_SHORT).show();
-//                }
-//                else {
-//                    Toast.makeText(getContext(), "Failure", Toast.LENGTH_SHORT).show();
-//                }
+                // Reset password
+                socket.BeginReset(watcher);
                 finishLoading(btnResetPassword, btnProgressReset);
             }
         });

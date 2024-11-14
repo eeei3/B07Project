@@ -1,8 +1,5 @@
 package com.example.b07project1;
 
-
-
-
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -13,28 +10,27 @@ import androidx.fragment.app.Fragment;
 
 class ServerCommunicator extends Fragment {
     final FirebaseAuth mAuth;
-    boolean successful;
-    private outcomeListener listener;
+    ModelPresenterPipe listener;
 
-//    This is our custom  listener
-    public interface outcomeListener {
+//    This is our listener that communicates with LoginPresenter
+    public interface ModelPresenterPipe {
         void onObjectReady(SuccessListener betweener);
     }
 
 
     public ServerCommunicator() {
         this.mAuth = FirebaseAuth.getInstance();
-        this.successful = false;
         this.listener = null;
     }
 
 
-    public void setListener(outcomeListener listener) {
+    // Tell's Model which listener from Presenter to notify when operation is completed
+    public void setModelPipe(ModelPresenterPipe listener) {
         this.listener = listener;
     }
 
+    // Model Login Method
     void login(String email, String passwd, SuccessListener watcher) {
-//        final boolean[] ret = {false};
         Task<AuthResult> task =  mAuth.signInWithEmailAndPassword(email, passwd);
         task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -46,31 +42,15 @@ class ServerCommunicator extends Fragment {
         );
     }
 
-//    FirebaseUser attempt(String email, String passwd) {
-//        if (login(email, passwd)) {
-//            return mAuth.getCurrentUser();
-//        }
-//        return null;
-//
-//    }
-
+    // Model Password Reset Method
     void reset_passwd(String email, SuccessListener watcher) {
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-//                            ServerCommunicator.this.res = 0;
-                            watcher.setSuccess(true);
+                            watcher.setSuccess(task.isSuccessful());
                             listener.onObjectReady(watcher);
-                        }
-                        else {
-                            watcher.setSuccess(false);
-                            listener.onObjectReady(watcher);
-                        }
                     }
                 });
-//        Log.e("Res Tag", "value of res is:" + this.res);
-//        return res;
     }
 }
