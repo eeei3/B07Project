@@ -11,6 +11,8 @@ public class SuccessListener {
 
     public SuccessListener() {
         this.success = false;
+        this.usergoals = new HashSet<Goal>();
+        this.listgoals = new HashSet<String>();
     }
 
     public void setSuccess(boolean success) {
