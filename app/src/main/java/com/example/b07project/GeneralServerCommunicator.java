@@ -12,17 +12,31 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * Goal - Class representing the Goal object for storing information about user goals
+ */
 class Goal {
     String name;
     int prog;
     HashSet<String> types;
 
-    public Goal(String name) {
+    /**
+     * Goal - Constructor that takes the goal's name, intended for creating new user goal
+     *
+     * @param name  - Name of the goal the user is starting
+     * @param types - Categories the goal belongs to
+     */
+    public Goal(String name, HashSet<String> types) {
         this.name = name;
         this.prog = 0;
         this.types = new HashSet<>();
     }
 
+    /**
+     * Goal - Constructor that takes the goal's name and progress, intended for reading user goals
+     * @param name - Name of the goal the program is fetching
+     * @param prog - Progress of the goal
+     */
     public Goal(String name, int prog) {
         this.name = name;
         this.prog = prog;
@@ -49,6 +63,10 @@ class Goal {
  *                  - 20%
  */
 
+/**
+ * GeneralServerCommunicator - The Model portion of the Habit Suggestion Module
+ */
+
 final public class GeneralServerCommunicator {
     private static GeneralServerCommunicator serverCommunicator;
     final private FirebaseDatabase db;
@@ -58,12 +76,17 @@ final public class GeneralServerCommunicator {
     ServerCommunicator.ModelPresenterPipe listener;
 
     /**
-     * A listener exclusively for Model-Presenter communications
+     * ModelPresenterPipe - A listener exclusively for Model-Presenter communications
      */
     public interface ModelPresenterPipe {
         void onObjectReady(SuccessListener betweener);
     }
 
+    /**
+     * GeneralServerCommunicator - Constructor, creates a reference to the Firebase Database,
+     * follows Singleton SOLID design
+     * @param userid - the id of the user
+     */
     private GeneralServerCommunicator(String userid) {
         this.userid = userid;
         db = FirebaseDatabase.getInstance("https://b07project-b43b0-default-rtdb.firebaseio.com/");
@@ -71,6 +94,11 @@ final public class GeneralServerCommunicator {
     }
 
     // Tell's Model which listener from Presenter to notify when operation is completed
+
+    /**
+     * setModelPipe - Set's ModelPresenterPipe to permit the Presenter to communicate with Model
+     * @param listener
+     */
     public void setModelPipe(ServerCommunicator.ModelPresenterPipe listener) {
         this.listener = listener;
     }
@@ -116,7 +144,7 @@ final public class GeneralServerCommunicator {
                         res.add(temp);
                     }
                     catch (NullPointerException ex) {
-                        Goal temp = new Goal(goals.getKey());
+                        Goal temp = new Goal(goals.getKey(), );
                         res.add(temp);
                     }
                 }
@@ -137,7 +165,7 @@ final public class GeneralServerCommunicator {
      * Set a new goal for the user
      */
     void setGoals(String goalname, SuccessListener watcher) {
-        dbworker.child("users").child(userid).setValue(new Goal(goalname))
+        dbworker.child("users").child(userid).setValue(new Goal(goalname, ))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
