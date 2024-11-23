@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+//import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginFragment extends Fragment {
     private EditText editTextUserEmail, editTextUserPassword;
@@ -54,13 +55,33 @@ public class LoginFragment extends Fragment {
     }
 
     private void verifyCredentials() {
+        // Retrieve the email the User entered
         String email = editTextUserEmail.getText().toString().trim();
+        // Retrieve the password the User entered
         String password = editTextUserPassword.getText().toString().trim();
-
+        // Check for invalid input
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(getContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
             return;
         }
+        // Create communication channel with the Presenter
+        LoginPresenter socket = new LoginPresenter(email, password);
+        // Create object to hold if operation is successful or not
+        SuccessListener watcher = new SuccessListener();
+        // Create Listener to check if password reset successful or not.
+        socket.setViewPipe(new LoginPresenter.PresenterViewPipe() {
+            @Override
+            public void onObjectReady(SuccessListener watcher) {
+                if (watcher.success) {
+                    Toast.makeText(getContext(), "Login Success", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getContext(), "Login Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        // Log in user
+        socket.beginAuthenticate(watcher);
 
         /*
         UserLogin user = new UserLogin(email, password, DatabaseUrl);
