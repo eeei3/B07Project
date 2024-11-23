@@ -9,28 +9,48 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 
+/**
+ * This is the Model portion of the Login Module. It handles login and password reset requests
+ */
 class ServerCommunicator extends Fragment {
     final FirebaseAuth mAuth;
     ModelPresenterPipe listener;
 
-//    This is our listener that communicates with LoginPresenter
+
+    /**
+     * ModelPresenterPipe - Interface representing the communication pipe (listener) between Model
+     * and Presenter
+     */
     public interface ModelPresenterPipe {
         void onObjectReady(SuccessListener betweener);
     }
 
 
+    /**
+     * ServerCommunicator - Default constructor, gets Firebase Authentication instance
+     * and sets listener to null
+     */
     public ServerCommunicator() {
         this.mAuth = FirebaseAuth.getInstance();
         this.listener = null;
     }
 
 
-    // Tell's Model which listener from Presenter to notify when operation is completed
+    /**
+     * setModelPipe - To permit communications between Model and Presenter
+     * @param listener - How we notify the Presenter that the results are ready
+     */
     public void setModelPipe(ModelPresenterPipe listener) {
         this.listener = listener;
     }
 
-    // Model Login Method
+
+    /**
+     * login - For when the user attempts to log in
+     * @param email - The user's email
+     * @param passwd - The user's entered password
+     * @param watcher - How we notify the Presenter that the results are ready
+     */
     void login(String email, String passwd, SuccessListener watcher) {
         Task<AuthResult> task =  mAuth.signInWithEmailAndPassword(email, passwd);
         task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -43,7 +63,12 @@ class ServerCommunicator extends Fragment {
         );
     }
 
-    // Model Password Reset Method
+
+    /**
+     * reset_passwd - For when the user wants to reset their password.
+     * @param email - The user's email
+     * @param watcher - How we notify the Presenter that the results are ready
+     */
     void reset_passwd(String email, SuccessListener watcher) {
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {

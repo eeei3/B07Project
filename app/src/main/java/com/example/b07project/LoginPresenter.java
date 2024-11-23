@@ -1,51 +1,60 @@
 package com.example.b07project;
 
+/**
+ * Class representing the Presenter portion of the Login module
+ */
 public class LoginPresenter {
     final private String email;
     final private String passwd;
-    // ServerCommunicator socket = new ServerCommunicator();
-//        SuccessListener watcher = new SuccessListener();
-//        socket.setListener(new ServerCommunicator.outcomeListener() {
-//            @Override
-//            public void onObjectReady(SuccessListener watcher) {
-//                Toast.makeText(getContext(), "Fired", Toast.LENGTH_SHORT).show();
-//                if (watcher.success) {
-//                    Toast.makeText(getContext(), "Login Success", Toast.LENGTH_SHORT).show();
-//                }
-//                else {
-//                    Toast.makeText(getContext(), "Login Failed", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-////        mAuth.addAuthStateListener(mAuthListener);
-//        LoginPresenter auth = new LoginPresenter(email, password);
-//        auth.BeginAuthenticate(socket, watcher);
+
     PresenterViewPipe listener;
 
-    //    This is our listener that communicates with the View
-    //    (LoginFragment and ForgotPasswordFragment)
+
+    /**
+     * PresenterViewPipe - Interface representing the communication pipe (listener) between
+     * Presenter and View
+     */
     public interface PresenterViewPipe {
         // This is the event that we fire when operation has been completed
         void onObjectReady(SuccessListener betweener);
     }
 
+    /**
+     * LoginPresenter - Constructor for when the user attempts to login, thus an email
+     * and password are required
+     * @param email - The email of the user that wants to login
+     * @param passwd - The password of the user that wants to login
+     */
     public LoginPresenter(String email, String passwd) {
         this.email = email;
         this.passwd = passwd;
     }
+
+    /**
+     * LoginPresenter - Constructor for when the user attempts to reset their password, thus only
+     * an email is required
+     * @param email - The email of the user that wants to reset their account password
+     */
     public LoginPresenter(String email) {
         this.email = email;
         this.passwd = null;
     }
 
-    // Tell's Presenter which listener from View to notify when operation is completed
+
+    /**
+     * setViewPipe - Set's PresenterViewPipe to permit the Presenter to communicate with View
+     * @param listener - The listener that connects the Presenter with the View
+     */
     public void setViewPipe(PresenterViewPipe listener) {
         this.listener = listener;
     }
 
 
-    // Presenter Log-in Method
-    public void BeginAuthenticate(SuccessListener pv) {
+    /**
+     * beginAuthenticate - Initiates the Authentication process, communicates with Model
+     * @param pv - The SuccessListener that allows the Presenter to pass its results to the View
+     */
+    public void beginAuthenticate(SuccessListener pv) {
         // Create a ServerCommunicator (Model) object
         ServerCommunicator socket = new ServerCommunicator();
         // An object between the Model and Presenter to track outcome of operation
@@ -64,8 +73,12 @@ public class LoginPresenter {
         socket.login(this.email, this.passwd, mp);
     }
 
-    // Presenter Password Reset Method
-    public void BeginReset(SuccessListener pv) {
+
+    /**
+     * beginReset - Initiates the Password Reset process, communicates with Model
+     * @param pv - The SuccessListener that allows the Presenter to pass its results to the View
+     */
+    public void beginReset(SuccessListener pv) {
         // Create a ServerCommunicator (Model) object
         ServerCommunicator socket = new ServerCommunicator();
         // An object between the Model and Presenter to track outcome of operation
@@ -83,6 +96,4 @@ public class LoginPresenter {
         // Tell Model to send reset email
         socket.reset_passwd(this.email, mp);
     }
-
-
 }
