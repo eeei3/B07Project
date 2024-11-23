@@ -2,22 +2,35 @@ package com.example.b07project;
 
 import java.util.Objects;
 
+
+/**
+ * Class representing the Presenter portion of the Habit Suggestion Module
+ */
 public class HabitPresenter {
     GeneralServerCommunicator presenterToModel;
     String userid;
     HabitPresenter.PresenterViewPipe listener;
 
+    /**
+     * PresenterViewPipe - Interface representing the communication pipe (listener) between
+     * Presenter and View
+     */
     public interface PresenterViewPipe {
         void onObjectReady(SuccessListener listener);
     }
 
+    /**
+     * HabitPresenter - Default Constructor that sets userid and creates an instance of
+     * GeneralServerCommunicator to permit communication between Presenter and View
+     * @param userid
+     */
     public HabitPresenter(String userid) {
         this.userid = userid;
         this.presenterToModel = GeneralServerCommunicator.createInstance(userid);
     }
 
     /**
-     * setViewPipe permits the View to communicate with the Presenter
+     * setViewPipe - Set's setViewPipe to permit the Model to communicate with Presenter
      * @param listener
      */
     public void setViewPipe(HabitPresenter.PresenterViewPipe listener) {
@@ -25,7 +38,7 @@ public class HabitPresenter {
     }
 
     /**
-     * searchByName lets the user search potential goals by it's name
+     * searchByName -  Lets the user search potential goals by it's name
      * @param filter - The filter the user wishes to apply to the list
      * @param pv - How we notify the View that the results are ready
      */
