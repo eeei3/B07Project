@@ -144,7 +144,7 @@ final public class GeneralServerCommunicator {
                         res.add(temp);
                     }
                     catch (NullPointerException ex) {
-                        Goal temp = new Goal(goals.getKey(), );
+                        Goal temp = new Goal(goals.getKey(), 0);
                         res.add(temp);
                     }
                 }
@@ -165,7 +165,7 @@ final public class GeneralServerCommunicator {
      * Set a new goal for the user
      */
     void setGoals(String goalname, SuccessListener watcher) {
-        dbworker.child("users").child(userid).setValue(new Goal(goalname, ))
+        dbworker.child("users").child(userid).setValue(new Goal(goalname, 0))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
