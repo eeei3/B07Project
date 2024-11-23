@@ -43,4 +43,19 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+
+    <string name="BYOB">Bring your own bag when shopping</string>
+
+    <string-array name="habits_list">
+        <item>Bring your own bag</item>
+        <item>Cycling</item>
+        <item>Shop less</item>
+        <item>Limit meat consumption</item>
+        <item>Buy local and organic food</item>
+        <item>Use public transport</item>
+        <item>Recycle</item>
+        <item>Turn off unused electronics</item>
+        <item>Walking</item>
+        <item>Wash clothes with cold water</item>
+    </string-array>
 </resources>
