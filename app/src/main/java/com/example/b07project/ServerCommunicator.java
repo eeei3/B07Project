@@ -46,7 +46,7 @@ class ServerCommunicator extends Fragment {
     // Model Password Reset Method
     void reset_passwd(String email, SuccessListener watcher) {
         mAuth.sendPasswordResetEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                .addOnCompleteListener(new OnCompleteListener<>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                             watcher.setSuccess(task.isSuccessful());

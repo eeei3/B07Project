@@ -10,7 +10,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.ValueEventListener;
 
 class Goal {
@@ -21,13 +20,13 @@ class Goal {
     public Goal(String name) {
         this.name = name;
         this.prog = 0;
-        this.types = new HashSet<String>();
+        this.types = new HashSet<>();
     }
 
     public Goal(String name, int prog) {
         this.name = name;
         this.prog = prog;
-        this.types = new HashSet<String>();
+        this.types = new HashSet<>();
     }
 }
 
@@ -52,8 +51,8 @@ class Goal {
 
 final public class GeneralServerCommunicator {
     private static GeneralServerCommunicator serverCommunicator;
-    private FirebaseDatabase db;
-    private DatabaseReference dbworker;
+    final private FirebaseDatabase db;
+    final private DatabaseReference dbworker;
     private String userid;
 
     ServerCommunicator.ModelPresenterPipe listener;

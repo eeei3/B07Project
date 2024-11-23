@@ -1,5 +1,7 @@
 package com.example.b07project;
 
+import java.util.Objects;
+
 public class HabitPresenter {
     GeneralServerCommunicator presenterToModel;
     String userid;
@@ -35,7 +37,9 @@ public class HabitPresenter {
             public void onObjectReady(SuccessListener betweener) {
                 pv.setSuccess(true);
                 for (Goal g: betweener.usergoals) {
-                    pv.listgoals.add(g.name);
+                    if (Objects.equals(g.name, filter)) {
+                        pv.listgoals.add(g.name);
+                    }
                 }
                 listener.onObjectReady(pv);
             }
@@ -56,8 +60,9 @@ public class HabitPresenter {
             public void onObjectReady(SuccessListener betweener) {
                 pv.setSuccess(true);
                 for (Goal g: betweener.usergoals) {
-                    pv.listgoals.add(g.name);
-
+                    if (g.types.contains(filter)) {
+                        pv.listgoals.add(g.name);
+                    }
                 }
                 listener.onObjectReady(pv);
             }
