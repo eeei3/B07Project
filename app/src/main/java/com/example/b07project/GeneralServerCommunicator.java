@@ -104,7 +104,7 @@ final public class GeneralServerCommunicator {
     /**
      * Get the list of goals the user is currently working on
      */
-    void getGoals(String userid, SuccessListener watcher) {
+    void getGoals(SuccessListener watcher) {
         Query usergoals = dbworker.child("users").child(userid);
         usergoals.addValueEventListener(new ValueEventListener() {
             @Override
