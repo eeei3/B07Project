@@ -1,4 +1,11 @@
 <resources>
+    <string name="app_name">Registration</string>
+    <string name="register">Register</string>
+    <string name="Register">Register</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="name">Name</string>
     <string name="app_name">B07Project</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
