@@ -15,27 +15,30 @@ import static org.mockito.Mockito.when;
 public class LoginUnitTesting {
 
     @Mock
-    LoginFragment view;
+    LoginFragment view1;
+
+    @Mock
+    LoginFragment view2;
 
 
     @Test
     public void testGoodLogin() {
-        when(view.getEmail()).thenReturn("joshualiu0307@gmail.com");
-        when(view.getPassword()).thenReturn("mockitotest");
-        LoginPresenter presenter = new LoginPresenter(view);
+        when(view1.getEmail()).thenReturn("joshualiu0307@gmail.com");
+        when(view1.getPassword()).thenReturn("mockitotest");
+        LoginPresenter presenter = new LoginPresenter(view1);
         SuccessListener watcher = new SuccessListener();
         presenter.beginAuthenticate(watcher);
-        verify(view).success();
+        verify(view1).success();
     }
 
     @Test
     public void testBadLogin() {
-        when(view.getEmail()).thenReturn("ihatejava@java.com");
-        when(view.getPassword()).thenReturn("bruh");
-        LoginPresenter presenter = new LoginPresenter(view);
+        when(view2.getEmail()).thenReturn("ihatejava@java.com");
+        when(view2.getPassword()).thenReturn("bruh");
+        LoginPresenter presenter = new LoginPresenter(view2);
         SuccessListener watcher = new SuccessListener();
         presenter.beginAuthenticate(watcher);
-        verify(view).failure();
+        verify(view2).failure();
     }
 
 //    @Test
