@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Registration</string>
     <string name="register">Register</string>
     <string name="Register">Register</string>
     <string name="confirm_password">Confirm Password</string>

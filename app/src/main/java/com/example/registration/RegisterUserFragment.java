@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.b07project.MainActivity;
+import com.example.b07project.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -128,7 +130,7 @@ public class RegisterUserFragment extends Fragment {
 
             Log.d(TAG, "User is signed in: " + user.getEmail());
 
-            startActivity(new Intent(getActivity(),MainActivity.class)); //not sure why "this" instead of getactivity() is not working
+            startActivity(new Intent(getActivity(), MainActivity.class)); //not sure why "this" instead of getactivity() is not working
 
         } else {
 
