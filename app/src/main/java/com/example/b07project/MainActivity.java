@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<HabitsModel> habitsModels = new ArrayList<>();
+    ArrayList<HabitsNewModel> habitsModels = new ArrayList<>();
 
     int[] habitsImages = {R.drawable.habits_bringownbag, R.drawable.habits_cycling,
             R.drawable.habits_lessshoping, R.drawable.habits_limitmeat,
@@ -20,21 +20,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.habits_menu);
+        setContentView(R.layout.habits_main_page);
 
-        RecyclerView recyclerView = findViewById(R.id.habitsRecyclerView);
+        RecyclerView recyclerView = findViewById(R.id.habit_list);
+
 
         setUpHabitModels();
-        HabitsRecyclerViewAdapter adapter = new HabitsRecyclerViewAdapter(this, habitsModels);
+        HabitsNewAdapter adapter = new HabitsNewAdapter(this, habitsModels);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
 
     private void setUpHabitModels(){
         String[] habitsNames = getResources().getStringArray(R.array.habits_list);
+        String[] habitsImpacts = getResources().getStringArray(R.array.habits_impacts);
 
         for (int i = 0; i < habitsNames.length; i++) {
-            habitsModels.add(new HabitsModel(habitsNames[i], habitsImages[i], false));
+            habitsModels.add(new HabitsNewModel(habitsNames[i], habitsImages[i], habitsImpacts[i]));
         }
     }
 }

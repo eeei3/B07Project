@@ -58,4 +58,17 @@
         <item>Walking</item>
         <item>Wash clothes with cold water</item>
     </string-array>
+
+    <string-array name="habits_impacts">
+        <item>Low</item>
+        <item>High</item>
+        <item>Medium</item>
+        <item>Low</item>
+        <item>High</item>
+        <item>Medium</item>
+        <item>Low</item>
+        <item>High</item>
+        <item>Medium</item>
+        <item>Low</item>
+    </string-array>
 </resources>
