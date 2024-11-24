@@ -22,16 +22,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-
 //        db = FirebaseDatabase.getInstance("https://registration-d6a6c-default-rtdb.firebaseio.com/");
 //        DatabaseReference myRef = db.getReference("test");
 //
 //        //myRef.setValue("Registration Demo!");
 //        myRef.child("movies").setValue("B07 Demo!");
-
         //checks if activity is being started for the first time
         if (savedInstanceState == null) {
-            loadFragment(new Home()); //adds homefragment to the activity
+            loadFragment(new LoginFragment()); //adds homefragment to the activity
         }
     }
 
