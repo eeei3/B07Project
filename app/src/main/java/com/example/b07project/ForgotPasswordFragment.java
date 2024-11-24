@@ -20,10 +20,13 @@ import androidx.fragment.app.FragmentTransaction;
 public class ForgotPasswordFragment extends Fragment {
     private EditText editTextUserEmail;
 
+    ForgetPresenter presenter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.forgot_password, container, false);
+        presenter = new ForgetPresenter();
 
         editTextUserEmail = view.findViewById(R.id.emailForResetPass);
         Button btnResetPassword = view.findViewById(R.id.loadingButton);
@@ -38,23 +41,23 @@ public class ForgotPasswordFragment extends Fragment {
                 // Retrieve the email the User entered
                 String email = editTextUserEmail.getText().toString().trim();
                 // Create communication channel with the Presenter
-                LoginPresenter socket = new LoginPresenter(email);
+                presenter.setEmail(email);
                 // Create object to hold if operation is successful or not
                 SuccessListener watcher = new SuccessListener();
                 // Create Listener to check if password reset successful or not.
-                socket.setViewPipe(new LoginPresenter.PresenterViewPipe() {
+                presenter.setViewPipe(new LoginPresenter.PresenterViewPipe() {
                     @Override
                     public void onObjectReady(SuccessListener watcher) {
                         if (watcher.success) {
-                            Toast.makeText(getContext(), "Email sent", Toast.LENGTH_SHORT).show();
+                            success();
                         }
                         else {
-                            Toast.makeText(getContext(), "Failure", Toast.LENGTH_SHORT).show();
+                            failure();
                         }
                     }
                 });
                 // Reset password
-                socket.beginReset(watcher);
+                presenter.beginReset(watcher);
                 finishLoading(btnResetPassword, btnProgressReset);
             }
         });
@@ -77,6 +80,21 @@ public class ForgotPasswordFragment extends Fragment {
                 pgb.setVisibility(View.GONE);
             }}, 5000);
     }
+
+    public void success() {
+        Toast.makeText(getContext(), "Email Sent", Toast.LENGTH_SHORT).show();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.popBackStack();
+    }
+
+    public void failure() {
+        Toast.makeText(getContext(), "Failure", Toast.LENGTH_SHORT).show();
+    }
+
+    public void getEmail() {
+
+    }
+
 
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
