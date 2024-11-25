@@ -27,6 +27,11 @@ public class HabitsNewAdapter extends RecyclerView.Adapter<HabitsNewAdapter.MyVi
         this.habitsModels = habitsModels;
     }
 
+    public void setHabitsModels(ArrayList<HabitsNewModel> habitsModels) {
+        this.habitsModels = habitsModels;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public HabitsNewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
