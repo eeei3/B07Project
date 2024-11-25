@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,6 +49,15 @@ public class RegisterUserFragment extends Fragment {
         editTextPass = view.findViewById(R.id.editTextPass);
         editTextConfirmPass = view.findViewById(R.id.editTextConfirmPass);
         buttonRegisterUser = view.findViewById(R.id.buttonRegisterUser);
+        ImageButton imageButtonBack = view.findViewById(R.id.backButtonSignUp);
+
+        imageButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), EntryActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //click listener for register button
         buttonRegisterUser.setOnClickListener(new View.OnClickListener() {
