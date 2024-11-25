@@ -43,6 +43,8 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.firebase.auth)
+    testImplementation("junit:junit:4.+")
+    androidTestImplementation("androidx.test.ext:junit:1.1.3")
     implementation(libs.firebase.database)
     testImplementation("junit:junit:4.+")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")

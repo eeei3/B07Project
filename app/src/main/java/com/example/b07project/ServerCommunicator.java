@@ -12,9 +12,12 @@ import com.google.firebase.auth.FirebaseAuth;
 /**
  * This is the Model portion of the Login Module. It handles login and password reset requests
  */
-class ServerCommunicator extends Fragment {
+public class ServerCommunicator extends Fragment {
     final FirebaseAuth mAuth;
     ModelPresenterPipe listener;
+
+    LoginPresenter lPresenter;
+    ForgetPresenter fPresenter;
 
 
     /**
@@ -65,11 +68,11 @@ class ServerCommunicator extends Fragment {
 
 
     /**
-     * reset_passwd - For when the user wants to reset their password.
+     * resetPasswd - For when the user wants to reset their password.
      * @param email - The user's email
      * @param watcher - How we notify the Presenter that the results are ready
      */
-    void reset_passwd(String email, SuccessListener watcher) {
+    void resetPasswd(String email, SuccessListener watcher) {
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

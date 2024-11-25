@@ -15,16 +15,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import java.util.Objects;
 //import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginFragment extends Fragment {
     private EditText editTextUserEmail, editTextUserPassword;
 
+    LoginPresenter presenter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.login_screen_upd, container, false);
-
+        presenter = new LoginPresenter(this);
         editTextUserEmail = view.findViewById(R.id.txtUserEmail);
         editTextUserPassword = view.findViewById(R.id.userPassWord);
         Button buttonSignIn = view.findViewById(R.id.signIn);
@@ -56,34 +60,35 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-    private void verifyCredentials() {
+    public void verifyCredentials() {
         // Retrieve the email the User entered
-        String email = editTextUserEmail.getText().toString().trim();
+        String email = getEmail();
         // Retrieve the password the User entered
-        String password = editTextUserPassword.getText().toString().trim();
+        String password = getPassword();
         // Check for invalid input
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(getContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
             return;
         }
         // Create communication channel with the Presenter
-        LoginPresenter socket = new LoginPresenter(email, password);
+        presenter.setEmail(email);
+        presenter.setPasswd(password);
         // Create object to hold if operation is successful or not
         SuccessListener watcher = new SuccessListener();
         // Create Listener to check if password reset successful or not.
-        socket.setViewPipe(new LoginPresenter.PresenterViewPipe() {
+        presenter.setViewPipe(new LoginPresenter.PresenterViewPipe() {
             @Override
             public void onObjectReady(SuccessListener watcher) {
                 if (watcher.success) {
-                    Toast.makeText(getContext(), "Login Success", Toast.LENGTH_SHORT).show();
+                    success();
                 }
                 else {
-                    Toast.makeText(getContext(), "Login Failed", Toast.LENGTH_SHORT).show();
+                    failure();
                 }
             }
         });
         // Log in user
-        socket.beginAuthenticate(watcher);
+        presenter.beginAuthenticate(watcher);
 
         /*
         UserLogin user = new UserLogin(email, password, DatabaseUrl);
@@ -94,6 +99,23 @@ public class LoginFragment extends Fragment {
             Toast.makeText(getContext(),"Invalid email address or password", Toast.LENGTH_SHORT).show();
         }
         */
+    }
+
+    public void success() {
+        Toast.makeText(getContext(), "Login Success", Toast.LENGTH_SHORT).show();
+        // Send back to whatever screen is appropriate
+    }
+
+    public void failure() {
+        Toast.makeText(getContext(), "Login Failed", Toast.LENGTH_SHORT).show();
+    }
+
+    public String getEmail() {
+        return editTextUserEmail.getText().toString().trim();
+    }
+
+    public String getPassword() {
+        return editTextUserPassword.getText().toString().trim();
     }
 
     private void loadFragment(Fragment fragment) {
