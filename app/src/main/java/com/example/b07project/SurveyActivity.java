@@ -1,4 +1,6 @@
 package com.example.b07project;
+import static java.security.AccessController.getContext;
+
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,10 +28,13 @@ public class SurveyActivity extends AppCompatActivity {
     private Button btnSubmit;
     private LinearLayout groupCarQuestionsLayout, dietQuestionsLayout;
 
+    SurveyActivity view;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitivity_survey);
+        view = this;
 
         CarOwnership = findViewById(R.id.radioGroupCarOwnership);
         CarUsage = findViewById(R.id.radioGroupCarUsage);
@@ -125,6 +130,7 @@ public class SurveyActivity extends AppCompatActivity {
                     consumptionEmissions = emissionsCalculator.getConsumptionEmissions(SelectedOption(Clothes), SelectedOption(Thrift), SelectedOption(Electronic), SelectedOption(Recycle));
                     totalEmissions = transportationEmissions + foodEmissions + housingEmissions + consumptionEmissions;
                     user.totalEmissions = totalEmissions;
+                    ServerCommunicator model = new ServerCommunicator(view);
                     //carbon.footprint = CalculateCarOwnership(SelectedOption(CarOwnership)) + CalculatePublicTransportation(SelectedOption(PublicTransport), SelectedOption(PublicTransportUse)) + CalculateShortFlight(SelectedOption(ShortFlights)) + CalculateLongFlight(SelectedOption(LongFlights));
                     //Toast.makeText(SurveyActivity.this, "Carbon Footprint: " + totalEmissions, Toast.LENGTH_SHORT).show();
                     }
@@ -209,6 +215,18 @@ public class SurveyActivity extends AppCompatActivity {
             View child = parent.getChildAt(i);
             child.setVisibility(View.GONE);
         }
+    }
+
+    public void success() {
+        Toast.makeText(getApplicationContext(),
+                "Survey successfully completed!",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    public void failure() {
+        Toast.makeText(getApplicationContext(),
+                "Server Communication Error, please try again",
+                Toast.LENGTH_SHORT).show();
     }
 
 
