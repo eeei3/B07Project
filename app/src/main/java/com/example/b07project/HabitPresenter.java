@@ -1,5 +1,7 @@
 package com.example.b07project;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Objects;
 
 
@@ -7,35 +9,35 @@ import java.util.Objects;
  * Class representing the Presenter portion of the Habit Suggestion Module
  */
 public class HabitPresenter {
-    GeneralServerCommunicator presenterToModel;
-    String userid;
-    HabitPresenter.PresenterViewPipe listener;
+    GeneralServerCommunicator model;
+//    HabitPresenter.PresenterViewPipe listener;
+    //View view;
 
     /**
      * PresenterViewPipe - Interface representing the communication pipe (listener) between
      * Presenter and View
      */
-    public interface PresenterViewPipe {
-        void onObjectReady(SuccessListener listener);
-    }
+//    public interface PresenterViewPipe {
+//        void onObjectReady(SuccessListener listener);
+//    }
 
     /**
      * HabitPresenter - Default Constructor that sets userid and creates an instance of
      * GeneralServerCommunicator to permit communication between Presenter and View
-     * @param userid
      */
-    public HabitPresenter(String userid) {
-        this.userid = userid;
-        this.presenterToModel = GeneralServerCommunicator.createInstance(userid);
+    public HabitPresenter() {
+        FirebaseAuth mauth = FirebaseAuth.getInstance();
+        this.model = GeneralServerCommunicator.createInstance(
+                String.valueOf(mauth.getCurrentUser()));
     }
 
     /**
      * setViewPipe - Set's setViewPipe to permit the Model to communicate with Presenter
      * @param listener
      */
-    public void setViewPipe(HabitPresenter.PresenterViewPipe listener) {
-        this.listener = listener;
-    }
+//    public void setViewPipe(HabitPresenter.PresenterViewPipe listener) {
+//        this.listener = listener;
+//    }
 
     /**
      * searchByName -  Lets the user search potential goals by it's name
@@ -45,7 +47,7 @@ public class HabitPresenter {
     public void searchByName(String filter, SuccessListener pv) {
         // mp is the listener that we use to tell if the Model operation succeeded
         SuccessListener mp = new SuccessListener();
-        this.presenterToModel.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
             public void onObjectReady(SuccessListener betweener) {
                 pv.setSuccess(true);
@@ -54,10 +56,10 @@ public class HabitPresenter {
                         pv.listgoals.add(g.name);
                     }
                 }
-                listener.onObjectReady(pv);
+//                listener.onObjectReady(pv);
             }
         });
-        this.presenterToModel.getListGoals(mp);
+        this.model.getListGoals(mp);
     }
 
     /**
@@ -68,7 +70,7 @@ public class HabitPresenter {
     public void searchByCategory(String filter, SuccessListener pv) {
         // mp is the listener that we use to tell if the Model operation succeeded
         SuccessListener mp = new SuccessListener();
-        this.presenterToModel.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
             public void onObjectReady(SuccessListener betweener) {
                 pv.setSuccess(true);
@@ -77,10 +79,10 @@ public class HabitPresenter {
                         pv.listgoals.add(g.name);
                     }
                 }
-                listener.onObjectReady(pv);
+//                listener.onObjectReady(pv);
             }
         });
-        this.presenterToModel.getListGoals(mp);
+        this.model.getListGoals(mp);
     }
 
     /**
@@ -91,17 +93,17 @@ public class HabitPresenter {
     public void searchByImpact(String filter, SuccessListener pv) {
         // mp is the listener that we use to tell if the Model operation succeeded
         SuccessListener mp = new SuccessListener();
-        this.presenterToModel.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
             public void onObjectReady(SuccessListener betweener) {
                 pv.setSuccess(true);
                 for (Goal g: betweener.usergoals) {
                     pv.listgoals.add(g.name);
                 }
-                listener.onObjectReady(pv);
+//                listener.onObjectReady(pv);
             }
         });
-        this.presenterToModel.getListGoals(mp);
+        this.model.getListGoals(mp);
     }
 
     /**
@@ -111,14 +113,14 @@ public class HabitPresenter {
      */
     public void userAddGoal(String goal, SuccessListener pv) {
         SuccessListener mp = new SuccessListener();
-        this.presenterToModel.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
             public void onObjectReady(SuccessListener betweener) {
                 pv.setSuccess(mp.success);
-                listener.onObjectReady(pv);
+//                listener.onObjectReady(pv);
             }
         });
-        this.presenterToModel.setGoals(goal, mp);
+        this.model.setGoals(goal, mp);
     }
 
     /**
@@ -128,7 +130,7 @@ public class HabitPresenter {
      */
     public void userGetGoal(String filter, SuccessListener pv) {
         SuccessListener mp = new SuccessListener();
-        this.presenterToModel.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
             public void onObjectReady(SuccessListener betweener) {
                 if (mp.success) {
@@ -139,11 +141,11 @@ public class HabitPresenter {
                     }
                 }
                 pv.setSuccess(mp.success);
-                listener.onObjectReady(pv);
+//                listener.onObjectReady(pv);
 
             }
         });
-        this.presenterToModel.getGoals(mp);
+        this.model.getGoals(mp);
     }
 
     /**
@@ -154,14 +156,14 @@ public class HabitPresenter {
      */
     public void userSetProg(String goal, int prog, SuccessListener pv) {
         SuccessListener mp = new SuccessListener();
-        this.presenterToModel.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
             public void onObjectReady(SuccessListener betweener) {
                 pv.setSuccess(mp.success);
-                listener.onObjectReady(pv);
+//                listener.onObjectReady(pv);
             }
         });
-        this.presenterToModel.setProg(goal, prog, mp);
+        this.model.setProg(goal, prog, mp);
     }
 
     /**
@@ -171,7 +173,7 @@ public class HabitPresenter {
      */
     public void userGetProg(String goal, SuccessListener pv) {
         SuccessListener mp = new SuccessListener();
-        this.presenterToModel.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
             public void onObjectReady(SuccessListener betweener) {
                 if (mp.success) {
@@ -181,9 +183,9 @@ public class HabitPresenter {
                 else {
                     pv.setSuccess(mp.success);
                 }
-                listener.onObjectReady(pv);
+//                listener.onObjectReady(pv);
             }
         });
-        this.presenterToModel.getProg(goal, mp);
+        this.model.getProg(goal, mp);
     }
 }
