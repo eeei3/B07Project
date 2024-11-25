@@ -1,6 +1,9 @@
 package com.example.b07project;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,8 +13,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<HabitsModel> habitsModels = new ArrayList<>();
-    ArrayList<HabitsModel> filteredHabitsModels = new ArrayList<>();
+    public static ArrayList<HabitsModel> habitsModels = new ArrayList<>();
+    public static ArrayList<HabitsModel> filteredHabitsModels = new ArrayList<>();
 
     int[] habitsImages = {R.drawable.habits_bringownbag, R.drawable.habits_cycling,
             R.drawable.habits_lessshoping, R.drawable.habits_limitmeat,
@@ -19,9 +22,6 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.habits_recycle, R.drawable.habits_turnlightsoff,
             R.drawable.habits_walking, R.drawable.habits_washcold};
 
-    String[] habitsCategories = {"Consumption", "Transportation", "Consumption",
-            "Food", "Food", "Transportation", "Energy", "Energy",
-            "Transportation", "Energy"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,32 +30,36 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.habit_list);
         ChipGroup filterChips = findViewById(R.id.filter_chip_group);
+        ImageView filterTool = findViewById(R.id.filter_icon);
+        ImageView searchTool = findViewById(R.id.search_icon);
 
         setUpHabitModels();
         HabitsAdapter adapter = new HabitsAdapter(this, habitsModels);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-
         filterChips.setOnCheckedStateChangeListener((group, checkedIds) -> {
             ArrayList<String> checkedCategories = new ArrayList<>();
 
             for (Integer chipId : checkedIds) {
                 Chip chip = findViewById(chipId);
-
                 if (chip != null) {
                     String chipTxt = chip.getText().toString().trim();
                     checkedCategories.add(chipTxt);
                 }
             }
-
             filterHabitsByChips(checkedCategories, adapter);
+        });
+
+        filterTool.setOnClickListener(v -> {
+
         });
 
     }
 
     private void setUpHabitModels(){
         String[] habitsNames = getResources().getStringArray(R.array.habits_list);
+        String[] habitsCategories = getResources().getStringArray(R.array.habits_categories);
         String[] habitsImpacts = getResources().getStringArray(R.array.habits_impacts);
         String[] habitsDesc = getResources().getStringArray(R.array.habits_desc);
         String[] habitsImpactsDesc = getResources().getStringArray(R.array.habits_impact_desc);

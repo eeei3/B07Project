@@ -88,6 +88,19 @@
         <item>Medium</item>
     </string-array>
 
+    <string-array name="habits_categories">
+        <item>Consumption</item>
+        <item>Transportation</item>
+        <item>Consumption</item>
+        <item>Food</item>
+        <item>Food</item>
+        <item>Transportation</item>
+        <item>Energy</item>
+        <item>Energy</item>
+        <item>Transportation</item>
+        <item>Energy</item>
+    </string-array>
+
     <string-array name="habits_desc">
         <item>Avoid using single-use plastic bags by bringing
             your own reusable bag when shopping.</item>

@@ -14,7 +14,6 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 public class HabitsSetGoalsDialogFragment extends DialogFragment {
@@ -50,7 +49,6 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
 
         // toggle visibility of reminder options if switch is flipped
         reminderSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> reminderOptionsContainer.setVisibility(isChecked ? View.VISIBLE : View.GONE));
-
 
         // Synchronize SeekBar with EditText
         timesSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
