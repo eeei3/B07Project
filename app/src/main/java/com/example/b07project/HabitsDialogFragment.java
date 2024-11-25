@@ -31,11 +31,14 @@ public class HabitsDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         Dialog dialog = getDialog();
-        Window window = dialog.getWindow();
-        // Check if the window is available
-        if (window != null) {
-            // Set the dialog size using LayoutParams
-            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        if (dialog != null) {
+            Window window = dialog.getWindow();
+            // Check if the window is available
+            if (window != null) {
+                // Set the dialog size using LayoutParams
+                window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            }
         }
     }
 
@@ -44,9 +47,18 @@ public class HabitsDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.habits_item_details, container, false);
 
         // Get the arguments passed to the fragment
-        String habitName = getArguments().getString(argHabitName);
-        String habitDescription = getArguments().getString(argHabitDesc);
-        int habitImage = getArguments().getInt(argHabitImage);
+        String habitName = null;
+        if (getArguments() != null) {
+            habitName = getArguments().getString(argHabitName);
+        }
+        String habitDescription = null;
+        if (getArguments() != null) {
+            habitDescription = getArguments().getString(argHabitDesc);
+        }
+        int habitImage = 0;
+        if (getArguments() != null) {
+            habitImage = getArguments().getInt(argHabitImage);
+        }
 
         // Find views and set the data
         TextView habitNameTextView = view.findViewById(R.id.habit_name);
