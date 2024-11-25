@@ -27,7 +27,7 @@ public class Home extends Fragment {
      * @param savedInstanceState If non-null, this fragment is being re-constructed
      * from a previous saved state as given here.
      *
-     * @return
+     * @return - the home fragment View.
      */
     @Nullable
     @Override
