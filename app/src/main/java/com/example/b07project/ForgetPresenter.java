@@ -8,6 +8,11 @@ public class ForgetPresenter {
     ServerCommunicator model;
 
 
+    public ForgetPresenter(ForgotPasswordFragment fView) {
+        this.fView = fView;
+        this.model = new ServerCommunicator();
+    }
+
     /**
      * PresenterViewPipe - Interface representing the communication pipe (listener) between
      * Presenter and View

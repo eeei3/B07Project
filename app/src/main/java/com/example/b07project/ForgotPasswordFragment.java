@@ -26,7 +26,7 @@ public class ForgotPasswordFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.forgot_password, container, false);
-        presenter = new ForgetPresenter();
+        presenter = new ForgetPresenter(this);
 
         editTextUserEmail = view.findViewById(R.id.emailForResetPass);
         Button btnResetPassword = view.findViewById(R.id.loadingButton);
