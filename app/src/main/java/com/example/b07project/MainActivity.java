@@ -68,9 +68,13 @@ public class MainActivity extends AppCompatActivity {
     private void setUpHabitModels(){
         String[] habitsNames = getResources().getStringArray(R.array.habits_list);
         String[] habitsImpacts = getResources().getStringArray(R.array.habits_impacts);
+        String[] habitsDesc = getResources().getStringArray(R.array.habits_desc);
+        String[] habitsImpactsDesc = getResources().getStringArray(R.array.habits_impact_desc);
 
         for (int i = 0; i < habitsNames.length; i++) {
-            habitsModels.add(new HabitsNewModel(habitsNames[i], habitsImages[i], habitsImpacts[i], habitsCategories[i]));
+            habitsModels.add(new HabitsNewModel(habitsNames[i], habitsImages[i],
+                    habitsImpacts[i], habitsCategories[i],
+                    habitsDesc[i], habitsImpactsDesc[i]));
         }
     }
 

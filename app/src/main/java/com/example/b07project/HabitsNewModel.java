@@ -5,12 +5,16 @@ public class HabitsNewModel {
     int image;
     String impact;
     String category;
+    String habitDesc;
+    String impactDesc;
 
-    public HabitsNewModel(String habitName, int image, String impact, String category) {
+    public HabitsNewModel(String habitName, int image, String impact, String category, String habitDesc, String impactDesc) {
         this.habitName = habitName;
         this.image = image;
         this.impact = impact;
         this.category = category;
+        this.habitDesc = habitDesc;
+        this.impactDesc = impactDesc;
     }
 
 
@@ -28,5 +32,13 @@ public class HabitsNewModel {
 
     public String getCategory() {
         return category;
+    }
+
+    public String getHabitDesc() {
+        return habitDesc;
+    }
+
+    public String getImpactDesc() {
+        return impactDesc;
     }
 }

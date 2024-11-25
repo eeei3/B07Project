@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,15 +37,28 @@ public class HabitsNewAdapter extends RecyclerView.Adapter<HabitsNewAdapter.MyVi
     @Override
     public HabitsNewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.habits_item, parent, false);
+        View view = inflater.inflate(R.layout.habits_item_row, parent, false);
         return new HabitsNewAdapter.MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull HabitsNewAdapter.MyViewHolder holder, int position) {
-        holder.habitName.setText(habitsModels.get(position).getHabitName());
-        holder.habitImage.setImageResource(habitsModels.get(position).getImage());
-        holder.habitImpact.setText(habitsModels.get(position).getImpact());
+        HabitsNewModel habit = habitsModels.get(position);
+        holder.habitName.setText(habit.getHabitName());
+        holder.habitImage.setImageResource(habit.getImage());
+        holder.habitImpact.setText(habit.getImpact());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HabitsDialogFragment habitDialog = HabitsDialogFragment.newInstance(
+                        habit.getHabitDesc(),
+                        habit.getImpactDesc(),
+                        habit.getImage()
+                );
+                habitDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "habit_details_dialog");
+            }
+        });
     }
 
     @Override
@@ -53,7 +67,7 @@ public class HabitsNewAdapter extends RecyclerView.Adapter<HabitsNewAdapter.MyVi
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        // grabbing views from habits_recycler_view_row
+        // grabbing views from rows
         ImageView habitImage;
         TextView habitName;
         TextView habitImpact;
