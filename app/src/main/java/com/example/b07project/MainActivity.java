@@ -1,20 +1,12 @@
 package com.example.b07project;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.CompoundButton;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,9 +19,9 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.habits_recycle, R.drawable.habits_turnlightsoff,
             R.drawable.habits_walking, R.drawable.habits_washcold};
 
-    String[] habitsCategories = {"Shopping", "Transportation", "Shopping",
-            "Eating", "Eating", "Transportation", "Home", "Home",
-            "Transportation", "Home"};
+    String[] habitsCategories = {"Consumption", "Transportation", "Consumption",
+            "Food", "Food", "Transportation", "Energy", "Energy",
+            "Transportation", "Energy"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,22 +37,19 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
 
-        filterChips.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
-            @Override
-            public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
-                ArrayList<String> checkedCategories = new ArrayList<>();
+        filterChips.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            ArrayList<String> checkedCategories = new ArrayList<>();
 
-                for (Integer chipId : checkedIds) {
-                    Chip chip = findViewById(chipId);
+            for (Integer chipId : checkedIds) {
+                Chip chip = findViewById(chipId);
 
-                    if (chip != null) {
-                        String chipTxt = chip.getText().toString().trim();
-                        checkedCategories.add(chipTxt);
-                    }
+                if (chip != null) {
+                    String chipTxt = chip.getText().toString().trim();
+                    checkedCategories.add(chipTxt);
                 }
-
-                filterHabitsByChips(checkedCategories, adapter);
             }
+
+            filterHabitsByChips(checkedCategories, adapter);
         });
 
     }

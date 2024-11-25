@@ -60,16 +60,16 @@
     </string-array>
 
     <string-array name="habits_impacts">
-        <item>Low</item>
-        <item>High</item>
-        <item>Medium</item>
-        <item>High</item>
-        <item>Medium</item>
-        <item>High</item>
-        <item>Medium</item>
-        <item>Low</item>
-        <item>High</item>
-        <item>Medium</item>
+        <item>Impact - Low</item>
+        <item>Impact - High</item>
+        <item>Impact - Medium</item>
+        <item>Impact - High</item>
+        <item>Impact - Medium</item>
+        <item>Impact - High</item>
+        <item>Impact - Medium</item>
+        <item>Impact - Low</item>
+        <item>Impact - High</item>
+        <item>Impact - Medium</item>
     </string-array>
 
     <string-array name="habits_desc">
@@ -110,5 +110,12 @@
             trips, making it an effective low-carbon transportation option.</item>
         <item>Impact: Medium — Reducing energy used for heating water
             can lower emissions especially if you do laundry often.</item>
+    </string-array>
+
+
+    <string-array name="frequency_options">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
     </string-array>
 </resources>

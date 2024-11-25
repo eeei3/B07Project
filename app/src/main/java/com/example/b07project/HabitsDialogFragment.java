@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -64,10 +65,17 @@ public class HabitsDialogFragment extends DialogFragment {
         TextView habitNameTextView = view.findViewById(R.id.habit_name);
         TextView habitDescriptionTextView = view.findViewById(R.id.habit_description);
         ImageView habitImageView = view.findViewById(R.id.habit_image);
+        Button habitAdopt = view.findViewById(R.id.positive_button);
 
         habitNameTextView.setText(habitName);
         habitDescriptionTextView.setText(habitDescription);
         habitImageView.setImageResource(habitImage);
+
+        habitAdopt.setOnClickListener(v -> {
+            dismiss();
+            SetGoalsDialogFragment setGoalsDialog = new SetGoalsDialogFragment();
+            setGoalsDialog.show(getParentFragmentManager(), "SecondDialog");
+        });
 
         return view;
     }

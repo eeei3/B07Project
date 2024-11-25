@@ -1,23 +1,16 @@
 package com.example.b07project;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.materialswitch.MaterialSwitch;
-import com.google.android.material.switchmaterial.SwitchMaterial;
-
 import java.util.ArrayList;
+
 public class HabitsNewAdapter extends RecyclerView.Adapter<HabitsNewAdapter.MyViewHolder> {
     Context context;
     ArrayList<HabitsNewModel> habitsModels;
@@ -48,16 +41,13 @@ public class HabitsNewAdapter extends RecyclerView.Adapter<HabitsNewAdapter.MyVi
         holder.habitImage.setImageResource(habit.getImage());
         holder.habitImpact.setText(habit.getImpact());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HabitsDialogFragment habitDialog = HabitsDialogFragment.newInstance(
-                        habit.getHabitDesc(),
-                        habit.getImpactDesc(),
-                        habit.getImage()
-                );
-                habitDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "habit_details_dialog");
-            }
+        holder.itemView.setOnClickListener(v -> {
+            HabitsDialogFragment habitDialog = HabitsDialogFragment.newInstance(
+                    habit.getHabitDesc(),
+                    habit.getImpactDesc(),
+                    habit.getImage()
+            );
+            habitDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "habit_details_dialog");
         });
     }
 
