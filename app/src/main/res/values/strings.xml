@@ -45,6 +45,22 @@
     </string>
 
     <string name="BYOB">Bring your own bag when shopping</string>
+    <string name="eco_friendly_habits">Eco-Friendly Habits</string>
+    <string name="search">Search</string>
+    <string name="filter">Filter</string>
+    <string name="transportation">Transportation</string>
+    <string name="energy">Energy</string>
+    <string name="consumption">Consumption</string>
+    <string name="food">Food</string>
+    <string name="image_of_habit">Image of Habit</string>
+    <string name="adopt_habit">Adopt Habit</string>
+    <string name="times_habit">How many times do you want to do this habit?</string>
+    <string name="enter_times_habits">Enter number of times</string>
+    <string name="want_reminders">Do you want reminders?</string>
+    <string name="reminder_time">Reminder Time</string>
+    <string name="reminder_frequency">Reminder Frequency</string>
+    <string name="save">Save</string>
+    <string name="icon_of_habit">Icon of Habit</string>
 
     <string-array name="habits_list">
         <item>Bring your own bag</item>
@@ -60,16 +76,16 @@
     </string-array>
 
     <string-array name="habits_impacts">
-        <item>Impact - Low</item>
-        <item>Impact - High</item>
-        <item>Impact - Medium</item>
-        <item>Impact - High</item>
-        <item>Impact - Medium</item>
-        <item>Impact - High</item>
-        <item>Impact - Medium</item>
-        <item>Impact - Low</item>
-        <item>Impact - High</item>
-        <item>Impact - Medium</item>
+        <item>Low</item>
+        <item>High</item>
+        <item>Medium</item>
+        <item>High</item>
+        <item>Medium</item>
+        <item>High</item>
+        <item>Medium</item>
+        <item>Low</item>
+        <item>High</item>
+        <item>Medium</item>
     </string-array>
 
     <string-array name="habits_desc">
@@ -118,4 +134,6 @@
         <item>Weekly</item>
         <item>Monthly</item>
     </string-array>
+
+
 </resources>

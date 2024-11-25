@@ -11,20 +11,31 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="How many times do you want to do this habit?"
+            android:text="@string/times_habit"
             android:textSize="16sp"
             android:layout_marginBottom="8dp" />
 
-        <NumberPicker
-            android:id="@+id/habit_quantity"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/times_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:inputType="number"
+            android:autofillHints=""
+            android:hint="@string/enter_times_habits"
+            android:padding="8dp"
+            android:backgroundTint="@color/planetze_colour_1" />
+
+        <SeekBar
+            android:id="@+id/times_seek_bar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal" />
+            android:layout_marginTop="16dp"
+            android:max="20" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Do you want reminders?"
+            android:text="@string/want_reminders"
             android:textSize="16sp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp" />
@@ -32,7 +43,7 @@
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/reminder_switch"
-            android:layout_width="48dp"
+            android:layout_width="55dp"
             android:layout_height="48dp" />
 
         <LinearLayout
@@ -46,7 +57,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reminder Time"
+                android:text="@string/reminder_time"
                 android:textSize="16sp" />
 
             <TimePicker
@@ -59,7 +70,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reminder Frequency"
+                android:text="@string/reminder_frequency"
                 android:textSize="16sp" />
 
             <Spinner
@@ -74,7 +85,7 @@
             android:id="@+id/save_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
+            android:text="@string/save"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp" />
 

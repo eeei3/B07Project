@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<HabitsNewModel> habitsModels = new ArrayList<>();
-    ArrayList<HabitsNewModel> filteredHabitsModels = new ArrayList<>();
+    ArrayList<HabitsModel> habitsModels = new ArrayList<>();
+    ArrayList<HabitsModel> filteredHabitsModels = new ArrayList<>();
 
     int[] habitsImages = {R.drawable.habits_bringownbag, R.drawable.habits_cycling,
             R.drawable.habits_lessshoping, R.drawable.habits_limitmeat,
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         ChipGroup filterChips = findViewById(R.id.filter_chip_group);
 
         setUpHabitModels();
-        HabitsNewAdapter adapter = new HabitsNewAdapter(this, habitsModels);
+        HabitsAdapter adapter = new HabitsAdapter(this, habitsModels);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
@@ -61,13 +61,13 @@ public class MainActivity extends AppCompatActivity {
         String[] habitsImpactsDesc = getResources().getStringArray(R.array.habits_impact_desc);
 
         for (int i = 0; i < habitsNames.length; i++) {
-            habitsModels.add(new HabitsNewModel(habitsNames[i], habitsImages[i],
+            habitsModels.add(new HabitsModel(habitsNames[i], habitsImages[i],
                     habitsImpacts[i], habitsCategories[i],
                     habitsDesc[i], habitsImpactsDesc[i]));
         }
     }
 
-    private void filterHabitsByChips(ArrayList<String> checkedCategories, HabitsNewAdapter adapter) {
+    private void filterHabitsByChips(ArrayList<String> checkedCategories, HabitsAdapter adapter) {
         filteredHabitsModels.clear();
 
         if (checkedCategories.isEmpty()) {

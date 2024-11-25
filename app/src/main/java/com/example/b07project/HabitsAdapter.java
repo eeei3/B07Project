@@ -11,38 +11,38 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
-public class HabitsNewAdapter extends RecyclerView.Adapter<HabitsNewAdapter.MyViewHolder> {
+public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHolder> {
     Context context;
-    ArrayList<HabitsNewModel> habitsModels;
+    ArrayList<HabitsModel> habitsModels;
 
 
-    public HabitsNewAdapter(Context context, ArrayList<HabitsNewModel> habitsModels) {
+    public HabitsAdapter(Context context, ArrayList<HabitsModel> habitsModels) {
         this.context = context;
         this.habitsModels = habitsModels;
     }
 
-    public void setHabitsModels(ArrayList<HabitsNewModel> habitsModels) {
+    public void setHabitsModels(ArrayList<HabitsModel> habitsModels) {
         this.habitsModels = habitsModels;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public HabitsNewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HabitsAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.habits_item_row, parent, false);
-        return new HabitsNewAdapter.MyViewHolder(view);
+        return new HabitsAdapter.MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HabitsNewAdapter.MyViewHolder holder, int position) {
-        HabitsNewModel habit = habitsModels.get(position);
+    public void onBindViewHolder(@NonNull HabitsAdapter.MyViewHolder holder, int position) {
+        HabitsModel habit = habitsModels.get(position);
         holder.habitName.setText(habit.getHabitName());
         holder.habitImage.setImageResource(habit.getImage());
         holder.habitImpact.setText(habit.getImpact());
 
         holder.itemView.setOnClickListener(v -> {
-            HabitsDialogFragment habitDialog = HabitsDialogFragment.newInstance(
+            HabitsDetailsDialogFragment habitDialog = HabitsDetailsDialogFragment.newInstance(
                     habit.getHabitDesc(),
                     habit.getImpactDesc(),
                     habit.getImage()

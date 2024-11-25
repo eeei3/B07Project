@@ -13,13 +13,13 @@ import android.view.Window;
 
 import androidx.fragment.app.DialogFragment;
 
-public class HabitsDialogFragment extends DialogFragment {
+public class HabitsDetailsDialogFragment extends DialogFragment {
     private static final String argHabitName = "habit_name";
     private static final String argHabitDesc = "habit_description";
     private static final String argHabitImage = "habit_image";
 
-    public static HabitsDialogFragment newInstance(String habitName, String habitDesc, int habitImage) {
-        HabitsDialogFragment fragment = new HabitsDialogFragment();
+    public static HabitsDetailsDialogFragment newInstance(String habitName, String habitDesc, int habitImage) {
+        HabitsDetailsDialogFragment fragment = new HabitsDetailsDialogFragment();
         Bundle args = new Bundle();
         args.putString(argHabitName, habitName);
         args.putString(argHabitDesc, habitDesc);
@@ -73,7 +73,7 @@ public class HabitsDialogFragment extends DialogFragment {
 
         habitAdopt.setOnClickListener(v -> {
             dismiss();
-            SetGoalsDialogFragment setGoalsDialog = new SetGoalsDialogFragment();
+            HabitsSetGoalsDialogFragment setGoalsDialog = new HabitsSetGoalsDialogFragment();
             setGoalsDialog.show(getParentFragmentManager(), "SecondDialog");
         });
 

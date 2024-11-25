@@ -11,7 +11,8 @@
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/image_of_habit"/>
 
     <TextView
         android:id="@+id/habit_name"
@@ -51,7 +52,7 @@
         android:id="@+id/positive_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Adopt Habit"
+        android:text="@string/adopt_habit"
         app:layout_constraintTop_toBottomOf="@id/habit_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

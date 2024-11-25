@@ -1,6 +1,6 @@
 package com.example.b07project;
 
-public class HabitsNewModel {
+public class HabitsModel {
     String habitName;
     int image;
     String impact;
@@ -8,7 +8,7 @@ public class HabitsNewModel {
     String habitDesc;
     String impactDesc;
 
-    public HabitsNewModel(String habitName, int image, String impact, String category, String habitDesc, String impactDesc) {
+    public HabitsModel(String habitName, int image, String impact, String category, String habitDesc, String impactDesc) {
         this.habitName = habitName;
         this.image = image;
         this.impact = impact;

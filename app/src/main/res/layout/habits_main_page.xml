@@ -26,7 +26,7 @@
             android:layout_weight="1"
             android:paddingStart="5dp"
             android:paddingEnd="0dp"
-            android:text="Eco-Friendly Habits"
+            android:text="@string/eco_friendly_habits"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -35,14 +35,14 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/search_icon"
-            android:contentDescription="Search" />
+            android:contentDescription="@string/search" />
 
         <ImageView
             android:id="@+id/filter_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/filter_icon"
-            android:contentDescription="Filter" />
+            android:contentDescription="@string/filter" />
 
     </LinearLayout>
 
@@ -69,31 +69,29 @@
                 android:id="@+id/transport_chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Transportation"
+                android:text="@string/transportation"
                 style="@style/Widget.MaterialComponents.Chip.Filter" />
 
             <com.google.android.material.chip.Chip
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Energy"
+                android:text="@string/energy"
                 style="@style/Widget.MaterialComponents.Chip.Filter" />
 
             <com.google.android.material.chip.Chip
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Consumption"
+                android:text="@string/consumption"
                 style="@style/Widget.MaterialComponents.Chip.Filter" />
 
             <com.google.android.material.chip.Chip
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Food"
+                android:text="@string/food"
                 style="@style/Widget.MaterialComponents.Chip.Filter" />
 
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
-
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/habit_list"
