@@ -149,7 +149,7 @@ public class EmissionsCalculator extends EmissionsData{
                                       String Renewable) {
 
         double emissions = 0;
-        
+
         // Map the user selections to corresponding indices
         int homeTypeIndex = Arrays.asList(homeTypes).indexOf(homeType);
         int householdSizeIndex = Arrays.asList(householdSizes).indexOf(householdSize);
@@ -174,12 +174,12 @@ public class EmissionsCalculator extends EmissionsData{
         }
 
         // User primarily uses renewable energy sources
-        if (Renewable.equals("Yes, primarily")) {
+        if (Renewable.equals(renewableEnergyUsage[0])) {
             emissions -= 6000;
         }
 
         // User sometimes uses renewable energy sources
-        if (Renewable.equals("Yes, partially")) {
+        if (Renewable.equals(renewableEnergyUsage[1])) {
             emissions -= 4000;
         }
 
