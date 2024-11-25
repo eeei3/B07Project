@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         filterTool.setOnClickListener(v -> {
-
+            HabitsFilterDialogFragment filterDialog = new HabitsFilterDialogFragment();
+            filterDialog.show(getSupportFragmentManager(), "filter_dialog");
         });
 
     }

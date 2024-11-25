@@ -74,7 +74,7 @@ public class HabitsDetailsDialogFragment extends DialogFragment {
         habitAdopt.setOnClickListener(v -> {
             dismiss();
             HabitsSetGoalsDialogFragment setGoalsDialog = new HabitsSetGoalsDialogFragment();
-            setGoalsDialog.show(getParentFragmentManager(), "SecondDialog");
+            setGoalsDialog.show(getParentFragmentManager(), "SetGoalsDialog");
         });
 
         return view;
