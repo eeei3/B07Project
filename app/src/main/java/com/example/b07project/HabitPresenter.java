@@ -135,7 +135,7 @@ public class HabitPresenter {
             public void onObjectReady(SuccessListener betweener) {
                 if (mp.success) {
                     for (Goal g : mp.usergoals) {
-                        if ((filter != null) || (filter == g.name)) {
+                        if ((filter != null) || (Objects.equals(filter, g.name))) {
                             pv.usergoals.add(g);
                         }
                     }
