@@ -57,6 +57,11 @@
         <item>Subway</item>
     </string-array>
 
+    <string-array name="flight_types">
+        <item>Short-haul(less than 1500 km)</item>
+        <item>Long-haul(more than 1500 km)</item>
+    </string-array>
+
     <string-array name="meal_types">
         <item>Beef</item>
         <item>Pork</item>
