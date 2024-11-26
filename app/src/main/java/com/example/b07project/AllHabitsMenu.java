@@ -17,10 +17,10 @@ import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 
 public class AllHabitsMenu extends AppCompatActivity {
-
     public static ArrayList<HabitsModel> habitsModels = new ArrayList<>();
     public static ArrayList<HabitsModel> filteredHabitsModels = new ArrayList<>();
     public static ArrayList<HabitsModel> userHabitsModels = new ArrayList<>();
+    private static final boolean[] currentMenu = {false}; // false for all habits, true for user's habits, final bcs android studio complains
 
     @SuppressLint("StaticFieldLeak")
     private static HabitsAdapter adapter;
@@ -49,7 +49,6 @@ public class AllHabitsMenu extends AppCompatActivity {
         int planetzeColour4 = ContextCompat.getColor(this, R.color.planetze_colour_4);
         allHabits.setBackgroundColor(planetzeColour3);
         usersHabits.setBackgroundColor(planetzeColour4);
-        final int[] currentState = {0}; // 0 for all habits, 1 for user's habits, final bcs android studio complains
 
         setUpHabitModels();
         adapter = new HabitsAdapter(this, habitsModels);
@@ -57,19 +56,19 @@ public class AllHabitsMenu extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         usersHabits.setOnClickListener(v -> {
-            if (currentState[0] == 0) {
+            if (!currentMenu[0]) {
                     usersHabits.setBackgroundColor(planetzeColour3);
                     allHabits.setBackgroundColor(planetzeColour4);
-                    currentState[0] = 1;
+                    currentMenu[0] = true;
                     setUserArrayForAdapter();
                 }
         });
 
         allHabits.setOnClickListener(v -> {
-            if (currentState[0] == 1) {
+            if (currentMenu[0]) {
                 allHabits.setBackgroundColor(planetzeColour3);
                 usersHabits.setBackgroundColor(planetzeColour4);
-                currentState[0] = 0;
+                currentMenu[0] = false;
                 setOriginalArrayForAdapter();
             }
         });
@@ -141,27 +140,32 @@ public class AllHabitsMenu extends AppCompatActivity {
     public static void filterHabits(ArrayList<String> checkedCategories,
                                             ArrayList<String> checkedImpacts) {
         filteredHabitsModels.clear();
+        ArrayList<HabitsModel> toBeFilteredHabitsModels = currentMenu[0] ? userHabitsModels : habitsModels;
 
         if (checkedCategories.isEmpty() && checkedImpacts.isEmpty()) {
-            setOriginalArrayForAdapter();
+            if (currentMenu[0]) {
+                setUserArrayForAdapter();
+            } else {
+                setOriginalArrayForAdapter();
+            }
             return;
         } else if (checkedImpacts.isEmpty()) {
-            for (int i = 0; i < habitsModels.size(); i++) {
-                if (checkedCategories.contains(habitsModels.get(i).getCategory())) {
-                    filteredHabitsModels.add(habitsModels.get(i));
+            for (int i = 0; i < toBeFilteredHabitsModels.size(); i++) {
+                if (checkedCategories.contains(toBeFilteredHabitsModels.get(i).getCategory())) {
+                    filteredHabitsModels.add(toBeFilteredHabitsModels.get(i));
                 }
             }
         } else if (checkedCategories.isEmpty()) {
-            for (int i = 0; i < habitsModels.size(); i++) {
-                if (checkedImpacts.contains(habitsModels.get(i).getImpact())) {
-                    filteredHabitsModels.add(habitsModels.get(i));
+            for (int i = 0; i < toBeFilteredHabitsModels.size(); i++) {
+                if (checkedImpacts.contains(toBeFilteredHabitsModels.get(i).getImpact())) {
+                    filteredHabitsModels.add(toBeFilteredHabitsModels.get(i));
                 }
             }
         } else {
-            for (int i = 0; i < habitsModels.size(); i++) {
-                if (checkedCategories.contains(habitsModels.get(i).getCategory())
-                        && checkedImpacts.contains(habitsModels.get(i).getImpact())) {
-                    filteredHabitsModels.add(habitsModels.get(i));
+            for (int i = 0; i < toBeFilteredHabitsModels.size(); i++) {
+                if (checkedCategories.contains(toBeFilteredHabitsModels.get(i).getCategory())
+                        && checkedImpacts.contains(toBeFilteredHabitsModels.get(i).getImpact())) {
+                    filteredHabitsModels.add(toBeFilteredHabitsModels.get(i));
                 }
             }
         }
@@ -170,8 +174,9 @@ public class AllHabitsMenu extends AppCompatActivity {
 
     public void filterBySearch(String newText) {
         filteredHabitsModels.clear();
+        ArrayList<HabitsModel> toBeFilteredHabitsModels = currentMenu[0] ? userHabitsModels : habitsModels;
 
-        for (HabitsModel habit : habitsModels) {
+        for (HabitsModel habit : toBeFilteredHabitsModels) {
             if (habit.getHabitName().toLowerCase().contains(newText.toLowerCase())
                     || habit.getHabitDesc().toLowerCase().contains(newText.toLowerCase())) {
                 filteredHabitsModels.add(habit);

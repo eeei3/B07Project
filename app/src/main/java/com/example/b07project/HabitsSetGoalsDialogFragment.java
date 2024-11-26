@@ -112,16 +112,10 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
                 frequency = frequencySpinner.getSelectedItem().toString();
             }
 
-            Log.d( "setGoals", "b4 loop");
             HabitsModel currentHabitModel;
             for (int i = 0; i < AllHabitsMenu.habitsModels.size(); i++) {
                 currentHabitModel = AllHabitsMenu.habitsModels.get(i);
-                Log.d( "setGoals", "be4 conditional");
-                System.out.println(currentHabitModel.getHabitDesc());
-                System.out.println(argHabitName);
-
                 if (currentHabitModel.getHabitDesc().equals(getArguments().getString(argHabitName))) {
-                    Log.d( "setGoals", "Model added");
                     AllHabitsMenu.userHabitsModels.add(currentHabitModel);
                 }
             }
