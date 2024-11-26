@@ -61,6 +61,11 @@
     <string name="reminder_frequency">Reminder Frequency</string>
     <string name="save">Save</string>
     <string name="icon_of_habit">Icon of Habit</string>
+    <string name="categories">Categories</string>
+    <string name="impact_on_co2_emission">Impact on CO2 Emission</string>
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
 
     <string-array name="habits_list">
         <item>Bring your own bag</item>
