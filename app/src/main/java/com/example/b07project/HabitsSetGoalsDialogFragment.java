@@ -1,7 +1,6 @@
 package com.example.b07project;
 
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -115,6 +114,8 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
             HabitsModel currentHabitModel;
             for (int i = 0; i < AllHabitsMenu.habitsModels.size(); i++) {
                 currentHabitModel = AllHabitsMenu.habitsModels.get(i);
+
+                assert getArguments() != null;
                 if (currentHabitModel.getHabitDesc().equals(getArguments().getString(argHabitName))) {
                     AllHabitsMenu.userHabitsModels.add(currentHabitModel);
                 }
