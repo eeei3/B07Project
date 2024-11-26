@@ -1,7 +1,7 @@
 package com.example.b07project;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<HabitsModel> habitsModels = new ArrayList<>();
     public static ArrayList<HabitsModel> filteredHabitsModels = new ArrayList<>();
+    @SuppressLint("StaticFieldLeak")
+    public static HabitsAdapter adapter;
 
     int[] habitsImages = {R.drawable.habits_bringownbag, R.drawable.habits_cycling,
             R.drawable.habits_lessshoping, R.drawable.habits_limitmeat,
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView searchTool = findViewById(R.id.search_icon);
 
         setUpHabitModels();
-        HabitsAdapter adapter = new HabitsAdapter(this, habitsModels);
+        adapter = new HabitsAdapter(this, habitsModels);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
@@ -48,12 +50,14 @@ public class MainActivity extends AppCompatActivity {
                     checkedCategories.add(chipTxt);
                 }
             }
-            filterHabitsByChips(checkedCategories, adapter);
+            filterHabits(checkedCategories, new ArrayList<>());
         });
 
         filterTool.setOnClickListener(v -> {
+            setOriginalArrayForAdapter();
             HabitsFilterDialogFragment filterDialog = new HabitsFilterDialogFragment();
             filterDialog.show(getSupportFragmentManager(), "filter_dialog");
+            filterChips.clearCheck();
         });
 
     }
@@ -72,19 +76,41 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void filterHabitsByChips(ArrayList<String> checkedCategories, HabitsAdapter adapter) {
+    private static void setFilteredArrayForAdapter() {
+        adapter.setHabitsModels(filteredHabitsModels);
+    }
+
+    private static void setOriginalArrayForAdapter() {
+        adapter.setHabitsModels(habitsModels);
+    }
+
+    public static void filterHabits(ArrayList<String> checkedCategories,
+                                            ArrayList<String> checkedImpacts) {
         filteredHabitsModels.clear();
 
-        if (checkedCategories.isEmpty()) {
-            adapter.setHabitsModels(habitsModels);
+        if (checkedCategories.isEmpty() && checkedImpacts.isEmpty()) {
+            setOriginalArrayForAdapter();
             return;
-        }
-        for (int i = 0; i < habitsModels.size(); i++) {
-            if (checkedCategories.contains(habitsModels.get(i).getCategory())) {
-                filteredHabitsModels.add(habitsModels.get(i));
+        } else if (checkedImpacts.isEmpty()) {
+            for (int i = 0; i < habitsModels.size(); i++) {
+                if (checkedCategories.contains(habitsModels.get(i).getCategory())) {
+                    filteredHabitsModels.add(habitsModels.get(i));
+                }
+            }
+        } else if (checkedCategories.isEmpty()) {
+            for (int i = 0; i < habitsModels.size(); i++) {
+                if (checkedImpacts.contains(habitsModels.get(i).getImpact())) {
+                    filteredHabitsModels.add(habitsModels.get(i));
+                }
+            }
+        } else {
+            for (int i = 0; i < habitsModels.size(); i++) {
+                if (checkedCategories.contains(habitsModels.get(i).getCategory())
+                        && checkedImpacts.contains(habitsModels.get(i).getImpact())) {
+                    filteredHabitsModels.add(habitsModels.get(i));
+                }
             }
         }
-
-        adapter.setHabitsModels(filteredHabitsModels);
+        setFilteredArrayForAdapter();
     }
 }
