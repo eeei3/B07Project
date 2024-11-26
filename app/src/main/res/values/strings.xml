@@ -45,7 +45,7 @@
     </string>
 
     <string name="BYOB">Bring your own bag when shopping</string>
-    <string name="eco_friendly_habits">Eco-Friendly Habits</string>
+    <string name="eco_friendly_habits">All Habits</string>
     <string name="search">Search</string>
     <string name="filter">Filter</string>
     <string name="transportation">Transportation</string>
@@ -66,6 +66,7 @@
     <string name="low">Low</string>
     <string name="medium">Medium</string>
     <string name="high">High</string>
+    <string name="your_habits">Your Habits</string>
 
     <string-array name="habits_list">
         <item>Bring your own bag</item>

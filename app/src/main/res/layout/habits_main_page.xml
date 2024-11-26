@@ -19,23 +19,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" >
 
-        <TextView
+        <Button
             android:id="@+id/habits_heading"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingStart="5dp"
-            android:paddingEnd="0dp"
-            android:text="@string/eco_friendly_habits"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:text="@string/eco_friendly_habits" />
 
-        <ImageView
-            android:id="@+id/search_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/search_icon"
-            android:contentDescription="@string/search" />
+        <Button
+            android:id="@+id/userHabitsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:text="@string/your_habits" />
+
+        <SearchView
+            android:id="@+id/search_tool"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:queryHint="Search..."
+            android:layout_marginStart="5dp"
+            android:iconifiedByDefault="false"
+            android:background="@drawable/search_bg"/>
 
         <ImageView
             android:id="@+id/filter_icon"

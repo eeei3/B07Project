@@ -3,6 +3,7 @@ package com.example.b07project;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.habit_list);
         ChipGroup filterChips = findViewById(R.id.filter_chip_group);
         ImageView filterTool = findViewById(R.id.filter_icon);
-        ImageView searchTool = findViewById(R.id.search_icon);
+        SearchView searchTool = findViewById(R.id.search_tool);
+        searchTool.clearFocus();
 
         setUpHabitModels();
         adapter = new HabitsAdapter(this, habitsModels);
@@ -60,6 +62,18 @@ public class MainActivity extends AppCompatActivity {
             filterChips.clearCheck();
         });
 
+        searchTool.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterBySearch(newText);
+                return true;
+            }
+        });
     }
 
     private void setUpHabitModels(){
@@ -109,6 +123,18 @@ public class MainActivity extends AppCompatActivity {
                         && checkedImpacts.contains(habitsModels.get(i).getImpact())) {
                     filteredHabitsModels.add(habitsModels.get(i));
                 }
+            }
+        }
+        setFilteredArrayForAdapter();
+    }
+
+    public void filterBySearch(String newText) {
+        filteredHabitsModels.clear();
+
+        for (HabitsModel habit : habitsModels) {
+            if (habit.getHabitName().toLowerCase().contains(newText.toLowerCase())
+                    || habit.getHabitDesc().toLowerCase().contains(newText.toLowerCase())) {
+                filteredHabitsModels.add(habit);
             }
         }
         setFilteredArrayForAdapter();
