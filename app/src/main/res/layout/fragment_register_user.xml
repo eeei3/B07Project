@@ -157,11 +157,10 @@
 
     <Button
         android:id="@+id/buttonRegisterUser"
-        android:layout_width="160dp"
+        android:layout_width="280dp"
         android:layout_height="50dp"
         android:layout_marginTop="48dp"
-        android:background="@drawable/log_in_button"
-        android:backgroundTint="#009999"
+        android:background="@drawable/round_button"
         android:text="register"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
