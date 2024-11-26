@@ -67,6 +67,9 @@
     <string name="medium">Medium</string>
     <string name="high">High</string>
     <string name="your_habits">Your Habits</string>
+    <string name="zero">0</string>
+    <string name="progress">Progress</string>
+    <string name="number_of_days">Number of days:</string>
 
     <string-array name="habits_list">
         <item>Bring your own bag</item>

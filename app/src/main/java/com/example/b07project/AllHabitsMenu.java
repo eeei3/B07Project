@@ -17,7 +17,7 @@ public class AllHabitsMenu extends AppCompatActivity {
     public static ArrayList<HabitsModel> habitsModels = new ArrayList<>();
     public static ArrayList<HabitsModel> filteredHabitsModels = new ArrayList<>();
     public static ArrayList<HabitsModel> userHabitsModels = new ArrayList<>();
-    private static final boolean[] currentMenu = {false}; // false for all habits, true for user's habits, final bcs android studio complains
+    public static final boolean[] currentMenu = {false}; // false for all habits, true for user's habits, final bcs android studio complains
 
     @SuppressLint("StaticFieldLeak")
     private static HabitsAdapter adapter;

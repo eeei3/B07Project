@@ -42,12 +42,14 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
         holder.habitImpact.setText(habit.getImpact());
 
         holder.itemView.setOnClickListener(v -> {
-            HabitsDetailsDialogFragment habitDialog = HabitsDetailsDialogFragment.newInstance(
-                    habit.getHabitDesc(),
-                    habit.getImpactDesc(),
-                    habit.getImage()
-            );
-            habitDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "habit_details_dialog");
+            if (!AllHabitsMenu.currentMenu[0]) {
+                HabitsDetailsDialogFragment habitDialog = HabitsDetailsDialogFragment.newInstance(
+                        habit.getHabitDesc(),
+                        habit.getImpactDesc(),
+                        habit.getImage()
+                );
+                habitDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "habit_details_dialog");
+            }
         });
     }
 
