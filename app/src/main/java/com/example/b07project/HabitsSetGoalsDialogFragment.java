@@ -1,8 +1,10 @@
 package com.example.b07project;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +19,21 @@ import androidx.fragment.app.DialogFragment;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 public class HabitsSetGoalsDialogFragment extends DialogFragment {
+    private static final String argHabitName = "habit_name_set_goals";
     private EditText timesEditText;
     private SeekBar timesSeekBar;
     private MaterialSwitch reminderSwitch;
     private TimePicker timePicker;
     private Spinner frequencySpinner;
     private View reminderOptionsContainer;
+
+    public static HabitsSetGoalsDialogFragment newInstance(String habitName) {
+        HabitsSetGoalsDialogFragment fragment = new HabitsSetGoalsDialogFragment();
+        Bundle args = new Bundle();
+        args.putString(argHabitName, habitName);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -88,7 +99,7 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
         saveButton.setOnClickListener(v -> {
 
             // store information in databases and such...
-
+            Log.d("setGoals", "saveClicked");
             int quantity = Integer.parseInt(timesEditText.getText().toString().trim());
             boolean remindersEnabled = reminderSwitch.isChecked();
             String reminderTime = null;
@@ -101,6 +112,19 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
                 frequency = frequencySpinner.getSelectedItem().toString();
             }
 
+            Log.d( "setGoals", "b4 loop");
+            HabitsModel currentHabitModel;
+            for (int i = 0; i < AllHabitsMenu.habitsModels.size(); i++) {
+                currentHabitModel = AllHabitsMenu.habitsModels.get(i);
+                Log.d( "setGoals", "be4 conditional");
+                System.out.println(currentHabitModel.getHabitDesc());
+                System.out.println(argHabitName);
+
+                if (currentHabitModel.getHabitDesc().equals(getArguments().getString(argHabitName))) {
+                    Log.d( "setGoals", "Model added");
+                    AllHabitsMenu.userHabitsModels.add(currentHabitModel);
+                }
+            }
 
             dismiss(); // Close the dialog
         });

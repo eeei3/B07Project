@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -122,7 +120,7 @@ public class HabitsFilterDialogFragment extends DialogFragment {
         });
 
         filterButton.setOnClickListener(v -> {
-            MainActivity.filterHabits(checkedCategories, checkedImpacts);
+            AllHabitsMenu.filterHabits(checkedCategories, checkedImpacts);
             dismiss();
         });
 

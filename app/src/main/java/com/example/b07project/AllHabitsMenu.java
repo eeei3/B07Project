@@ -1,23 +1,29 @@
 package com.example.b07project;
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class AllHabitsMenu extends AppCompatActivity {
 
     public static ArrayList<HabitsModel> habitsModels = new ArrayList<>();
     public static ArrayList<HabitsModel> filteredHabitsModels = new ArrayList<>();
+    public static ArrayList<HabitsModel> userHabitsModels = new ArrayList<>();
+
     @SuppressLint("StaticFieldLeak")
-    public static HabitsAdapter adapter;
+    private static HabitsAdapter adapter;
 
     int[] habitsImages = {R.drawable.habits_bringownbag, R.drawable.habits_cycling,
             R.drawable.habits_lessshoping, R.drawable.habits_limitmeat,
@@ -31,16 +37,42 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.habits_main_page);
 
+        Button allHabits = findViewById(R.id.allHabitsButton);
+        Button usersHabits = findViewById(R.id.userHabitsButton);
         RecyclerView recyclerView = findViewById(R.id.habit_list);
         ChipGroup filterChips = findViewById(R.id.filter_chip_group);
         ImageView filterTool = findViewById(R.id.filter_icon);
         SearchView searchTool = findViewById(R.id.search_tool);
         searchTool.clearFocus();
 
+        int planetzeColour3 = ContextCompat.getColor(this, R.color.planetze_colour_3);
+        int planetzeColour4 = ContextCompat.getColor(this, R.color.planetze_colour_4);
+        allHabits.setBackgroundColor(planetzeColour3);
+        usersHabits.setBackgroundColor(planetzeColour4);
+        final int[] currentState = {0}; // 0 for all habits, 1 for user's habits, final bcs android studio complains
+
         setUpHabitModels();
         adapter = new HabitsAdapter(this, habitsModels);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        usersHabits.setOnClickListener(v -> {
+            if (currentState[0] == 0) {
+                    usersHabits.setBackgroundColor(planetzeColour3);
+                    allHabits.setBackgroundColor(planetzeColour4);
+                    currentState[0] = 1;
+                    setUserArrayForAdapter();
+                }
+        });
+
+        allHabits.setOnClickListener(v -> {
+            if (currentState[0] == 1) {
+                allHabits.setBackgroundColor(planetzeColour3);
+                usersHabits.setBackgroundColor(planetzeColour4);
+                currentState[0] = 0;
+                setOriginalArrayForAdapter();
+            }
+        });
 
         filterChips.setOnCheckedStateChangeListener((group, checkedIds) -> {
             ArrayList<String> checkedCategories = new ArrayList<>();
@@ -62,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
             filterChips.clearCheck();
         });
 
+
+        // searching will uncheck all Chips and previous filters (don't know how
+        // to implement otherwise)
         searchTool.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -70,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                filterChips.clearCheck();
                 filterBySearch(newText);
                 return true;
             }
@@ -92,6 +128,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static void setFilteredArrayForAdapter() {
         adapter.setHabitsModels(filteredHabitsModels);
+    }
+
+    private static void setUserArrayForAdapter() {
+        adapter.setHabitsModels(userHabitsModels);
     }
 
     private static void setOriginalArrayForAdapter() {
