@@ -62,7 +62,7 @@ public class RegisterUserFragment extends Fragment {
         //click listener for register button
         buttonRegisterUser.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 registerUser();
             }
         });
@@ -138,7 +138,7 @@ public class RegisterUserFragment extends Fragment {
 
             Log.d(TAG, "User is signed in: " + user.getEmail());
 
-            startActivity(new Intent(getActivity(),MainActivity.class)); //not sure why "this" instead of getactivity() is not working
+            startActivity(new Intent(getActivity(),SurveyActivity.class)); //not sure why "this" instead of getactivity() is not working
 
         } else {
 
