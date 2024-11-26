@@ -59,4 +59,12 @@
     <string name="reset_pass">Reset Password</string>
     <string name="forgot_password_frame_desc">reset password panel</string>
     <string name="reset">Reset</string>
+
+    <string-array name="timeValues">
+        <item>Select time</item>
+        <item>Daily</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+    </string-array>
+
 </resources>
