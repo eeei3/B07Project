@@ -58,4 +58,6 @@ dependencies {
     // Chart and graph library
     implementation ("com.github.blackfizz:eazegraph:1.2.2@aar")
     implementation ("com.nineoldandroids:library:2.4.0")
+    implementation ("com.github.lecho:hellocharts-library:1.5.8@aar")
+
 }

@@ -16,6 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
+import lecho.lib.hellocharts.view.LineChartView;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
 
 
 import java.util.Arrays;
@@ -35,6 +39,7 @@ public class EcoGauge extends AppCompatActivity {
     private TextView totalEmissionsText, comparisonText, shopping, transportation,
             foodConsumption, energyUse, yourEmissions, yourEmissionsNumber, GlobalEmissions;
     private Spinner timeSpinner, countrySpinner;
+    LineChartView chart;
 
 
     @Override
@@ -64,6 +69,7 @@ public class EcoGauge extends AppCompatActivity {
         yourEmissions = findViewById(R.id.yourEmissions);
         yourEmissionsNumber = findViewById(R.id.yourEmissionsNumber);
         GlobalEmissions = findViewById(R.id.GlobalEmissions);
+        chart = findViewById(R.id.chart);
     }
 
 
@@ -71,33 +77,11 @@ public class EcoGauge extends AppCompatActivity {
      * Configures spinners with adapters and listeners.
      */
     private void setupTimeSpinners() {
-        ArrayAdapter<CharSequence> timeAdapter = ArrayAdapter.createFromResource(
-                this, R.array.timeValues, android.R.layout.simple_spinner_item);
-        timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        timeSpinner.setAdapter(timeAdapter);
-
-
-        timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-
-            /**
-             * Select daily, monthly or yearly
-             */
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = (String) parent.getItemAtPosition(position);
-                Toast.makeText(EcoGauge.this, "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
-                updateChartForTimePeriod(selectedItem);
-            }
-
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Optional: Handle the case when no item is selected
-            }
-        });
+            String[] categories = getResources().getStringArray(R.array.timeValues);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, categories);
+            Spinner locationSpinner = findViewById(R.id.timeSpinner);
+            timeSpinner.setAdapter(adapter);
     }
-
 
     /**
      * Updates the chart based on the selected time period.
@@ -120,6 +104,8 @@ public class EcoGauge extends AppCompatActivity {
                 double housingEmissions = getIntent().getDoubleExtra("housingEmissions", 0);
                 double consumptionEmissions = getIntent().getDoubleExtra("consumptionEmissions", 0);
 
+                //set the text
+                totalEmissionsText.setText(String.format("Yearly Carbon Footprint: %.2f tons of CO₂e", totalEmissions));
 
                 // Set the percentage of emissions to pie chart
                 transportation.setText(Integer.toString((int) transportationEmissions));
@@ -145,39 +131,9 @@ public class EcoGauge extends AppCompatActivity {
                         Color.parseColor("#29B6F6")));
                 break;
             default:
-                // Handle invalid selections
+                //
                 break;
         }
-    }
-
-
-
-
-    /**
-     * Updates the PieChart with emissions data.
-     *
-     * @param emissionsData The data to populate the PieChart.
-     */
-    private void updatePieChart(Map<String, Integer> emissionsData) {
-        if (emissionsData == null || emissionsData.isEmpty()) {
-            Toast.makeText(this, "No emissions data available", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        pieChart.clearChart(); // Clear any previous data
-        for (Map.Entry<String, Integer> entry : emissionsData.entrySet()) {
-            pieChart.addPieSlice(new PieModel(entry.getKey(), entry.getValue(), getRandomColor()));
-        }
-        pieChart.startAnimation();
-    }
-
-
-    /**
-     * Updates the total emissions TextView.
-     *
-     * @param totalEmissions Total emissions value.
-     */
-    private void updateTotalEmissions(int totalEmissions) {
-        totalEmissionsText.setText(String.format("Total Emissions: %d kg CO2e", totalEmissions));
     }
 
 
@@ -188,7 +144,6 @@ public class EcoGauge extends AppCompatActivity {
      */
     private void updateComparisonText(String comparison) {
         String location = getIntent().getStringExtra("location");
-
 
         // Placeholder: Assume these are the national and global target emissions
         int i = Arrays.asList(EmissionsData.countries).indexOf(location);
@@ -201,12 +156,14 @@ public class EcoGauge extends AppCompatActivity {
     }
 
     /**
-     * Generates a random color.
-     *
-     * @return Random RGB color.
+     * Updates the LineChart to show emissions trend (daily, weekly, monthly)
      */
-    private int getRandomColor() {
-        Random random = new Random();
-        return Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256));
+    private void updateLineChart() {
+        double totalEmissions = getIntent().getDoubleExtra("totalEmissions", 0)/1000;
+        //do same for month and day
+
+        //array for points
+        List<PointValue> values = new ArrayList<>();
+        values.add(new PointValue(0, (float)totalEmissions));
     }
 }

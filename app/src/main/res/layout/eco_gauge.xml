@@ -31,9 +31,10 @@
         <!-- Time Period Selector -->
         <Spinner
             android:id="@+id/timeSpinner"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="48dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="10dp"
             android:background="#F8F9FA"
             android:entries="@array/timeValues" />
 
@@ -41,23 +42,22 @@
 
 
         <!-- Total Emissions Overview -->
+
+
+        <!-- Pies -->
         <TextView
             android:id="@+id/totalEmissionsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="10dp"
             android:fontFamily="@font/custom_font"
             android:text="Total Emissions: 72 kg CO2e"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-
-
-
-        <!-- Pies -->
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="473dp"
+            android:layout_height="410dp"
             android:background="@color/white"
             tools:context=".MainActivity">
 
@@ -120,7 +120,7 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="15dp"
+                            android:layout_height="18dp"
                             android:layout_gravity="center_vertical">
 
 
@@ -155,7 +155,7 @@
                         <!--Linear layout to display Green-->
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="15dp"
+                            android:layout_height="18dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginTop="5dp">
 
@@ -166,7 +166,7 @@
                             <View
                                 android:layout_width="15dp"
                                 android:layout_height="match_parent"
-                                android:background="@color/planetze_colour_2" />
+                                android:background="@color/purple_200" />
 
 
 
@@ -187,7 +187,7 @@
                         <!--Linear layout to display Food consumption-->
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="15dp"
+                            android:layout_height="18dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginTop="5dp">
 
@@ -219,7 +219,7 @@
                         <!--Linear layout to display Energy use-->
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="15dp"
+                            android:layout_height="18dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginTop="5dp">
 
@@ -276,11 +276,12 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/details"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="180dp"
                 android:layout_below="@+id/cardViewGraph"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
                 android:elevation="10dp"
                 app:cardCornerRadius="10dp">
 
@@ -299,19 +300,19 @@
 
                     <!--Text view to use of -->
                     <!-- programming languages text-->
+
+
+                    <!--View to display the line-->
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="25dp"
                         android:layout_marginTop="20dp"
                         android:text="Comparison of your Emissions"
-                        android:textSize="23sp"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
-
-
-
-                    <!--View to display the line-->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -358,7 +359,7 @@
                             android:textAlignment="textEnd"
                             android:textColor="@color/planetze_colour_2"
                             android:id="@+id/yourEmissionsNumber"
-                            android:textSize="18sp"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
                     </RelativeLayout>
 
@@ -413,7 +414,7 @@
                             android:text="0"
                             android:textAlignment="textEnd"
                             android:textColor="@color/planetze_colour_2"
-                            android:textSize="18sp"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
 
 
@@ -445,8 +446,8 @@
         <Spinner
             android:id="@+id/countrySpinner"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="48dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="10dp"
             android:entries="@array/location_array" />
 
 
@@ -460,19 +461,22 @@
             android:text="Your emissions are 20% lower than the national average."
             android:textSize="20sp" />
 
+        <!-- Line chart -->
+        <TextView
+            android:id="@+id/Linechart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/custom_font"
+            android:text="Emissions Trend"
+            android:textSize="20sp" />
 
-
-
-        <!-- Line chart-->
-        <RelativeLayout
-
-
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
+        <lecho.lib.hellocharts.view.LineChartView
+            android:id="@+id/chart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".EcoGauge">
-        </RelativeLayout>
+            android:layout_height="200dp"
+            android:layout_margin="16dp" />
+
     </LinearLayout>
 </ScrollView>
 

@@ -61,7 +61,7 @@
     <string name="reset">Reset</string>
 
     <string-array name="timeValues">
-        <item>Select time</item>
+        <item>Select a time period</item>
         <item>Daily</item>
         <item>Monthly</item>
         <item>Yearly</item>
