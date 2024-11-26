@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -26,7 +25,7 @@ public class LoginUnitTesting {
         when(view1.getEmail()).thenReturn("joshualiu0307@gmail.com");
         when(view1.getPassword()).thenReturn("mockitotest");
         LoginPresenter presenter = new LoginPresenter(view1);
-        SuccessListener watcher = new SuccessListener();
+        AsyncAuthComms watcher = new AsyncAuthComms();
         presenter.beginAuthenticate(watcher);
         verify(view1).success();
     }
@@ -36,7 +35,7 @@ public class LoginUnitTesting {
         when(view2.getEmail()).thenReturn("ihatejava@java.com");
         when(view2.getPassword()).thenReturn("bruh");
         LoginPresenter presenter = new LoginPresenter(view2);
-        SuccessListener watcher = new SuccessListener();
+        AsyncAuthComms watcher = new AsyncAuthComms();
         presenter.beginAuthenticate(watcher);
         verify(view2).failure();
     }

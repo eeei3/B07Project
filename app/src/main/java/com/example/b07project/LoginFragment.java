@@ -15,8 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
-import java.util.Objects;
 //import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginFragment extends Fragment {
@@ -74,11 +72,11 @@ public class LoginFragment extends Fragment {
         presenter.setEmail(email);
         presenter.setPasswd(password);
         // Create object to hold if operation is successful or not
-        SuccessListener watcher = new SuccessListener();
+        AsyncAuthComms watcher = new AsyncAuthComms();
         // Create Listener to check if password reset successful or not.
         presenter.setViewPipe(new LoginPresenter.PresenterViewPipe() {
             @Override
-            public void onObjectReady(SuccessListener watcher) {
+            public void onObjectReady(AsyncAuthComms watcher) {
                 if (watcher.success) {
                     success();
                 }

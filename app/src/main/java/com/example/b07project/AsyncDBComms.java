@@ -5,8 +5,7 @@ import java.util.HashSet;
 /**
  * SuccessListener - Class representing the results of our asynchronous calls to Firebase auth
  */
-public class SuccessListener {
-    boolean success;
+public class AsyncDBComms extends AsyncComms {
     int value;
     HashSet<Goal> usergoals;
     HashSet<String> listgoals;
@@ -14,18 +13,10 @@ public class SuccessListener {
     /**
      * SuccessListener - Default constructor, sets success to false
      */
-    public SuccessListener() {
-        this.success = false;
+    public AsyncDBComms() {
+        super();
         this.usergoals = new HashSet<Goal>();
         this.listgoals = new HashSet<String>();
-    }
-
-    /**
-     * setSuccess - Modify the success field
-     * @param success - The new value of success
-     */
-    public void setSuccess(boolean success) {
-        this.success = success;
     }
 
     /**

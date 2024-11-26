@@ -25,7 +25,7 @@ public class ServerCommunicator extends Fragment {
      * and Presenter
      */
     public interface ModelPresenterPipe {
-        void onObjectReady(SuccessListener betweener);
+        void onObjectReady(AsyncAuthComms betweener);
     }
 
 
@@ -54,7 +54,7 @@ public class ServerCommunicator extends Fragment {
      * @param passwd - The user's entered password
      * @param watcher - How we notify the Presenter that the results are ready
      */
-    void login(String email, String passwd, SuccessListener watcher) {
+    void login(String email, String passwd, AsyncAuthComms watcher) {
         Task<AuthResult> task =  mAuth.signInWithEmailAndPassword(email, passwd);
         task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -72,7 +72,7 @@ public class ServerCommunicator extends Fragment {
      * @param email - The user's email
      * @param watcher - How we notify the Presenter that the results are ready
      */
-    void resetPasswd(String email, SuccessListener watcher) {
+    void resetPasswd(String email, AsyncAuthComms watcher) {
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

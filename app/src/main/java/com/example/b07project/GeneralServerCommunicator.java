@@ -79,7 +79,7 @@ final public class GeneralServerCommunicator {
      * ModelPresenterPipe - A listener exclusively for Model-Presenter communications
      */
     public interface ModelPresenterPipe {
-        void onObjectReady(SuccessListener betweener);
+        void onObjectReady(AsyncAuthComms betweener);
     }
 
     /**
@@ -106,7 +106,7 @@ final public class GeneralServerCommunicator {
     /**
      * Get the list of goals available on the Database
      */
-    void getListGoals(SuccessListener watcher) {
+    void getListGoals(AsyncAuthComms watcher) {
         Query listgoals = dbworker.child("habitslist");
         listgoals.addValueEventListener(new ValueEventListener() {
             @Override
@@ -131,7 +131,7 @@ final public class GeneralServerCommunicator {
     /**
      * Get the list of goals the user is currently working on
      */
-    void getGoals(SuccessListener watcher) {
+    void getGoals(AsyncAuthComms watcher) {
         Query usergoals = dbworker.child("users").child(userid);
         usergoals.addValueEventListener(new ValueEventListener() {
             @Override
@@ -164,7 +164,7 @@ final public class GeneralServerCommunicator {
     /**
      * Set a new goal for the user
      */
-    void setGoals(String goalname, SuccessListener watcher) {
+    void setGoals(String goalname, AsyncAuthComms watcher) {
         dbworker.child("users").child(userid).setValue(new Goal(goalname, 0))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -183,7 +183,7 @@ final public class GeneralServerCommunicator {
     /**
      * Get the progress of a goal that the user is working on
      */
-    void getProg(String goal, SuccessListener watcher) {
+    void getProg(String goal, AsyncAuthComms watcher) {
         dbworker.child("users").child(userid).child("habits").child(goal)
                 .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
@@ -206,7 +206,7 @@ final public class GeneralServerCommunicator {
     /**
      * Set the progress of a goal that the user is working on
      */
-    void setProg(String goalname, int prog, SuccessListener watcher) {
+    void setProg(String goalname, int prog, AsyncAuthComms watcher) {
         dbworker.child("users").child(userid).child(goalname).setValue(prog)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

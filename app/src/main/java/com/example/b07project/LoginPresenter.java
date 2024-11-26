@@ -19,7 +19,7 @@ public class LoginPresenter {
      */
     public interface PresenterViewPipe {
         // This is the event that we fire when operation has been completed
-        void onObjectReady(SuccessListener betweener);
+        void onObjectReady(AsyncAuthComms betweener);
     }
 
     /**
@@ -53,15 +53,15 @@ public class LoginPresenter {
      * beginAuthenticate - Initiates the Authentication process, communicates with Model
      * @param pv - The SuccessListener that allows the Presenter to pass its results to the View
      */
-    public void beginAuthenticate(SuccessListener pv) {
+    public void beginAuthenticate(AsyncAuthComms pv) {
         // Create a ServerCommunicator (Model) object
 //        ServerCommunicator socket = new ServerCommunicator();
         // An object between the Model and Presenter to track outcome of operation
-        SuccessListener mp = new SuccessListener();
+        AsyncAuthComms mp = new AsyncAuthComms();
         // Create a Listener for the Model's operation
         model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(SuccessListener mp) {
+            public void onObjectReady(AsyncAuthComms mp) {
                 if (mp.success) {
                     lView.success();
                 }

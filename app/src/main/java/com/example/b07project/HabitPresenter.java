@@ -44,12 +44,12 @@ public class HabitPresenter {
      * @param filter - The filter the user wishes to apply to the list
      * @param pv - How we notify the View that the results are ready
      */
-    public void searchByName(String filter, SuccessListener pv) {
+    public void searchByName(String filter, AsyncAuthComms pv) {
         // mp is the listener that we use to tell if the Model operation succeeded
-        SuccessListener mp = new SuccessListener();
+        AsyncAuthComms mp = new AsyncAuthComms();
         this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(SuccessListener betweener) {
+            public void onObjectReady(AsyncAuthComms betweener) {
                 pv.setSuccess(true);
                 for (Goal g: betweener.usergoals) {
                     if (Objects.equals(g.name, filter)) {
@@ -67,12 +67,12 @@ public class HabitPresenter {
      * @param filter - The filter the user wishes to apply to the list
      * @param pv - How we notify the View that the results are ready
      */
-    public void searchByCategory(String filter, SuccessListener pv) {
+    public void searchByCategory(String filter, AsyncAuthComms pv) {
         // mp is the listener that we use to tell if the Model operation succeeded
-        SuccessListener mp = new SuccessListener();
+        AsyncAuthComms mp = new AsyncAuthComms();
         this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(SuccessListener betweener) {
+            public void onObjectReady(AsyncAuthComms betweener) {
                 pv.setSuccess(true);
                 for (Goal g: betweener.usergoals) {
                     if (g.types.contains(filter)) {
@@ -90,12 +90,12 @@ public class HabitPresenter {
      * @param filter - The filter the user wishes to apply to the list
      * @param pv - How we notify the View that the results are ready
      */
-    public void searchByImpact(String filter, SuccessListener pv) {
+    public void searchByImpact(String filter, AsyncAuthComms pv) {
         // mp is the listener that we use to tell if the Model operation succeeded
-        SuccessListener mp = new SuccessListener();
+        AsyncAuthComms mp = new AsyncAuthComms();
         this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(SuccessListener betweener) {
+            public void onObjectReady(AsyncAuthComms betweener) {
                 pv.setSuccess(true);
                 for (Goal g: betweener.usergoals) {
                     pv.listgoals.add(g.name);
@@ -111,11 +111,11 @@ public class HabitPresenter {
      * @param goal - The goal the user wishes to work towards
      * @param pv - How we notify the View that the results are ready
      */
-    public void userAddGoal(String goal, SuccessListener pv) {
-        SuccessListener mp = new SuccessListener();
+    public void userAddGoal(String goal, AsyncAuthComms pv) {
+        AsyncAuthComms mp = new AsyncAuthComms();
         this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(SuccessListener betweener) {
+            public void onObjectReady(AsyncAuthComms betweener) {
                 pv.setSuccess(mp.success);
 //                listener.onObjectReady(pv);
             }
@@ -128,11 +128,11 @@ public class HabitPresenter {
      * @param filter - If the user chooses to filter the results
      * @param pv - How we notify the View that the results are ready
      */
-    public void userGetGoal(String filter, SuccessListener pv) {
-        SuccessListener mp = new SuccessListener();
+    public void userGetGoal(String filter, AsyncAuthComms pv) {
+        AsyncAuthComms mp = new AsyncAuthComms();
         this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(SuccessListener betweener) {
+            public void onObjectReady(AsyncAuthComms betweener) {
                 if (mp.success) {
                     for (Goal g : mp.usergoals) {
                         if ((filter != null) || (Objects.equals(filter, g.name))) {
@@ -154,11 +154,11 @@ public class HabitPresenter {
      * @param prog - The user's new progress
      * @param pv - How we notify the View that the results are ready
      */
-    public void userSetProg(String goal, int prog, SuccessListener pv) {
-        SuccessListener mp = new SuccessListener();
+    public void userSetProg(String goal, int prog, AsyncAuthComms pv) {
+        AsyncAuthComms mp = new AsyncAuthComms();
         this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(SuccessListener betweener) {
+            public void onObjectReady(AsyncAuthComms betweener) {
                 pv.setSuccess(mp.success);
 //                listener.onObjectReady(pv);
             }
@@ -171,11 +171,11 @@ public class HabitPresenter {
      * @param goal - The goal whose progress the user wishes to fetch
      * @param pv - How we notify the View that the results are ready
      */
-    public void userGetProg(String goal, SuccessListener pv) {
-        SuccessListener mp = new SuccessListener();
+    public void userGetProg(String goal, AsyncAuthComms pv) {
+        AsyncAuthComms mp = new AsyncAuthComms();
         this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(SuccessListener betweener) {
+            public void onObjectReady(AsyncAuthComms betweener) {
                 if (mp.success) {
                     pv.setSuccess(mp.success);
                     pv.setValue(mp.value);
