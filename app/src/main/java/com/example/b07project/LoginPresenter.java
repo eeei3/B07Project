@@ -10,7 +10,7 @@ public class LoginPresenter {
     PresenterViewPipe listener;
 
     LoginFragment lView;
-    ServerCommunicator model;
+    FirebaseAuthHandler model;
 
 
     /**
@@ -28,7 +28,7 @@ public class LoginPresenter {
      */
     public LoginPresenter(LoginFragment lView) {
         this.lView = lView;
-        this.model = new ServerCommunicator();
+        this.model = new FirebaseAuthHandler();
     }
 
     public void setEmail(String email) {
@@ -59,7 +59,7 @@ public class LoginPresenter {
         // An object between the Model and Presenter to track outcome of operation
         AsyncAuthComms mp = new AsyncAuthComms();
         // Create a Listener for the Model's operation
-        model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncAuthComms mp) {
                 if (mp.success) {

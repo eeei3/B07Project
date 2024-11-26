@@ -47,7 +47,7 @@ public class HabitPresenter {
     public void searchByName(String filter, AsyncAuthComms pv) {
         // mp is the listener that we use to tell if the Model operation succeeded
         AsyncAuthComms mp = new AsyncAuthComms();
-        this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncAuthComms betweener) {
                 pv.setSuccess(true);
@@ -70,7 +70,7 @@ public class HabitPresenter {
     public void searchByCategory(String filter, AsyncAuthComms pv) {
         // mp is the listener that we use to tell if the Model operation succeeded
         AsyncAuthComms mp = new AsyncAuthComms();
-        this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncAuthComms betweener) {
                 pv.setSuccess(true);
@@ -93,7 +93,7 @@ public class HabitPresenter {
     public void searchByImpact(String filter, AsyncAuthComms pv) {
         // mp is the listener that we use to tell if the Model operation succeeded
         AsyncAuthComms mp = new AsyncAuthComms();
-        this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncAuthComms betweener) {
                 pv.setSuccess(true);
@@ -113,7 +113,7 @@ public class HabitPresenter {
      */
     public void userAddGoal(String goal, AsyncAuthComms pv) {
         AsyncAuthComms mp = new AsyncAuthComms();
-        this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncAuthComms betweener) {
                 pv.setSuccess(mp.success);
@@ -130,7 +130,7 @@ public class HabitPresenter {
      */
     public void userGetGoal(String filter, AsyncAuthComms pv) {
         AsyncAuthComms mp = new AsyncAuthComms();
-        this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncAuthComms betweener) {
                 if (mp.success) {
@@ -156,7 +156,7 @@ public class HabitPresenter {
      */
     public void userSetProg(String goal, int prog, AsyncAuthComms pv) {
         AsyncAuthComms mp = new AsyncAuthComms();
-        this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncAuthComms betweener) {
                 pv.setSuccess(mp.success);
@@ -173,7 +173,7 @@ public class HabitPresenter {
      */
     public void userGetProg(String goal, AsyncAuthComms pv) {
         AsyncAuthComms mp = new AsyncAuthComms();
-        this.model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncAuthComms betweener) {
                 if (mp.success) {

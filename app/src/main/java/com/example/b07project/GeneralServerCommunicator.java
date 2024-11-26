@@ -73,7 +73,7 @@ final public class GeneralServerCommunicator {
     final private DatabaseReference dbworker;
     private String userid;
 
-    ServerCommunicator.ModelPresenterPipe listener;
+    FirebaseAuthHandler.ModelPresenterPipe listener;
 
     /**
      * ModelPresenterPipe - A listener exclusively for Model-Presenter communications
@@ -99,7 +99,7 @@ final public class GeneralServerCommunicator {
      * setModelPipe - Set's ModelPresenterPipe to permit the Presenter to communicate with Model
      * @param listener
      */
-    public void setModelPipe(ServerCommunicator.ModelPresenterPipe listener) {
+    public void setModelPipe(FirebaseAuthHandler.ModelPresenterPipe listener) {
         this.listener = listener;
     }
 

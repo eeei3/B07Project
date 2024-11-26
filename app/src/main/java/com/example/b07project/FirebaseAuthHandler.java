@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 /**
  * This is the Model portion of the Login Module. It handles login and password reset requests
  */
-public class ServerCommunicator extends Fragment {
+public class FirebaseAuthHandler extends Model{
     final FirebaseAuth mAuth;
     ModelPresenterPipe listener;
 
@@ -21,32 +21,13 @@ public class ServerCommunicator extends Fragment {
 
 
     /**
-     * ModelPresenterPipe - Interface representing the communication pipe (listener) between Model
-     * and Presenter
-     */
-    public interface ModelPresenterPipe {
-        void onObjectReady(AsyncAuthComms betweener);
-    }
-
-
-    /**
      * ServerCommunicator - Default constructor, gets Firebase Authentication instance
      * and sets listener to null
      */
-    public ServerCommunicator() {
+    public FirebaseAuthHandler() {
         this.mAuth = FirebaseAuth.getInstance();
         this.listener = null;
     }
-
-
-    /**
-     * setModelPipe - To permit communications between Model and Presenter
-     * @param listener - How we notify the Presenter that the results are ready
-     */
-    public void setModelPipe(ModelPresenterPipe listener) {
-        this.listener = listener;
-    }
-
 
     /**
      * login - For when the user attempts to log in
