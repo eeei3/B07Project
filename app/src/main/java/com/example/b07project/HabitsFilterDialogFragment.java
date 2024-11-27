@@ -120,7 +120,7 @@ public class HabitsFilterDialogFragment extends DialogFragment {
         });
 
         filterButton.setOnClickListener(v -> {
-            AllHabitsMenu.filterHabits(checkedCategories, checkedImpacts);
+            HabitsMenu.filterHabits(checkedCategories, checkedImpacts);
             dismiss();
         });
 

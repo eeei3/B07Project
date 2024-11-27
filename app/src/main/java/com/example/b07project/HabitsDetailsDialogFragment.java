@@ -74,15 +74,15 @@ public class HabitsDetailsDialogFragment extends DialogFragment {
 
         // get current HabitsModel
         HabitsModel currModel = null;
-        for (int i = 0; i < AllHabitsMenu.habitsModels.size(); i++) {
-            if (AllHabitsMenu.habitsModels.get(i).getHabitDesc().equals(habitDesc)) {
-                currModel = AllHabitsMenu.habitsModels.get(i);
+        for (int i = 0; i < HabitsMenu.habitsModels.size(); i++) {
+            if (HabitsMenu.habitsModels.get(i).getHabitDesc().equals(habitDesc)) {
+                currModel = HabitsMenu.habitsModels.get(i);
             }
         }
         final HabitsModel habit = currModel;
 
         habitAdopt.setOnClickListener(v -> {
-            if (AllHabitsMenu.userHabitsModels.contains(habit)) {
+            if (HabitsMenu.userHabitsModels.contains(habit)) {
                 Toast.makeText(requireContext(), "Habit already added.", Toast.LENGTH_SHORT).show();
             } else {
                 dismiss();

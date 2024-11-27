@@ -111,12 +111,12 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
             }
 
             HabitsModel currentHabitModel;
-            for (int i = 0; i < AllHabitsMenu.habitsModels.size(); i++) {
-                currentHabitModel = AllHabitsMenu.habitsModels.get(i);
+            for (int i = 0; i < HabitsMenu.habitsModels.size(); i++) {
+                currentHabitModel = HabitsMenu.habitsModels.get(i);
 
                 assert getArguments() != null;
                 if (currentHabitModel.getHabitDesc().equals(getArguments().getString(argHabitDesc))) {
-                    AllHabitsMenu.userHabitsModels.add(currentHabitModel);
+                    HabitsMenu.userHabitsModels.add(currentHabitModel);
                     // Notify the adapter that the habit has been updated
                     if (getActivity() instanceof OnHabitUpdatedListener) {
                         ((OnHabitUpdatedListener) getActivity()).onHabitUpdated(currentHabitModel);

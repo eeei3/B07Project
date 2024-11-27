@@ -4,15 +4,12 @@ import static android.view.View.GONE;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,8 +21,6 @@ import java.util.ArrayList;
 public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHolder> {
     Context context;
     ArrayList<HabitsModel> habitsModels;
-    private OnHabitUpdatedListener listener;
-
 
     public HabitsAdapter(Context context, ArrayList<HabitsModel> habitsModels) {
         this.context = context;
@@ -56,8 +51,8 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
         holder.habitCard.setCardBackgroundColor(white);
         holder.cancelButton.setVisibility(GONE); //make sure cancel btn is only visible in users page
 
-        if (!AllHabitsMenu.currentMenu[0]) {
-            if (AllHabitsMenu.userHabitsModels.contains(habit)) {
+        if (!HabitsMenu.currentMenu[0]) {
+            if (HabitsMenu.userHabitsModels.contains(habit)) {
                 int planetzeColour2 = ContextCompat.getColor(context, R.color.planetze_colour_2);
                 holder.habitCard.setCardBackgroundColor(planetzeColour2);
             }
@@ -72,7 +67,7 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
                             // Handle the "No" action
                             Toast.makeText(context, "Habit Removed", Toast.LENGTH_SHORT).show();
                             int pos = habitsModels.indexOf(habit); // Get the position of the habit in the list
-                            AllHabitsMenu.userHabitsModels.remove(habit);
+                            HabitsMenu.userHabitsModels.remove(habit);
 
 
                             notifyItemRemoved(pos);  // Notify the adapter to remove the item at the position
@@ -81,7 +76,7 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
                             // Handle the "Yes" action
                             Toast.makeText(context, "Habit Removed", Toast.LENGTH_SHORT).show();
                             int pos = habitsModels.indexOf(habit); // Get the position of the habit in the list
-                            AllHabitsMenu.userHabitsModels.remove(habit);
+                            HabitsMenu.userHabitsModels.remove(habit);
 
                             notifyItemRemoved(pos);  // Notify the adapter to remove the item at the position
                         });
@@ -92,7 +87,7 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
         }
 
         holder.itemView.setOnClickListener(v -> {
-            if (!AllHabitsMenu.currentMenu[0]) {
+            if (!HabitsMenu.currentMenu[0]) {
                 HabitsDetailsDialogFragment habitDialog = HabitsDetailsDialogFragment.newInstance(
                         habit.getHabitDesc(),
                         habit.getImpactDesc(),
@@ -107,10 +102,6 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
             }
         });
 
-        // Updating background after interaction
-        if (listener != null) {
-            listener.onHabitUpdated(habit);
-        }
     }
 
     @Override
