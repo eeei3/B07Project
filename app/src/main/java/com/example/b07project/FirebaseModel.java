@@ -67,8 +67,8 @@ class Goal {
  * GeneralServerCommunicator - The Model portion of the Habit Suggestion Module
  */
 
-final public class GeneralServerCommunicator {
-    private static GeneralServerCommunicator serverCommunicator;
+final public class FirebaseModel extends Model {
+    private static FirebaseModel serverCommunicator;
     final private FirebaseDatabase db;
     final private DatabaseReference dbworker;
     private String userid;
@@ -76,37 +76,20 @@ final public class GeneralServerCommunicator {
     FirebaseAuthHandler.ModelPresenterPipe listener;
 
     /**
-     * ModelPresenterPipe - A listener exclusively for Model-Presenter communications
-     */
-    public interface ModelPresenterPipe {
-        void onObjectReady(AsyncAuthComms betweener);
-    }
-
-    /**
      * GeneralServerCommunicator - Constructor, creates a reference to the Firebase Database,
      * follows Singleton SOLID design
      * @param userid - the id of the user
      */
-    private GeneralServerCommunicator(String userid) {
+    private FirebaseModel(String userid) {
         this.userid = userid;
         db = FirebaseDatabase.getInstance("https://b07project-b43b0-default-rtdb.firebaseio.com/");
         dbworker = db.getInstance().getReference();
     }
 
-    // Tell's Model which listener from Presenter to notify when operation is completed
-
-    /**
-     * setModelPipe - Set's ModelPresenterPipe to permit the Presenter to communicate with Model
-     * @param listener
-     */
-    public void setModelPipe(FirebaseAuthHandler.ModelPresenterPipe listener) {
-        this.listener = listener;
-    }
-
     /**
      * Get the list of goals available on the Database
      */
-    void getListGoals(AsyncAuthComms watcher) {
+    void getListGoals(AsyncDBComms watcher) {
         Query listgoals = dbworker.child("habitslist");
         listgoals.addValueEventListener(new ValueEventListener() {
             @Override
@@ -115,14 +98,14 @@ final public class GeneralServerCommunicator {
                 for (DataSnapshot goals: snapshot.getChildren()) {
                     res.add(goals.getKey());
                 }
-                watcher.setSuccess(true);
+                watcher.setResult(true);
                 watcher.setListgoals(res);
                 listener.onObjectReady(watcher);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                watcher.setSuccess(false);
+                watcher.setResult(false);
                 listener.onObjectReady(watcher);
             }
         });
@@ -131,7 +114,7 @@ final public class GeneralServerCommunicator {
     /**
      * Get the list of goals the user is currently working on
      */
-    void getGoals(AsyncAuthComms watcher) {
+    void getGoals(AsyncDBComms watcher) {
         Query usergoals = dbworker.child("users").child(userid);
         usergoals.addValueEventListener(new ValueEventListener() {
             @Override
@@ -148,14 +131,14 @@ final public class GeneralServerCommunicator {
                         res.add(temp);
                     }
                 }
-                watcher.setSuccess(true);
+                watcher.setResult(true);
                 watcher.setUsergoals(res);
                 listener.onObjectReady(watcher);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                watcher.setSuccess(false);
+                watcher.setResult(false);
                 listener.onObjectReady(watcher);
             }
         });
@@ -164,13 +147,13 @@ final public class GeneralServerCommunicator {
     /**
      * Set a new goal for the user
      */
-    void setGoals(String goalname, AsyncAuthComms watcher) {
+    void setGoals(String goalname, AsyncDBComms watcher) {
         dbworker.child("users").child(userid).setValue(new Goal(goalname, 0))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            watcher.setSuccess(true);
+                            watcher.setResult(true);
                             listener.onObjectReady(watcher);
                         }
                         else {
@@ -183,7 +166,7 @@ final public class GeneralServerCommunicator {
     /**
      * Get the progress of a goal that the user is working on
      */
-    void getProg(String goal, AsyncAuthComms watcher) {
+    void getProg(String goal, AsyncDBComms watcher) {
         dbworker.child("users").child(userid).child("habits").child(goal)
                 .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
@@ -191,12 +174,12 @@ final public class GeneralServerCommunicator {
                         if (task.isSuccessful()) {
                             // Fetch the values we want
                             watcher.value = Integer.parseInt((String) task.getResult().getValue());
-                            watcher.setSuccess(true);
+                            watcher.setResult(true);
                             listener.onObjectReady(watcher);
                         }
                         else {
                             // Return an error
-                            watcher.setSuccess(false);
+                            watcher.setResult(false);
                             listener.onObjectReady(watcher);
                         }
                     }
@@ -206,13 +189,13 @@ final public class GeneralServerCommunicator {
     /**
      * Set the progress of a goal that the user is working on
      */
-    void setProg(String goalname, int prog, AsyncAuthComms watcher) {
+    void setProg(String goalname, int prog, AsyncDBComms watcher) {
         dbworker.child("users").child(userid).child(goalname).setValue(prog)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            watcher.setSuccess(true);
+                            watcher.setResult(true);
                             listener.onObjectReady(watcher);
                         }
                         else {
@@ -222,9 +205,9 @@ final public class GeneralServerCommunicator {
                 });
     }
 
-    public static GeneralServerCommunicator createInstance(String userid) {
+    public static FirebaseModel createInstance(String userid) {
         if (serverCommunicator == null)
-            serverCommunicator = new GeneralServerCommunicator(userid);
+            serverCommunicator = new FirebaseModel(userid);
         return serverCommunicator;
     }
 

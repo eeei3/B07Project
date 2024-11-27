@@ -26,7 +26,7 @@ public class LoginUnitTesting {
         when(view1.getPassword()).thenReturn("mockitotest");
         LoginPresenter presenter = new LoginPresenter(view1);
         AsyncAuthComms watcher = new AsyncAuthComms();
-        presenter.beginAuthenticate(watcher);
+        presenter.beginAuthenticate();
         verify(view1).success();
     }
 
@@ -36,7 +36,7 @@ public class LoginUnitTesting {
         when(view2.getPassword()).thenReturn("bruh");
         LoginPresenter presenter = new LoginPresenter(view2);
         AsyncAuthComms watcher = new AsyncAuthComms();
-        presenter.beginAuthenticate(watcher);
+        presenter.beginAuthenticate();
         verify(view2).failure();
     }
 

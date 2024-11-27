@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-public class ForgotPasswordFragment extends Fragment {
+public class ForgotPasswordFragment extends Fragment implements BView{
     private EditText editTextUserEmail;
 
     ForgetPresenter presenter;
@@ -41,13 +41,11 @@ public class ForgotPasswordFragment extends Fragment {
                 String email = editTextUserEmail.getText().toString().trim();
                 // Create communication channel with the Presenter
                 presenter.setEmail(email);
-                // Create object to hold if operation is successful or not
-                AsyncAuthComms watcher = new AsyncAuthComms();
                 // Create Listener to check if password reset successful or not.
                 presenter.setViewPipe(new LoginPresenter.PresenterViewPipe() {
                     @Override
                     public void onObjectReady(AsyncAuthComms watcher) {
-                        if (watcher.success) {
+                        if (watcher.res) {
                             success();
                         }
                         else {
@@ -56,7 +54,7 @@ public class ForgotPasswordFragment extends Fragment {
                     }
                 });
                 // Reset password
-                presenter.beginReset(watcher);
+                presenter.beginReset();
                 finishLoading(btnResetPassword, btnProgressReset);
             }
         });
@@ -89,11 +87,6 @@ public class ForgotPasswordFragment extends Fragment {
     public void failure() {
         Toast.makeText(getContext(), "Failure", Toast.LENGTH_SHORT).show();
     }
-
-    public void getEmail() {
-
-    }
-
 
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();

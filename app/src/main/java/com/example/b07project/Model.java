@@ -2,14 +2,14 @@ package com.example.b07project;
 
 public abstract class Model {
     ModelPresenterPipe listener;
-    Presenter presenter;
+    BView BView;
 
     /**
      * ModelPresenterPipe - Interface representing the communication pipe (listener) between Model
      * and Presenter
      */
     public interface ModelPresenterPipe {
-        void onObjectReady(AsyncAuthComms betweener);
+        void onObjectReady(AsyncComms betweener);
     }
 
     /**

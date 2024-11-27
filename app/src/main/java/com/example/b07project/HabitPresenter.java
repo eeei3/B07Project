@@ -9,17 +9,7 @@ import java.util.Objects;
  * Class representing the Presenter portion of the Habit Suggestion Module
  */
 public class HabitPresenter {
-    GeneralServerCommunicator model;
-//    HabitPresenter.PresenterViewPipe listener;
-    //View view;
-
-    /**
-     * PresenterViewPipe - Interface representing the communication pipe (listener) between
-     * Presenter and View
-     */
-//    public interface PresenterViewPipe {
-//        void onObjectReady(SuccessListener listener);
-//    }
+    FirebaseModel model;
 
     /**
      * HabitPresenter - Default Constructor that sets userid and creates an instance of
@@ -27,31 +17,24 @@ public class HabitPresenter {
      */
     public HabitPresenter() {
         FirebaseAuth mauth = FirebaseAuth.getInstance();
-        this.model = GeneralServerCommunicator.createInstance(
+        this.model = FirebaseModel.createInstance(
                 String.valueOf(mauth.getCurrentUser()));
     }
-
-    /**
-     * setViewPipe - Set's setViewPipe to permit the Model to communicate with Presenter
-     * @param listener
-     */
-//    public void setViewPipe(HabitPresenter.PresenterViewPipe listener) {
-//        this.listener = listener;
-//    }
 
     /**
      * searchByName -  Lets the user search potential goals by it's name
      * @param filter - The filter the user wishes to apply to the list
      * @param pv - How we notify the View that the results are ready
      */
-    public void searchByName(String filter, AsyncAuthComms pv) {
+    public void searchByName(String filter, AsyncDBComms pv) {
         // mp is the listener that we use to tell if the Model operation succeeded
-        AsyncAuthComms mp = new AsyncAuthComms();
+        AsyncDBComms mp = new AsyncDBComms();
         this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(AsyncAuthComms betweener) {
-                pv.setSuccess(true);
-                for (Goal g: betweener.usergoals) {
+            public void onObjectReady(AsyncComms betweener) {
+                AsyncDBComms plug = (AsyncDBComms) betweener;
+                pv.setResult(true);
+                for (Goal g: plug.usergoals) {
                     if (Objects.equals(g.name, filter)) {
                         pv.listgoals.add(g.name);
                     }
@@ -67,14 +50,15 @@ public class HabitPresenter {
      * @param filter - The filter the user wishes to apply to the list
      * @param pv - How we notify the View that the results are ready
      */
-    public void searchByCategory(String filter, AsyncAuthComms pv) {
+    public void searchByCategory(String filter, AsyncDBComms pv) {
         // mp is the listener that we use to tell if the Model operation succeeded
-        AsyncAuthComms mp = new AsyncAuthComms();
+        AsyncDBComms mp = new AsyncDBComms();
         this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(AsyncAuthComms betweener) {
-                pv.setSuccess(true);
-                for (Goal g: betweener.usergoals) {
+            public void onObjectReady(AsyncComms betweener) {
+                AsyncDBComms plug = (AsyncDBComms) betweener;
+                pv.setResult(true);
+                for (Goal g: plug.usergoals) {
                     if (g.types.contains(filter)) {
                         pv.listgoals.add(g.name);
                     }
@@ -90,14 +74,15 @@ public class HabitPresenter {
      * @param filter - The filter the user wishes to apply to the list
      * @param pv - How we notify the View that the results are ready
      */
-    public void searchByImpact(String filter, AsyncAuthComms pv) {
+    public void searchByImpact(String filter, AsyncDBComms pv) {
         // mp is the listener that we use to tell if the Model operation succeeded
-        AsyncAuthComms mp = new AsyncAuthComms();
+        AsyncDBComms mp = new AsyncDBComms();
         this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(AsyncAuthComms betweener) {
-                pv.setSuccess(true);
-                for (Goal g: betweener.usergoals) {
+            public void onObjectReady(AsyncComms betweener) {
+                AsyncDBComms plug = (AsyncDBComms) betweener;
+                pv.setResult(true);
+                for (Goal g: plug.usergoals) {
                     pv.listgoals.add(g.name);
                 }
 //                listener.onObjectReady(pv);
@@ -111,12 +96,13 @@ public class HabitPresenter {
      * @param goal - The goal the user wishes to work towards
      * @param pv - How we notify the View that the results are ready
      */
-    public void userAddGoal(String goal, AsyncAuthComms pv) {
-        AsyncAuthComms mp = new AsyncAuthComms();
+    public void userAddGoal(String goal, AsyncDBComms pv) {
+        AsyncDBComms mp = new AsyncDBComms();
         this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(AsyncAuthComms betweener) {
-                pv.setSuccess(mp.success);
+            public void onObjectReady(AsyncComms betweener) {
+                AsyncDBComms plug = (AsyncDBComms) betweener;
+                pv.setResult(mp.res);
 //                listener.onObjectReady(pv);
             }
         });
@@ -128,19 +114,19 @@ public class HabitPresenter {
      * @param filter - If the user chooses to filter the results
      * @param pv - How we notify the View that the results are ready
      */
-    public void userGetGoal(String filter, AsyncAuthComms pv) {
-        AsyncAuthComms mp = new AsyncAuthComms();
+    public void userGetGoal(String filter, AsyncDBComms pv) {
+        AsyncDBComms mp = new AsyncDBComms();
         this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(AsyncAuthComms betweener) {
-                if (mp.success) {
+            public void onObjectReady(AsyncComms betweener) {
+                if (mp.res) {
                     for (Goal g : mp.usergoals) {
                         if ((filter != null) || (Objects.equals(filter, g.name))) {
                             pv.usergoals.add(g);
                         }
                     }
                 }
-                pv.setSuccess(mp.success);
+                pv.setResult(mp.res);
 //                listener.onObjectReady(pv);
 
             }
@@ -154,13 +140,13 @@ public class HabitPresenter {
      * @param prog - The user's new progress
      * @param pv - How we notify the View that the results are ready
      */
-    public void userSetProg(String goal, int prog, AsyncAuthComms pv) {
-        AsyncAuthComms mp = new AsyncAuthComms();
+    public void userSetProg(String goal, int prog, AsyncDBComms pv) {
+        AsyncDBComms mp = new AsyncDBComms();
         this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(AsyncAuthComms betweener) {
-                pv.setSuccess(mp.success);
-//                listener.onObjectReady(pv);
+            public void onObjectReady(AsyncComms betweener) {
+                AsyncDBComms plug = (AsyncDBComms) betweener;
+                pv.setResult(mp.res);
             }
         });
         this.model.setProg(goal, prog, mp);
@@ -171,19 +157,19 @@ public class HabitPresenter {
      * @param goal - The goal whose progress the user wishes to fetch
      * @param pv - How we notify the View that the results are ready
      */
-    public void userGetProg(String goal, AsyncAuthComms pv) {
-        AsyncAuthComms mp = new AsyncAuthComms();
+    public void userGetProg(String goal, AsyncDBComms pv) {
+        AsyncDBComms mp = new AsyncDBComms();
         this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(AsyncAuthComms betweener) {
-                if (mp.success) {
-                    pv.setSuccess(mp.success);
-                    pv.setValue(mp.value);
+            public void onObjectReady(AsyncComms betweener) {
+                AsyncDBComms plug = (AsyncDBComms) betweener;
+                if (plug.res) {
+                    pv.setResult(plug.res);
+                    pv.setValue(plug.value);
                 }
                 else {
-                    pv.setSuccess(mp.success);
+                    pv.setResult(plug.res);
                 }
-//                listener.onObjectReady(pv);
             }
         });
         this.model.getProg(goal, mp);

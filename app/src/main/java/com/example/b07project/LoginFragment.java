@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 //import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements BView {
     private EditText editTextUserEmail, editTextUserPassword;
 
     LoginPresenter presenter;
@@ -77,7 +77,7 @@ public class LoginFragment extends Fragment {
         presenter.setViewPipe(new LoginPresenter.PresenterViewPipe() {
             @Override
             public void onObjectReady(AsyncAuthComms watcher) {
-                if (watcher.success) {
+                if (watcher.res) {
                     success();
                 }
                 else {
@@ -86,17 +86,7 @@ public class LoginFragment extends Fragment {
             }
         });
         // Log in user
-        presenter.beginAuthenticate(watcher);
-
-        /*
-        UserLogin user = new UserLogin(email, password, DatabaseUrl);
-
-        if (user.BeginAuthenticate()) {
-            // change to dashboard layout?
-        } else {
-            Toast.makeText(getContext(),"Invalid email address or password", Toast.LENGTH_SHORT).show();
-        }
-        */
+        presenter.beginAuthenticate();
     }
 
     public void success() {

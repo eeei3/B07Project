@@ -40,7 +40,7 @@ public class FirebaseAuthHandler extends Model{
         task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                watcher.setSuccess(task.isSuccessful());
+                watcher.setResult(task.isSuccessful());
                 listener.onObjectReady(watcher);
             }
             }
@@ -58,7 +58,7 @@ public class FirebaseAuthHandler extends Model{
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                            watcher.setSuccess(task.isSuccessful());
+                            watcher.setResult(task.isSuccessful());
                             listener.onObjectReady(watcher);
                     }
                 });
