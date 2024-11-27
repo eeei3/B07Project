@@ -4,6 +4,7 @@ import static java.security.AccessController.getContext;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
 import android.util.Log;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ public class SurveyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitivity_survey);
         view = this;
@@ -146,15 +148,7 @@ public class SurveyActivity extends AppCompatActivity {
 
                 // Pass the emissions data via Intent
                 Intent intent = new Intent(SurveyActivity.this, ResultsActivity.class);
-                intent.putExtra("totalEmissions", totalEmissions);
-                intent.putExtra("transportationEmissions", transportationEmissions);
-                intent.putExtra("foodEmissions", foodEmissions);
-                intent.putExtra("housingEmissions", housingEmissions);
-                intent.putExtra("consumptionEmissions", consumptionEmissions);
-
-                // Optionally, pass other details
-                String location = SelectedOption(locationSpinner);
-                intent.putExtra("location", location);
+                intent.putExtra("userID", auth.getCurrentUser().getUid());
                 startActivity(intent);
             }
         });

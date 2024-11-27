@@ -1,75 +1,79 @@
 package com.example.b07project;
-import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
-import androidx.appcompat.app.AppCompatActivity;
-import android.widget.Button;
-import android.view.View;
-import android.content.Intent;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.util.Arrays;
-import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.b07project.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 public class ResultsActivity extends AppCompatActivity {
 
     // TextViews for displaying the results
     TextView totalEmissionsTextView, transportationTextView, foodTextView, housingTextView, consumptionTextView;
-    TextView comparisonTextView, globalTargetComparisonTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
+        // Initialize the TextViews
         totalEmissionsTextView = findViewById(R.id.totalEmissionsTextView);
         transportationTextView = findViewById(R.id.transportationTextView);
         foodTextView = findViewById(R.id.foodTextView);
         housingTextView = findViewById(R.id.housingTextView);
         consumptionTextView = findViewById(R.id.consumptionTextView);
-        comparisonTextView = findViewById(R.id.comparisonTextView);
-        globalTargetComparisonTextView = findViewById(R.id.globalTargetComparisonTextView);
 
-        // Retrieve the total emissions passed from the SurveyActivity
-        double totalEmissions = getIntent().getDoubleExtra("totalEmissions", 0)/1000;
-        double transportationEmissions = getIntent().getDoubleExtra("transportationEmissions", 0);
-        double foodEmissions = getIntent().getDoubleExtra("foodEmissions", 0);
-        double housingEmissions = getIntent().getDoubleExtra("housingEmissions", 0);
-        double consumptionEmissions = getIntent().getDoubleExtra("consumptionEmissions", 0);
-        String location = getIntent().getStringExtra("location");
+        // Get the userID (assuming you passed it in the Intent)
+        String userID = getIntent().getStringExtra("userID");
 
-        // Display the total carbon footprint
-        totalEmissionsTextView.setText(String.format("Total Carbon Footprint: %.2f tons of CO₂e", totalEmissions));
-        transportationTextView.setText(String.format("Transportation: %.2f tons of CO₂e", transportationEmissions));
-        foodTextView.setText(String.format("Food: %.2f tons of CO₂e", foodEmissions));
-        housingTextView.setText(String.format("Housing: %.2f tons of CO₂e", housingEmissions));
-        consumptionTextView.setText(String.format("Comsumption: %.2f tons of CO₂e", consumptionEmissions));
+        // Firebase reference to the user's data
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users")
+                .child(userID).child("annualEmissions");
 
-        // Placeholder: Assume these are the national and global target emissions
-        int i = Arrays.asList(EmissionsData.countries).indexOf(location);
-        double nationalAverage = EmissionsData.globalAverages[i]; // Example: National average emissions in tons
-        // Calculate comparison to national average
-        double nationalComparison = ((totalEmissions) / nationalAverage) * 100;
-        comparisonTextView.setText(String.format("Your carbon footprint is %.2f%% of the national average.", nationalComparison));
+        // Fetch data from Firebase
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Retrieve values from Firebase
+                    Double totalEmission = dataSnapshot.child("totalEmission").getValue(Double.class);
+                    Double transportationEmission = dataSnapshot.child("transportationEmissions").getValue(Double.class);
+                    Double foodEmission = dataSnapshot.child("foodEmissions").getValue(Double.class);
+                    Double housingEmission = dataSnapshot.child("housingEmissions").getValue(Double.class);
+                    Double consumptionEmission = dataSnapshot.child("consumptionEmissions").getValue(Double.class);
 
-        // Calculate comparison to global target
-        double globalComparison = ((totalEmissions - 2) / 2) * 100;
-        globalTargetComparisonTextView.setText(String.format("You are %.2f%% above the global target.", globalComparison));
+                    // Check if each value is null and assign default values if necessary
+                    totalEmission = (totalEmission != null) ? totalEmission : 0.0;
+                    transportationEmission = (transportationEmission != null) ? transportationEmission : 0.0;
+                    foodEmission = (foodEmission != null) ? foodEmission : 0.0;
+                    housingEmission = (housingEmission != null) ? housingEmission : 0.0;
+                    consumptionEmission = (consumptionEmission != null) ? consumptionEmission : 0.0;
 
-        // If needed, also display individual breakdowns for categories like food, transportation, etc.
+                    // Update TextViews with Firebase data
+                    totalEmissionsTextView.setText(String.format("Total: %.2f tons CO₂e", totalEmission));
+                    transportationTextView.setText(String.format("Transportation: %.2f tons CO₂e", transportationEmission));
+                    foodTextView.setText(String.format("Food: %.2f tons CO₂e", foodEmission));
+                    housingTextView.setText(String.format("Housing: %.2f tons CO₂e", housingEmission));
+                    consumptionTextView.setText(String.format("Consumption: %.2f tons CO₂e", consumptionEmission));
+                } else {
+                    Toast.makeText(ResultsActivity.this, "No data available", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ResultsActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
