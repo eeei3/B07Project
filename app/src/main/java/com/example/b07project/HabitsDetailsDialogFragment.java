@@ -71,10 +71,23 @@ public class HabitsDetailsDialogFragment extends DialogFragment {
         habitDescriptionTextView.setText(habitDescription);
         habitImageView.setImageResource(habitImage);
 
+        HabitsModel currModel = null;
+        for (int i = 0; i < AllHabitsMenu.habitsModels.size(); i++) {
+            if (AllHabitsMenu.habitsModels.get(i).getHabitDesc().equals(habitName)) {
+                currModel = AllHabitsMenu.habitsModels.get(i);
+            }
+        }
+        final HabitsModel habit = currModel;
+
         habitAdopt.setOnClickListener(v -> {
             dismiss();
             HabitsSetGoalsDialogFragment setGoalsDialog = HabitsSetGoalsDialogFragment.newInstance(getArguments().getString(argHabitName));
             setGoalsDialog.show(getParentFragmentManager(), "SetGoalsDialog");
+
+            // Notify adapter to update color
+            if (getActivity() instanceof OnHabitUpdatedListener) {
+                ((OnHabitUpdatedListener) getActivity()).onHabitUpdated(habit);
+            }
         });
 
         return view;

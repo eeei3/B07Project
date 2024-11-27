@@ -46,7 +46,20 @@
         android:inputType="number"
         android:minWidth="48dp"
         android:minHeight="48dp"
+        android:enabled="false"
+        android:textColor="@color/planetze_colour_5"
         android:textColorHint="#546E7A"
         app:layout_constraintStart_toStartOf="@id/userHabitProgressBar"
         app:layout_constraintTop_toBottomOf="@id/userHabitProgressBar" />
+
+    <Button
+        android:id="@+id/logActivityButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/log_activity"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="@color/planetze_colour_4"
+        app:layout_constraintTop_toBottomOf="@id/userHabitNumDaysInt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

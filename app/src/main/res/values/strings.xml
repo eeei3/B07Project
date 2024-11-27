@@ -70,6 +70,7 @@
     <string name="zero">0</string>
     <string name="progress">Progress</string>
     <string name="number_of_days">Number of days:</string>
+    <string name="log_activity">Log Activity</string>
 
     <string-array name="habits_list">
         <item>Bring your own bag</item>

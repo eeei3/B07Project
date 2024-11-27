@@ -13,7 +13,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 
-public class AllHabitsMenu extends AppCompatActivity {
+public class AllHabitsMenu extends AppCompatActivity implements OnHabitUpdatedListener{
     public static ArrayList<HabitsModel> habitsModels = new ArrayList<>();
     public static ArrayList<HabitsModel> filteredHabitsModels = new ArrayList<>();
     public static ArrayList<HabitsModel> userHabitsModels = new ArrayList<>();
@@ -180,5 +180,15 @@ public class AllHabitsMenu extends AppCompatActivity {
             }
         }
         setFilteredArrayForAdapter();
+    }
+
+    @Override
+    public void onHabitUpdated(HabitsModel habit) {
+        // Find the corresponding habit in the list and change its color
+        int position = habitsModels.indexOf(habit);
+        if (position != -1) {
+            // Update the background color for that position
+            adapter.notifyItemChanged(position);
+        }
     }
 }

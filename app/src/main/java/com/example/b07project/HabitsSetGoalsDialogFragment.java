@@ -98,7 +98,7 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
         saveButton.setOnClickListener(v -> {
 
             // store information in databases and such...
-            Log.d("setGoals", "saveClicked");
+
             int quantity = Integer.parseInt(timesEditText.getText().toString().trim());
             boolean remindersEnabled = reminderSwitch.isChecked();
             String reminderTime = null;
@@ -118,6 +118,11 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
                 assert getArguments() != null;
                 if (currentHabitModel.getHabitDesc().equals(getArguments().getString(argHabitName))) {
                     AllHabitsMenu.userHabitsModels.add(currentHabitModel);
+
+                    // Notify the adapter that the habit has been updated
+                    if (getActivity() instanceof OnHabitUpdatedListener) {
+                        ((OnHabitUpdatedListener) getActivity()).onHabitUpdated(currentHabitModel);
+                    }
                 }
             }
 
