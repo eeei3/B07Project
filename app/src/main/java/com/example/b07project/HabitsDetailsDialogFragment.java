@@ -63,7 +63,8 @@ public class HabitsDetailsDialogFragment extends DialogFragment {
         if (dialog != null) {
             Window window = dialog.getWindow();
             if (window != null) {
-                window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
             }
         }
     }

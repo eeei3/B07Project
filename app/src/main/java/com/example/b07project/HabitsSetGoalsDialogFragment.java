@@ -169,7 +169,8 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
         // define behaviour for when the "Save" button is clicked
         saveButton.setOnClickListener(v -> {
 
-            // (Note for Back-end) extracted data to store information in databases and such...
+            // (Note for Back-end)
+            // extracted data to store information in databases and such...
             /*
             int quantity = Integer.parseInt(timesEditText.getText().toString().trim());
             boolean remindersEnabled = reminderSwitch.isChecked();
