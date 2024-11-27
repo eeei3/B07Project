@@ -10,19 +10,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.app.Dialog;
 import android.view.Window;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 
 public class HabitsDetailsDialogFragment extends DialogFragment {
-    private static final String argHabitName = "habit_name";
-    private static final String argHabitDesc = "habit_description";
+    private static final String argHabitDesc = "habit_desc";
+    private static final String argImpactDesc = "impact_desc";
     private static final String argHabitImage = "habit_image";
 
     public static HabitsDetailsDialogFragment newInstance(String habitName, String habitDesc, int habitImage) {
         HabitsDetailsDialogFragment fragment = new HabitsDetailsDialogFragment();
         Bundle args = new Bundle();
-        args.putString(argHabitName, habitName);
-        args.putString(argHabitDesc, habitDesc);
+        args.putString(argHabitDesc, habitName);
+        args.putString(argImpactDesc, habitDesc);
         args.putInt(argHabitImage, habitImage);
         fragment.setArguments(args);
         return fragment;
@@ -48,13 +49,13 @@ public class HabitsDetailsDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.habits_item_details, container, false);
 
         // Get the arguments passed to the fragment
-        String habitName = null;
+        String habitDesc = null;
         if (getArguments() != null) {
-            habitName = getArguments().getString(argHabitName);
+            habitDesc = getArguments().getString(argHabitDesc);
         }
-        String habitDescription = null;
+        String impactDesc = null;
         if (getArguments() != null) {
-            habitDescription = getArguments().getString(argHabitDesc);
+            impactDesc = getArguments().getString(argImpactDesc);
         }
         int habitImage = 0;
         if (getArguments() != null) {
@@ -62,31 +63,36 @@ public class HabitsDetailsDialogFragment extends DialogFragment {
         }
 
         // Find views and set the data
-        TextView habitNameTextView = view.findViewById(R.id.habit_name);
-        TextView habitDescriptionTextView = view.findViewById(R.id.habit_description);
+        TextView habitDescTextView = view.findViewById(R.id.habit_name);
+        TextView impactDescTextView = view.findViewById(R.id.habit_description);
         ImageView habitImageView = view.findViewById(R.id.habit_image);
         Button habitAdopt = view.findViewById(R.id.positive_button);
 
-        habitNameTextView.setText(habitName);
-        habitDescriptionTextView.setText(habitDescription);
+        habitDescTextView.setText(habitDesc);
+        impactDescTextView.setText(impactDesc);
         habitImageView.setImageResource(habitImage);
 
+        // get current HabitsModel
         HabitsModel currModel = null;
         for (int i = 0; i < AllHabitsMenu.habitsModels.size(); i++) {
-            if (AllHabitsMenu.habitsModels.get(i).getHabitDesc().equals(habitName)) {
+            if (AllHabitsMenu.habitsModels.get(i).getHabitDesc().equals(habitDesc)) {
                 currModel = AllHabitsMenu.habitsModels.get(i);
             }
         }
         final HabitsModel habit = currModel;
 
         habitAdopt.setOnClickListener(v -> {
-            dismiss();
-            HabitsSetGoalsDialogFragment setGoalsDialog = HabitsSetGoalsDialogFragment.newInstance(getArguments().getString(argHabitName));
-            setGoalsDialog.show(getParentFragmentManager(), "SetGoalsDialog");
+            if (AllHabitsMenu.userHabitsModels.contains(habit)) {
+                Toast.makeText(requireContext(), "Habit already added.", Toast.LENGTH_SHORT).show();
+            } else {
+                dismiss();
+                HabitsSetGoalsDialogFragment setGoalsDialog = HabitsSetGoalsDialogFragment.newInstance(getArguments().getString(argHabitDesc));
+                setGoalsDialog.show(getParentFragmentManager(), "SetGoalsDialog");
 
-            // Notify adapter to update color
-            if (getActivity() instanceof OnHabitUpdatedListener) {
-                ((OnHabitUpdatedListener) getActivity()).onHabitUpdated(habit);
+                // Notify adapter to update color
+                if (getActivity() instanceof OnHabitUpdatedListener) {
+                    ((OnHabitUpdatedListener) getActivity()).onHabitUpdated(habit);
+                }
             }
         });
 

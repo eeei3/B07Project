@@ -84,7 +84,11 @@ public class AllHabitsMenu extends AppCompatActivity implements OnHabitUpdatedLi
         });
 
         filterTool.setOnClickListener(v -> {
-            setOriginalArrayForAdapter();
+            if (currentMenu[0]) {
+                setUserArrayForAdapter();
+            } else {
+                setOriginalArrayForAdapter();
+            }
             HabitsFilterDialogFragment filterDialog = new HabitsFilterDialogFragment();
             filterDialog.show(getSupportFragmentManager(), "filter_dialog");
             filterChips.clearCheck();
