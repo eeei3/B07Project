@@ -28,6 +28,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
     public static ArrayList<HabitsModel> habitsModels = new ArrayList<>();
     public static ArrayList<HabitsModel> filteredHabitsModels = new ArrayList<>();
     public static ArrayList<HabitsModel> userHabitsModels = new ArrayList<>();
+    // !!! NOTE: userHabitsModels needs to be replaced with the user's habits pulled from the firebase
     public static final boolean[] currentMenu = {false}; // false for all habits, true for user's habits, final bcs android studio complains
 
     @SuppressLint("StaticFieldLeak")

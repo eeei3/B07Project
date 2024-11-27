@@ -167,24 +167,24 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
             public void afterTextChanged(Editable s) {}
         });
 
+        // NOTE FOR BACK-END
+        // save all this info (esp goal)
         // define behaviour for when the "Save" button is clicked
         saveButton.setOnClickListener(v -> {
 
-            // (Note for Back-end)
+
             // extracted data to store information in databases and such...
-            /*
-            int quantity = Integer.parseInt(timesEditText.getText().toString().trim());
-            boolean remindersEnabled = reminderSwitch.isChecked();
+            int goal = Integer.parseInt(timesEditText.getText().toString().trim());
             String reminderTime = null;
             String frequency = null;
 
-            if (remindersEnabled) {
+            if (reminderSwitch.isChecked()) {
                 int hour = timePicker.getHour();
                 int minute = timePicker.getMinute();
                 reminderTime = String.format("%d:%d", hour, minute);
                 frequency = frequencySpinner.getSelectedItem().toString();
             }
-             */
+
 
             // find the corresponding HabitsModel that the dialog is currently setting goals for
             // and add the habit to the set of the user's habits

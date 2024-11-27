@@ -26,11 +26,11 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
     private ProgressBar userHabitProgressBar;
     private EditText userHabitNumDaysInt;
 
-    private int goal = 5; // sample value (change as needed)
+    private int goal = 5;
     private int progress;
     // Note for Back-End
     // this information, "progress", is deleted after dialog is closed.
-    // needs to probably get this information from outside the class.
+    // needs to get this user's info from outside the class. (note this is for a single specific habit)
     // same for field "goal"
 
     public static UserHabitsProgressDialogFragment newInstance(String habitName) {
@@ -86,6 +86,10 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
         // set the goal for the ProgressBar
         userHabitProgressBar.setMax(goal);
 
+        // NOTE FOR BACK-END:
+        // this is for logging activities, when finished, i.e. progress = goal
+        // if user decides to not renew, i.e. the "No" option, then u can remove it from the firebase
+        // if user does renew, from the way I've done, u can simply reset the old goal to new goal, and progress to 0
         // if the "Log Activity" button is clicked, increment both the Progressbar and EditText
         logActivity.setOnClickListener(v -> {
             if (progress < goal) {
@@ -95,8 +99,8 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
                 setTextNumDays();
 
                 // dismissing the dialog will delete the "progress", need to get the field "progress" elsewhere
-                // dismiss();
-                // Toast.makeText(requireContext(), "Activity successfully logged!", Toast.LENGTH_SHORT).show();
+                // dismiss()
+                Toast.makeText(requireContext(), "Activity successfully logged!", Toast.LENGTH_SHORT).show();
 
             } else {
                 // if goal is reached,
