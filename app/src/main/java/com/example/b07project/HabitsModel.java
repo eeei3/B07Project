@@ -16,7 +16,7 @@ public class HabitsModel {
      * Constructor for HabitsModel.
      *
      * @param habitName name of the habit.
-     * @param image int value of the habit image.
+     * @param image resource ID of the habit image.
      * @param impact level of impact of the habit.
      * @param category category of the habit.
      * @param habitDesc description of the habit.
@@ -52,7 +52,7 @@ public class HabitsModel {
     /**
      * Method to return the field image of the calling HabitsModel object.
      *
-     * @return int value of the image habit of the calling HabitsModel object.
+     * @return resource ID of the image habit of the calling HabitsModel object.
      */
     public int getImage() {
         return image;
