@@ -11,13 +11,16 @@ import android.widget.TextView;
 import android.app.Dialog;
 import android.view.Window;
 import android.widget.Toast;
-
 import androidx.fragment.app.DialogFragment;
 
 /**
  * HabitsDetailsDialogFragment class is a DialogFragment that displays detailed information
  * about a specific habit.
  *
+ * @see HabitsModel
+ * @see HabitsMenu
+ * @see HabitsSetGoalsDialogFragment
+ * @see OnHabitUpdatedListener
  */
 public class HabitsDetailsDialogFragment extends DialogFragment {
     private static final String argHabitDesc = "habit_desc";

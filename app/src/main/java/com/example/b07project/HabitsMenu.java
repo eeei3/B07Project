@@ -16,6 +16,13 @@ import java.util.ArrayList;
 /**
  * HabitsMenu class contains fields and methods related to the Habits activity
  *
+ * @see HabitsModel
+ * @see HabitsAdapter
+ * @see HabitsDetailsDialogFragment
+ * @see HabitsSetGoalsDialogFragment
+ * @see HabitsFilterDialogFragment
+ * @see UserHabitsProgressDialogFragment
+ * @see OnHabitUpdatedListener
  */
 public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListener{
     public static ArrayList<HabitsModel> habitsModels = new ArrayList<>();

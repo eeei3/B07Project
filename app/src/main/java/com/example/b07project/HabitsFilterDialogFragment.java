@@ -27,7 +27,6 @@ public class HabitsFilterDialogFragment extends DialogFragment {
     private CheckBox lowImpact;
     private CheckBox mediumImpact;
     private CheckBox highImpact;
-    private Button filterButton;
 
     @Override
     public void onStart() {
@@ -58,7 +57,7 @@ public class HabitsFilterDialogFragment extends DialogFragment {
         lowImpact = view.findViewById(R.id.checkBoxLowImpact);
         mediumImpact = view.findViewById(R.id.checkBoxMediumImpact);
         highImpact = view.findViewById(R.id.checkBoxHighImpact);
-        filterButton = view.findViewById(R.id.buttonFilter);
+        Button filterButton = view.findViewById(R.id.buttonFilter);
 
         allCategories.setOnCheckedChangeListener((buttonView, isChecked) -> {
             int visibility = isChecked ? View.VISIBLE : View.GONE;
