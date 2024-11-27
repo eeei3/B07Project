@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Registration"
         tools:targetApi="31">
+
+        <!--app's launcher activity -->
+
         <activity
             android:name=".EntryActivity"
             android:exported="true"
@@ -26,6 +29,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <!--app's LogActivitiesActivity -->
+        <activity android:name=".LogActivitiesActivity" />
+
+
     </application>
 
 </manifest>

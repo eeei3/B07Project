@@ -1,0 +1,465 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#ffffff">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Date for the chosen date on the home screen-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log Activities Page"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date: YYYY-MM-DD"
+            android:inputType="date"
+            android:padding="8dp"
+            android:background="@android:drawable/editbox_background"
+            android:id="@+id/input_date" />
+
+        <!-- Transportation Details -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transportation Details"
+            android:textStyle="bold"
+            android:paddingTop="16dp"/>
+
+        <!-- Checkbox for Drive Personal Vehicle -->
+        <CheckBox
+            android:id="@+id/checkbox_drive_vehicle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Drive Personal Vehicle" />
+
+        <!-- Subquestions for Drive Personal Vehicle -->
+        <LinearLayout
+            android:id="@+id/container_drive_vehicle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp">
+
+            <!-- Distance Driven -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Distance Driven (in kilometers)"
+                android:textSize="16sp"
+                android:paddingBottom="4dp" />
+
+            <EditText
+                android:id="@+id/input_distance_driven"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter distance driven"
+                android:inputType="numberDecimal" />
+
+            <!-- Change Vehicle Type -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vehicle Type (optional)"
+                android:textSize="16sp"
+                android:paddingTop="8dp"
+                android:paddingBottom="4dp" />
+
+            <Spinner
+                android:id="@+id/spinner_vehicle_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/vehicle_types" />
+        </LinearLayout>
+
+        <!-- Checkbox for Public Transportation -->
+        <CheckBox
+            android:id="@+id/checkbox_public_transport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Take Public Transportation" />
+
+        <!-- Subquestions for Public Transportation -->
+        <LinearLayout
+            android:id="@+id/container_public_transport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp">
+
+            <!-- Type of Public Transportation -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Type of Public Transportation"
+                android:textSize="16sp"
+                android:paddingBottom="4dp" />
+
+            <Spinner
+                android:id="@+id/spinner_transport_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/transport_types" />
+
+            <!-- Time Spent on Public Transportation -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Time Spent on Public Transport (in hours)"
+                android:textSize="16sp"
+                android:paddingTop="8dp"
+                android:paddingBottom="4dp" />
+
+            <EditText
+                android:id="@+id/input_time_spent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter time spent (hours)"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
+
+        <!-- Checkbox for Cycling or Walking -->
+        <CheckBox
+            android:id="@+id/checkbox_cycling_walking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cycling or Walking" />
+
+        <!-- Subquestions for Cycling or Walking -->
+        <LinearLayout
+            android:id="@+id/container_cycling_walking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp">
+
+            <!-- Distance Cycled or Walked -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Distance Cycled or Walked (in kilometers)"
+                android:textSize="16sp"
+                android:paddingBottom="4dp" />
+
+            <EditText
+                android:id="@+id/input_distance_cycled_walked"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter distance cycled or walked"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
+
+        <!-- Checkbox for Flight -->
+        <CheckBox
+            android:id="@+id/checkbox_flight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flight (Short-Haul or Long-Haul)" />
+
+        <!-- Subquestions for Flight -->
+        <LinearLayout
+            android:id="@+id/container_flight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp">
+
+            <!-- Number of Flights -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number of Flights Taken Today"
+                android:textSize="16sp"
+                android:paddingBottom="4dp" />
+
+            <EditText
+                android:id="@+id/input_num_flights"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter number of flights"
+                android:inputType="number" />
+
+            <!-- Short-Haul or Long-Haul -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Flight Type"
+                android:textSize="16sp"
+                android:paddingTop="8dp"
+                android:paddingBottom="4dp" />
+
+            <Spinner
+                android:id="@+id/spinner_flight_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+        <!-- Food Consumption Activities -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Food Consumption Activities"
+            android:textStyle="bold"
+            android:paddingTop="16dp"/>
+
+        <!-- Checkbox for Meal -->
+        <CheckBox
+            android:id="@+id/checkbox_meal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Meal" />
+
+        <!-- Subquestions for Meal -->
+        <LinearLayout
+            android:id="@+id/container_meal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp">
+
+            <!-- Type of Meal -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Type of Meal"
+                android:textSize="16sp"
+                android:paddingBottom="4dp" />
+
+            <Spinner
+                android:id="@+id/spinner_meal_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/meal_types" />
+
+            <!-- Number of Servings -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number of Servings"
+                android:textSize="16sp"
+                android:paddingTop="16dp"
+                android:paddingBottom="4dp" />
+
+            <EditText
+                android:id="@+id/input_servings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Enter number of servings" />
+
+        </LinearLayout>
+
+
+
+        <!-- Shopping Activities -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Consumption and Shopping Activities"
+            android:textStyle="bold"
+            android:paddingTop="16dp"/>
+
+        <!-- Checkbox for Buy New Clothes -->
+        <CheckBox
+            android:id="@+id/checkbox_buy_clothes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buy New Clothes" />
+
+        <!-- Subquestions for Buy New Clothes -->
+        <LinearLayout
+            android:id="@+id/container_buy_clothes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp">
+
+            <!-- Number of Clothing Items Purchased -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number of Clothing Items Purchased"
+                android:textSize="16sp"
+                android:paddingBottom="4dp" />
+
+            <EditText
+                android:id="@+id/input_clothing_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Enter number of items" />
+        </LinearLayout>
+
+
+        <!-- Checkbox for Buy Electronics -->
+        <CheckBox
+            android:id="@+id/checkbox_buy_electronics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buy Electronics" />
+
+        <!-- Subquestions for Buy Electronics -->
+        <LinearLayout
+            android:id="@+id/container_buy_electronics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp">
+
+            <!-- Type of Electronic Device -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Type of Electronic Device"
+                android:textSize="16sp"
+                android:paddingBottom="4dp" />
+
+            <EditText
+                android:id="@+id/input_device_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter device type (e.g., smartphone, laptop, TV)" />
+
+            <!-- Number of Devices Purchased -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number of Devices Purchased"
+                android:textSize="16sp"
+                android:paddingTop="8dp"
+                android:paddingBottom="4dp" />
+
+            <EditText
+                android:id="@+id/input_number_of_devices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Enter number of devices" />
+        </LinearLayout>
+
+
+        <!-- Checkbox for Other Purchases -->
+        <CheckBox
+            android:id="@+id/checkbox_other_purchases"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other Purchases" />
+
+        <!-- Subquestions for Other Purchases -->
+        <LinearLayout
+            android:id="@+id/container_other_purchases"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp">
+
+            <!-- Type of Purchase -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Type of Purchase"
+                android:textSize="16sp"
+                android:paddingBottom="4dp" />
+
+            <EditText
+                android:id="@+id/input_purchase_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter type of purchase (e.g., furniture, appliances)" />
+
+            <!-- Number of Purchases -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number of Purchases"
+                android:textSize="16sp"
+                android:paddingTop="8dp"
+                android:paddingBottom="4dp" />
+
+            <EditText
+                android:id="@+id/input_number_of_purchases"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Enter number of purchases" />
+        </LinearLayout>
+
+
+        <!-- Checkbox for Energy Bills -->
+        <CheckBox
+            android:id="@+id/checkbox_energy_bills"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Energy Bills" />
+
+        <!-- Subquestions for Energy Bills -->
+        <LinearLayout
+            android:id="@+id/container_energy_bills"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp">
+
+            <!-- Type of Bill -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select the type of bill"
+                android:textSize="16sp"
+                android:paddingBottom="4dp" />
+
+            <Spinner
+                android:id="@+id/spinner_bill_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- Bill Amount -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enter the bill amount"
+                android:textSize="16sp"
+                android:paddingTop="8dp"
+                android:paddingBottom="4dp" />
+
+            <EditText
+                android:id="@+id/input_bill_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter amount (e.g., $150)"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#009999"
+            android:text="Save"
+            android:textColor="#ffffff" />
+
+    </LinearLayout>
+</ScrollView>
