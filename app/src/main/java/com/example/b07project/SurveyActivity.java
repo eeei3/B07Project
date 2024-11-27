@@ -129,6 +129,7 @@ public class SurveyActivity extends AppCompatActivity {
                     // Create an instance of EmissionsCalculator
                     // Now, call the emissions calculation method
                     EmissionsCalculator emissionsCalculator = new EmissionsCalculator();
+                    String selectedLocation = locationSpinner.getSelectedItem().toString();
 
                     // Calculate the transportation emissions (you can adjust method signature if necessary)
                     transportationEmissions = emissionsCalculator.getTransportationEmissions(SelectedOption(CarOwnership), SelectedOption(CarUsage), SelectedOption(CarMiles), SelectedOption(PublicTransport), SelectedOption(PublicTransportUse), SelectedOption(ShortFlights), SelectedOption(LongFlights));
@@ -138,7 +139,7 @@ public class SurveyActivity extends AppCompatActivity {
                     totalEmissions = transportationEmissions + foodEmissions + housingEmissions + consumptionEmissions;
                     user.totalEmissions = totalEmissions;
                     ServerCommunicator model = new ServerCommunicator(view);
-                    model.writeResult(transportationEmissions, foodEmissions, housingEmissions, consumptionEmissions, totalEmissions);
+                    model.writeResult(transportationEmissions, foodEmissions, housingEmissions, consumptionEmissions, totalEmissions, selectedLocation);
                     //carbon.footprint = CalculateCarOwnership(SelectedOption(CarOwnership)) + CalculatePublicTransportation(SelectedOption(PublicTransport), SelectedOption(PublicTransportUse)) + CalculateShortFlight(SelectedOption(ShortFlights)) + CalculateLongFlight(SelectedOption(LongFlights));
                     //Toast.makeText(SurveyActivity.this, "Carbon Footprint: " + totalEmissions, Toast.LENGTH_SHORT).show();
 

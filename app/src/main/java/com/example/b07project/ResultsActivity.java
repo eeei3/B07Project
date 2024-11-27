@@ -1,25 +1,25 @@
 package com.example.b07project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.b07project.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Arrays;
+
 public class ResultsActivity extends AppCompatActivity {
 
     // TextViews for displaying the results
-    TextView totalEmissionsTextView, transportationTextView, foodTextView, housingTextView, consumptionTextView;
+    TextView totalEmissionsTextView, transportationTextView, foodTextView, housingTextView, consumptionTextView, comparisonTextView, globalTargetComparisonTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,27 +32,34 @@ public class ResultsActivity extends AppCompatActivity {
         foodTextView = findViewById(R.id.foodTextView);
         housingTextView = findViewById(R.id.housingTextView);
         consumptionTextView = findViewById(R.id.consumptionTextView);
+        comparisonTextView = findViewById(R.id.comparisonTextView);
+        globalTargetComparisonTextView = findViewById(R.id.globalTargetComparisonTextView);
 
         // Get the userID (assuming you passed it in the Intent)
         String userID = getIntent().getStringExtra("userID");
 
-        // Firebase reference to the user's data
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users")
-                .child(userID).child("annualEmissions");
+        // Firebase reference to the user's data (including emissions and location)
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userID);
 
         // Fetch data from Firebase
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // Retrieve values from Firebase
-                    Double totalEmission = dataSnapshot.child("totalEmission").getValue(Double.class);
-                    Double transportationEmission = dataSnapshot.child("transportationEmissions").getValue(Double.class);
-                    Double foodEmission = dataSnapshot.child("foodEmissions").getValue(Double.class);
-                    Double housingEmission = dataSnapshot.child("housingEmissions").getValue(Double.class);
-                    Double consumptionEmission = dataSnapshot.child("consumptionEmissions").getValue(Double.class);
+                    // Retrieve the location from the user node
+                    String location = dataSnapshot.child("location").getValue(String.class);
 
-                    // Check if each value is null and assign default values if necessary
+                    // Retrieve emission values from the 'annualEmissions' child node
+                    Double totalEmission = dataSnapshot.child("annualEmissions").child("totalEmission").getValue(Double.class);
+                    Double transportationEmission = dataSnapshot.child("annualEmissions").child("transportationEmissions").getValue(Double.class);
+                    Double foodEmission = dataSnapshot.child("annualEmissions").child("foodEmissions").getValue(Double.class);
+                    Double housingEmission = dataSnapshot.child("annualEmissions").child("housingEmissions").getValue(Double.class);
+                    Double consumptionEmission = dataSnapshot.child("annualEmissions").child("consumptionEmissions").getValue(Double.class);
+
+                    // Log to ensure the location value is being retrieved correctly
+                    Log.d("FirebaseData", "Retrieved location: " + location);
+
+                    // Check if each emission value is null and assign default values if necessary
                     totalEmission = (totalEmission != null) ? totalEmission : 0.0;
                     transportationEmission = (transportationEmission != null) ? transportationEmission : 0.0;
                     foodEmission = (foodEmission != null) ? foodEmission : 0.0;
@@ -60,19 +67,39 @@ public class ResultsActivity extends AppCompatActivity {
                     consumptionEmission = (consumptionEmission != null) ? consumptionEmission : 0.0;
 
                     // Update TextViews with Firebase data
-                    totalEmissionsTextView.setText(String.format("Total: %.2f tons CO₂e", totalEmission));
-                    transportationTextView.setText(String.format("Transportation: %.2f tons CO₂e", transportationEmission));
-                    foodTextView.setText(String.format("Food: %.2f tons CO₂e", foodEmission));
-                    housingTextView.setText(String.format("Housing: %.2f tons CO₂e", housingEmission));
-                    consumptionTextView.setText(String.format("Consumption: %.2f tons CO₂e", consumptionEmission));
+                    totalEmissionsTextView.setText(String.format("Total: %.2f tons CO₂e", totalEmission / 1000));
+                    transportationTextView.setText(String.format("Transportation: %.2f tons CO₂e", transportationEmission / 1000));
+                    foodTextView.setText(String.format("Food: %.2f tons CO₂e", foodEmission / 1000));
+                    housingTextView.setText(String.format("Housing: %.2f tons CO₂e", housingEmission / 1000));
+                    consumptionTextView.setText(String.format("Consumption: %.2f tons CO₂e", consumptionEmission / 1000));
+                    double globalComparison = (((totalEmission/1000) - 2) / 2) * 100;
+                    globalTargetComparisonTextView.setText(String.format("You are %.2f%% above the global target.", globalComparison));
+
+                    // Placeholder: Assume these are the national and global target emissions
+                    if (location != null) {
+                        int i = Arrays.asList(EmissionsData.countries).indexOf(location);
+                        if (i != -1) {
+                            double nationalAverage = EmissionsData.globalAverages[i]; // Example: National average emissions in tons
+                            // Calculate comparison to national average
+                            double nationalComparison = ((totalEmission / 1000) / nationalAverage) * 100;
+                            comparisonTextView.setText(String.format("Your carbon footprint is %.2f%% of the national average.", nationalComparison));
+                        } else {
+                            comparisonTextView.setText("Location data is unavailable for comparison.");
+                        }
+                    } else {
+                        comparisonTextView.setText("Location is missing or invalid.");
+                    }
+
                 } else {
                     Toast.makeText(ResultsActivity.this, "No data available", Toast.LENGTH_SHORT).show();
+                    Log.e("FirebaseData", "DataSnapshot is empty, no user emissions data found.");
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(ResultsActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show();
+                Log.e("FirebaseData", "DatabaseError: " + error.getMessage());
             }
         });
     }
