@@ -14,10 +14,6 @@ import com.google.firebase.auth.FirebaseAuth;
  */
 public class FirebaseAuthHandler extends Model{
     final FirebaseAuth mAuth;
-    ModelPresenterPipe listener;
-
-    LoginPresenter lPresenter;
-    ForgetPresenter fPresenter;
 
 
     /**
@@ -42,7 +38,7 @@ public class FirebaseAuthHandler extends Model{
             public void onComplete(@NonNull Task<AuthResult> task) {
                 watcher.setResult(task.isSuccessful());
                 listener.onObjectReady(watcher);
-            }
+                }
             }
         );
     }
@@ -61,6 +57,7 @@ public class FirebaseAuthHandler extends Model{
                             watcher.setResult(task.isSuccessful());
                             listener.onObjectReady(watcher);
                     }
-                });
+                }
+                );
     }
 }

@@ -3,7 +3,7 @@ package com.example.b07project;
 /**
  * Class representing the Presenter portion of the Login module
  */
-public class LoginPresenter extends Presenter {
+public class LoginPresenter {
     private String email;
     private String passwd;
 
@@ -20,10 +20,18 @@ public class LoginPresenter extends Presenter {
         this.model = new FirebaseAuthHandler();
     }
 
+    /**
+     * setEmail - sets the email the user wishes to login to
+     * @param email - the user's account email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * setPasswd - sets the password the user wishes to use to login with
+     * @param passwd - the user's account password
+     */
     public void setPasswd(String passwd) {
         this.passwd = passwd;
     }

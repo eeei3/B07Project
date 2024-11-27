@@ -27,6 +27,15 @@ public class AsyncDBComms extends AsyncComms {
         this.value = value;
     }
 
+    /**
+     * setUsergoals - sets the usergoals field to contain the appropriate user's goal
+     * @param value - the goals
+     */
     public void setUsergoals(HashSet<Goal> value) {this.usergoals = value;}
+
+    /**
+     * setListgoals - sets the list of goals to keep track of
+     * @param value - the goals' names
+     */
     public void setListgoals(HashSet<String> value) {this.listgoals = value;}
 }

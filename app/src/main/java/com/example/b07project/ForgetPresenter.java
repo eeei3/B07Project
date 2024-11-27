@@ -1,17 +1,25 @@
 package com.example.b07project;
 
-public class ForgetPresenter extends Presenter{
+public class ForgetPresenter {
     private String email;
     ForgotPasswordFragment fView;
     FirebaseAuthHandler model;
 
-
+    /**
+     * ForgetPresenter - default constructor that set's the fView field so that the presenter
+     * may interact with the View.
+     * @param fView - the reference to the View
+     */
     public ForgetPresenter(ForgotPasswordFragment fView) {
         super();
         this.fView = fView;
         this.model = new FirebaseAuthHandler();
     }
 
+    /**
+     * setEmail - sets the email the user wishes to login to
+     * @param email - the user's account email
+     */
     public void setEmail(String email) {
         this.email = email;
     }

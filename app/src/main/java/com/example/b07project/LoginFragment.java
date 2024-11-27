@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 //import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginFragment extends Fragment implements BView {
+public class LoginFragment extends Fragment{
     private EditText editTextUserEmail, editTextUserPassword;
 
     LoginPresenter presenter;
@@ -71,20 +71,6 @@ public class LoginFragment extends Fragment implements BView {
         // Create communication channel with the Presenter
         presenter.setEmail(email);
         presenter.setPasswd(password);
-        // Create object to hold if operation is successful or not
-        AsyncAuthComms watcher = new AsyncAuthComms();
-        // Create Listener to check if password reset successful or not.
-        presenter.setViewPipe(new LoginPresenter.PresenterViewPipe() {
-            @Override
-            public void onObjectReady(AsyncAuthComms watcher) {
-                if (watcher.res) {
-                    success();
-                }
-                else {
-                    failure();
-                }
-            }
-        });
         // Log in user
         presenter.beginAuthenticate();
     }

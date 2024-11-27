@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-public class ForgotPasswordFragment extends Fragment implements BView{
+public class ForgotPasswordFragment extends Fragment {
     private EditText editTextUserEmail;
 
     ForgetPresenter presenter;
@@ -41,18 +41,6 @@ public class ForgotPasswordFragment extends Fragment implements BView{
                 String email = editTextUserEmail.getText().toString().trim();
                 // Create communication channel with the Presenter
                 presenter.setEmail(email);
-                // Create Listener to check if password reset successful or not.
-                presenter.setViewPipe(new LoginPresenter.PresenterViewPipe() {
-                    @Override
-                    public void onObjectReady(AsyncAuthComms watcher) {
-                        if (watcher.res) {
-                            success();
-                        }
-                        else {
-                            failure();
-                        }
-                    }
-                });
                 // Reset password
                 presenter.beginReset();
                 finishLoading(btnResetPassword, btnProgressReset);

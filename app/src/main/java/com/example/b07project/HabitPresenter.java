@@ -127,8 +127,6 @@ public class HabitPresenter {
                     }
                 }
                 pv.setResult(mp.res);
-//                listener.onObjectReady(pv);
-
             }
         });
         this.model.getGoals(mp);
