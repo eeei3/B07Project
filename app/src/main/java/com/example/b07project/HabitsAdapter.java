@@ -138,7 +138,7 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
                         "habit_details_dialog");
             } else {
                 // if on User's Habits menu, launch a dialog to display and log the habit's activities
-                UserHabitsProgressDialogFragment habitDialog = new UserHabitsProgressDialogFragment();
+                UserHabitsProgressDialogFragment habitDialog = UserHabitsProgressDialogFragment.newInstance(habit.getHabitName());
                 habitDialog.show(((AppCompatActivity) context).getSupportFragmentManager(),
                         "user_progress" );
             }

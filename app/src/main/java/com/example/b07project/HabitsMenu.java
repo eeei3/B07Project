@@ -31,7 +31,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
     public static final boolean[] currentMenu = {false}; // false for all habits, true for user's habits, final bcs android studio complains
 
     @SuppressLint("StaticFieldLeak")
-    private static HabitsAdapter adapter;
+    public static HabitsAdapter adapter;
 
     int[] habitsImages = {R.drawable.habits_bringownbag, R.drawable.habits_cycling,
             R.drawable.habits_lessshoping, R.drawable.habits_limitmeat,

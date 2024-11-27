@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -201,6 +202,8 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
                     }
                 }
             }
+            Toast.makeText(requireContext(), "New Goal Added!",
+                    Toast.LENGTH_SHORT).show();
             dismiss();
         });
 
