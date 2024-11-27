@@ -17,9 +17,14 @@ import android.widget.RadioGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.concurrent.ThreadFactory;
 
 public class SurveyActivity extends AppCompatActivity {
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference emissionsRef = database.getReference("emissions");
     private RadioGroup CarOwnership, CarUsage, CarMiles, PublicTransport, PublicTransportUse,
             ShortFlights, LongFlights, Diet, BeefConsumption, PorkConsumption,
             ChickenConsumption, FishConsumption, FoodWaste, Housing, HousingPeople,
@@ -131,8 +136,11 @@ public class SurveyActivity extends AppCompatActivity {
                     totalEmissions = transportationEmissions + foodEmissions + housingEmissions + consumptionEmissions;
                     user.totalEmissions = totalEmissions;
                     ServerCommunicator model = new ServerCommunicator(view);
+                    model.writeResult(transportationEmissions, foodEmissions, housingEmissions, consumptionEmissions, totalEmissions);
                     //carbon.footprint = CalculateCarOwnership(SelectedOption(CarOwnership)) + CalculatePublicTransportation(SelectedOption(PublicTransport), SelectedOption(PublicTransportUse)) + CalculateShortFlight(SelectedOption(ShortFlights)) + CalculateLongFlight(SelectedOption(LongFlights));
                     //Toast.makeText(SurveyActivity.this, "Carbon Footprint: " + totalEmissions, Toast.LENGTH_SHORT).show();
+
+
                     }
                 }
 
