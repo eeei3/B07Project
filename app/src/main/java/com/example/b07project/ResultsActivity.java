@@ -1,12 +1,10 @@
 package com.example.b07project;
-
+import android.graphics.Color;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.widget.TextView;
-
+import android.widget.Toast;
 import java.util.Arrays;
 
 
@@ -47,15 +45,11 @@ public class ResultsActivity extends AppCompatActivity {
         globalTargetComparisonTextView = findViewById(R.id.globalTargetComparisonTextView);
 
         // Retrieve the total emissions passed from the SurveyActivity
-        double totalEmissions = getIntent()
-                                        .getDoubleExtra("totalEmissions", 0)/1000;
-        double transportationEmissions = getIntent()
-                                        .getDoubleExtra("transportationEmissions",
-                                                0);
-        double foodEmissions = getIntent().getDoubleExtra("foodEmissions", 0);
-        double housingEmissions = getIntent().getDoubleExtra("housingEmissions", 0);
-        double consumptionEmissions = getIntent()
-                                        .getDoubleExtra("consumptionEmissions", 0);
+        double totalEmissions = getIntent().getDoubleExtra("totalEmissions", 0)/1000;
+        double transportationEmissions = getIntent().getDoubleExtra("transportationEmissions", 0)/1000;
+        double foodEmissions = getIntent().getDoubleExtra("foodEmissions", 0)/1000;
+        double housingEmissions = getIntent().getDoubleExtra("housingEmissions", 0)/1000;
+        double consumptionEmissions = getIntent().getDoubleExtra("consumptionEmissions", 0)/1000;
         String location = getIntent().getStringExtra("location");
 
         // Display the total carbon footprint

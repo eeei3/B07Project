@@ -1,86 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/entry_page_background">
 
+    <!--Planetze Logo-->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="300dp"
+        android:layout_height="93dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/trans_planetze_logo"
+        android:layout_gravity="center"/>
+
+    <!--Let's review the breakdown of your carbon footprint results!-->
     <TextView
-        android:id="@+id/totalEmissionsTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
-        android:padding="3dp"
-        android:fontFamily="@font/custom_font"
-        android:text="Total Carbon Footprint:"
-        android:textSize="18sp"/>
+        android:fontFamily="@font/garet"
+        android:gravity="center"
+        android:text="Let's review the breakdown of your carbon footprint results!"
+        android:textSize="24sp"
+        android:layout_marginBottom="15dp"
+        tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/transportationTextView"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
-        android:padding="3dp"
-        android:fontFamily="@font/custom_font"
-        android:text="Transportation:"
-        android:textSize="18sp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@android:color/white"
+        android:layout_marginBottom="15dp"
+        android:layout_gravity="center_horizontal"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp">
 
-    <TextView
-        android:id="@+id/foodTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
-        android:padding="3dp"
-        android:fontFamily="@font/custom_font"
-        android:text="Food:"
-        android:textSize="18sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    <TextView
-        android:id="@+id/housingTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
-        android:padding="3dp"
-        android:fontFamily="@font/custom_font"
-        android:text="Housing:"
-        android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/totalEmissionsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"
+                android:padding="3dp"
+                android:fontFamily="@font/garet"
+                android:textStyle="bold"
+                android:text="Total Carbon Footprint:"
+                android:textSize="16sp"/>
 
-    <TextView
-        android:id="@+id/consumptionTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
-        android:padding="3dp"
-        android:fontFamily="@font/custom_font"
-        android:text="Consumption:"
-        android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/transportationTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"
+                android:padding="3dp"
+                android:fontFamily="@font/garet"
+                android:textStyle="bold"
+                android:text="Transportation:"
+                android:textSize="16sp"/>
 
-    <TextView
-        android:id="@+id/comparisonTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
-        android:padding="3dp"
-        android:fontFamily="@font/custom_font"
-        android:text="Comparison to National Average: "
-        android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/foodTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"
+                android:padding="3dp"
+                android:fontFamily="@font/garet"
+                android:textStyle="bold"
+                android:text="Food:"
+                android:textSize="16sp"/>
 
-    <TextView
-        android:id="@+id/globalTargetComparisonTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
-        android:padding="3dp"
-        android:fontFamily="@font/custom_font"
-        android:text="Comparison to Global Target: "
-        android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/housingTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"
+                android:padding="3dp"
+                android:fontFamily="@font/garet"
+                android:textStyle="bold"
+                android:text="Housing:"
+                android:textSize="16sp"/>
 
+            <TextView
+                android:id="@+id/consumptionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="40dp"
+                android:padding="3dp"
+                android:fontFamily="@font/garet"
+                android:textStyle="bold"
+                android:text="Consumption:"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/comparisonTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"
+                android:padding="3dp"
+                android:fontFamily="@font/garet"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/globalTargetComparisonTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"
+                android:padding="3dp"
+                android:fontFamily="@font/garet"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!--Submit Button-->
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="200dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="30dp"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/round_button"
+        android:text="Next" />
 
 </LinearLayout>
