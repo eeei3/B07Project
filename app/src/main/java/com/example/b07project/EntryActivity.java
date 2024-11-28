@@ -1,18 +1,20 @@
 package com.example.b07project;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import com.example.b07project.databinding.ActivityEntryPageBinding;
 
 
 /**
  * EntryActivity class containing methods relating to the main menu of the application
  */
 public class EntryActivity extends AppCompatActivity {
-
     /**
      * onCreate - Method run when EntryActivity is created
      * @param savedInstanceState If the activity is being re-initialized after
@@ -22,8 +24,12 @@ public class EntryActivity extends AppCompatActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entry_page);  // Link the XML layout to the activity
+
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar); // Set the custom toolbar
 
         Button logInButton = (Button) findViewById(R.id.LogInButton);
 
@@ -39,6 +45,13 @@ public class EntryActivity extends AppCompatActivity {
             public void onClick(View v){
                 loadFragment(new RegisterUserFragment());            }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option_menu, menu);
+        return true;
     }
 
     /**
