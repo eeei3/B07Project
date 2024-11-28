@@ -1,14 +1,17 @@
 package com.example.b07project;
+
 import android.graphics.Color;
+import android.util.Log;
+import android.view.View;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import lecho.lib.hellocharts.view.LineChartView;
-import lecho.lib.hellocharts.model.Line;
-import lecho.lib.hellocharts.model.LineChartData;
-import lecho.lib.hellocharts.model.PointValue;
+
+import org.eazegraph.lib.charts.ValueLineChart;
+import org.eazegraph.lib.models.ValueLinePoint;
+import org.eazegraph.lib.models.ValueLineSeries;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -16,25 +19,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LineChart {
-    private LineChartView chart;
+    private ValueLineChart chart;
     private FirebaseUser user;
     private DatabaseReference userRef;
 
-    public LineChart(LineChartView chart) {
+    public LineChart(ValueLineChart chart) {
         this.chart = chart;
         FirebaseAuth auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();  // Get the current authenticated user
-        String userId = user.getUid();
+        String userId = user != null ? user.getUid() : "";
         userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
     }
 
     public void updateLineChart() {
         // Create separate lists to hold data points for daily, monthly, and annual emissions
-        List<PointValue> dailyValues = new ArrayList<>();
-        List<PointValue> monthlyValues = new ArrayList<>();
-        List<PointValue> annualValues = new ArrayList<>();
+        List<ValueLineSeries> seriesList = new ArrayList<>();
 
-        // Get current time and calculate the start and end of the current day, month, and year
+        // Create the ValueLineSeries for each data type
+        ValueLineSeries dailySeries = new ValueLineSeries();
+        dailySeries.setColor(Color.RED);
+        ValueLineSeries monthlySeries = new ValueLineSeries();
+        monthlySeries.setColor(Color.GREEN);
+        ValueLineSeries annualSeries = new ValueLineSeries();
+        annualSeries.setColor(Color.BLUE);
+
         long currentTimeMillis = System.currentTimeMillis();
         long startOfDay = DatesForDataBase.getStartOfDay(currentTimeMillis);
         long endOfDay = DatesForDataBase.getEndOfDay(currentTimeMillis);
@@ -58,11 +66,11 @@ public class LineChart {
                             Double totalEmission = snapshot.child("totalEmission").getValue(Double.class);
                             if (totalEmission != null) totalDailyEmissions += totalEmission;
                         }
-                        dailyValues.add(new PointValue(0, (float) totalDailyEmissions));
+                        dailySeries.addPoint(new ValueLinePoint((float) totalDailyEmissions));  // X: startOfDay, Y: totalDailyEmissions
                     }
                     completedQueries[0]++;
                     if (completedQueries[0] == 3) {
-                        updateLineChart(dailyValues, monthlyValues, annualValues);
+                        updateLineChart(seriesList, dailySeries, monthlySeries, annualSeries);
                     }
                 });
 
@@ -79,11 +87,11 @@ public class LineChart {
                             Double totalEmission = snapshot.child("totalEmission").getValue(Double.class);
                             if (totalEmission != null) totalMonthlyEmissions += totalEmission;
                         }
-                        monthlyValues.add(new PointValue(1, (float) totalMonthlyEmissions));
+                        monthlySeries.addPoint(new ValueLinePoint((float) totalMonthlyEmissions));  // X: startOfMonth, Y: totalMonthlyEmissions
                     }
                     completedQueries[0]++;
                     if (completedQueries[0] == 3) {
-                        updateLineChart(dailyValues, monthlyValues, annualValues);
+                        updateLineChart(seriesList, dailySeries, monthlySeries, annualSeries);
                     }
                 });
 
@@ -95,31 +103,29 @@ public class LineChart {
                     if (task.isSuccessful()) {
                         Double totalEmission = task.getResult().getValue(Double.class);
                         if (totalEmission != null) {
-                            annualValues.add(new PointValue(2, totalEmission.floatValue()));
+                            annualSeries.addPoint(new ValueLinePoint(totalEmission.floatValue()));  // X: startOfYear, Y: totalEmission
                         }
                     }
                     completedQueries[0]++;
                     if (completedQueries[0] == 3) {
-                        updateLineChart(dailyValues, monthlyValues, annualValues);
+                        updateLineChart(seriesList, dailySeries, monthlySeries, annualSeries);
                     }
                 });
     }
 
-    private void updateLineChart(List<PointValue> dailyValues, List<PointValue> monthlyValues, List<PointValue> annualValues) {
-        // Create lines for each data series (daily, monthly, annual)
-        Line dailyLine = new Line(dailyValues).setColor(Color.RED).setCubic(true);
-        Line monthlyLine = new Line(monthlyValues).setColor(Color.GREEN).setCubic(true);
-        Line annualLine = new Line(annualValues).setColor(Color.BLUE).setCubic(true);
+    private void updateLineChart(List<ValueLineSeries> seriesList, ValueLineSeries dailySeries,
+                                 ValueLineSeries monthlySeries, ValueLineSeries annualSeries) {
+        // Add the series to the list
+        seriesList.clear();
+        seriesList.add(dailySeries);
+        seriesList.add(monthlySeries);
+        seriesList.add(annualSeries);
 
-        // Add the lines to a list
-        List<Line> lines = new ArrayList<>();
-        lines.add(dailyLine);
-        lines.add(monthlyLine);
-        lines.add(annualLine);
-
-        // Create LineChartData and set it on the chart
-        LineChartData data = new LineChartData();
-        data.setLines(lines);
-        chart.setLineChartData(data);
+        // Set the series on the chart
+        chart.setVisibility(View.VISIBLE);  // Make sure chart is visible after data is ready
+        chart.setShowIndicator(true);
+        chart.addSeries(dailySeries);
+        chart.addSeries(monthlySeries);
+        chart.addSeries(annualSeries);
     }
 }

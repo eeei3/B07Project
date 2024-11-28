@@ -1,9 +1,6 @@
 package com.example.b07project;
 
-
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -17,25 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import org.eazegraph.lib.charts.PieChart;
-import org.eazegraph.lib.models.PieModel;
-import lecho.lib.hellocharts.view.LineChartView;
-import lecho.lib.hellocharts.model.Line;
-import lecho.lib.hellocharts.model.LineChartData;
-import lecho.lib.hellocharts.model.PointValue;
-
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.DataSnapshot;
-import com.google.android.gms.tasks.Task;
+import org.eazegraph.lib.charts.ValueLineChart;
 
 /**
  * Activity to display EcoGauge metrics, including emissions data via PieChart and LineChart.
@@ -48,7 +27,7 @@ public class EcoGauge extends AppCompatActivity {
     private TextView totalEmissionsText, shopping, transportation, comparisonText,
             foodConsumption, energyUse, yourEmissionsNumber, GlobalEmissions;
     private Spinner timeSpinner;
-    LineChartView chart;
+    private ValueLineChart chart;  // Changed to ValueLineChart
 
 
     @Override
@@ -61,8 +40,7 @@ public class EcoGauge extends AppCompatActivity {
         setupTimeSpinners(); //set the timeSpinner
 
         // get the timeSpinner val
-        Object selectedItem = timeSpinner.getSelectedItem();
-        String time = (String) selectedItem;
+        String time = (String) timeSpinner.getSelectedItem();
 
         // Get updated chart using PieChartUpdate class and text
         PieChartUpdate chartUpdate = new PieChartUpdate(totalEmissionsText, transportation, foodConsumption, shopping, energyUse, pieChart);
@@ -77,8 +55,8 @@ public class EcoGauge extends AppCompatActivity {
         comparisonTextObj.updateComparisonText(location, totalEmissions);
 
         //Get updated Linechart
-        LineChart lineChart = new LineChart(chart); // Pass the chart from EcoGauge to LineChart
-        lineChart.updateLineChart(); // Now calling it on the instance
+        LineChart lineChart = new LineChart(chart); // Pass the ValueLineChart to the LineChart class
+        lineChart.updateLineChart(); // Update the line chart
 
     }
 
