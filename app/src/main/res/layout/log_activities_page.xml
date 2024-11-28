@@ -11,14 +11,14 @@
 
         <!-- Title for the page -->
         <TextView
+            android:id="@+id/title_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id = "@+id/title_text_view"
-            android:text="Log Activities Page"
-            android:textStyle="bold"
-            android:textSize="18sp"
             android:layout_gravity="center"
-            android:paddingBottom="8dp"/>
+            android:paddingBottom="8dp"
+            android:text="Log Activities Page"
+            android:textSize="34sp"
+            android:textStyle="bold" />
 
         <!-- Date input field -->
         <TextView
@@ -34,9 +34,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="8dp"
             android:text="Transportation Details"
-            android:textStyle="bold"
-            android:paddingTop="16dp"/>
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -160,9 +161,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="8dp"
             android:text="Food Consumption Activities"
-            android:textStyle="bold"
-            android:paddingTop="16dp"/>
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -199,9 +201,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Consumption and Shopping Activities"
-            android:textStyle="bold"
-            android:paddingTop="10dp"/>
+            android:paddingTop="8dp"
+            android:text="Consumption&Shopping Activities"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <CheckBox
             android:layout_width="wrap_content"
