@@ -2,7 +2,6 @@ package com.example.b07project;
 
 public class ForgetPresenter {
     private String email;
-
     LoginPresenter.PresenterViewPipe listener;
     ForgotPasswordFragment fView;
     ServerCommunicator model;
