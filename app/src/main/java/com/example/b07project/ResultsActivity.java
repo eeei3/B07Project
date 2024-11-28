@@ -49,10 +49,10 @@ public class ResultsActivity extends AppCompatActivity {
 
         // Retrieve the total emissions passed from the SurveyActivity
         double totalEmissions = getIntent().getDoubleExtra("totalEmissions", 0)/1000;
-        double transportationEmissions = getIntent().getDoubleExtra("transportationEmissions", 0);
-        double foodEmissions = getIntent().getDoubleExtra("foodEmissions", 0);
-        double housingEmissions = getIntent().getDoubleExtra("housingEmissions", 0);
-        double consumptionEmissions = getIntent().getDoubleExtra("consumptionEmissions", 0);
+        double transportationEmissions = getIntent().getDoubleExtra("transportationEmissions", 0)/1000;
+        double foodEmissions = getIntent().getDoubleExtra("foodEmissions", 0)/1000;
+        double housingEmissions = getIntent().getDoubleExtra("housingEmissions", 0)/1000;
+        double consumptionEmissions = getIntent().getDoubleExtra("consumptionEmissions", 0)/1000;
         String location = getIntent().getStringExtra("location");
 
         // Display the total carbon footprint
