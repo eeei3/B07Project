@@ -33,6 +33,7 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
     private EditText timesEditText;
     private SeekBar timesSeekBar;
     private View reminderOptionsContainer;
+    public HabitPresenter presenter;
 
     /**
      * Creates a new instance of HabitsSetGoalsDialogFragment with the specified habit description.
@@ -64,6 +65,7 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        this.presenter = new HabitPresenter();
         View view = inflater.inflate(R.layout.setting_goals_user, container, false);
 
         // find all interactive/core components of this view
@@ -202,11 +204,21 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
                     }
                 }
             }
-            Toast.makeText(requireContext(), "New Goal Added!",
-                    Toast.LENGTH_SHORT).show();
-            dismiss();
+
         });
 
         return view;
+    }
+
+    public void success() {
+        Toast.makeText(requireContext(), "New Goal Added!",
+                Toast.LENGTH_SHORT).show();
+        dismiss();
+    }
+
+    public void failure() {
+        Toast.makeText(requireContext(), "Failed to Add New Goal",
+                Toast.LENGTH_SHORT).show();
+        dismiss();
     }
 }
