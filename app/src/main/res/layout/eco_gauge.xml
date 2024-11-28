@@ -404,7 +404,6 @@
 
 
 
-
                         <TextView
                             android:id="@+id/GlobalEmissions"
                             android:layout_width="fill_parent"
