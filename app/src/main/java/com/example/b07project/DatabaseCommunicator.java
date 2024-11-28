@@ -140,48 +140,4 @@ public class DatabaseCommunicator {
         return new UserEmissionData.CalculatedEmissions(totalTranspo, totalFood, totalShopping);
     }
 
-    public void getEmissionData(String userId, long startDate, long endDate, DataCallback callback) {
-        DatabaseReference userRef = database.child("users").child(userId).child("ecotracker");
-
-        userRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DataSnapshot snapshot = task.getResult();
-                double totalTranspo = 0, totalFood = 0, totalShopping = 0, totalEmission = 0;
-
-                for (DataSnapshot dateSnapshot : snapshot.getChildren()) {
-                    long date = Long.parseLong(dateSnapshot.getKey());
-                    if (date >= startDate && date <= endDate) {
-                        UserEmissionData.CalculatedEmissions emissions =
-                                dateSnapshot.child("calculatedEmissions").getValue(UserEmissionData.CalculatedEmissions.class);
-
-                        totalTranspo += emissions.getTotalTranspo();
-                        totalFood += emissions.getTotalFood();
-                        totalShopping += emissions.getTotalShopping();
-                        totalEmission += emissions.getTotalEmission();
-                    }
-                }
-
-                callback.onSuccess(new EmissionSummary(totalTranspo, totalFood, totalShopping, totalEmission));
-            } else {
-                callback.onFailure(task.getException());
-            }
-        });
-    }
-
-    public interface DataCallback {
-        void onSuccess(EmissionSummary summary);
-        void onFailure(Exception e);
-    }
-
-    public static class EmissionSummary {
-        public double totalTranspo, totalFood, totalShopping, totalEmission;
-
-        public EmissionSummary(double totalTranspo, double totalFood, double totalShopping, double totalEmission) {
-            this.totalTranspo = totalTranspo;
-            this.totalFood = totalFood;
-            this.totalShopping = totalShopping;
-            this.totalEmission = totalEmission;
-        }
-    }
-
 }
