@@ -1,6 +1,8 @@
+
 package com.example.b07project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -323,21 +326,50 @@ public class LogActivitiesActivity extends AppCompatActivity {
     }
 
     private void saveData() {
+        try {
+            vehicleType = spinnerVehicleType.getSelectedItem().toString();
+        } catch (NumberFormatException e) {
+            vehicleType = "";
+        }
 
-        vehicleType = spinnerVehicleType.getSelectedItem().toString();
+        try {
+            numFlights = Integer.parseInt(inputNumFlights.getText().toString());
+        } catch (NumberFormatException e) {
+            numFlights = 0;
+        }
+        try {
+            numServings = Integer.parseInt(inputServings.getText().toString());
+        } catch (NumberFormatException e) {
+            numServings = 0;
+        }
+        try {
+            numClothes = Integer.parseInt(inputNumClothes.getText().toString());
+        } catch (NumberFormatException e) {
+            numClothes = 0;
+        }
+        try {
+            numDevices = Integer.parseInt(inputNumDevices.getText().toString());
+        } catch (NumberFormatException e) {
+            numDevices = 0;
+        }
+        try {
+            numPurchases = Integer.parseInt(inputNumOtherPurchases.getText().toString());
+        } catch (NumberFormatException e) {
+            numPurchases = 0;
+        }
+        try {
+
+        } catch (NumberFormatException e) {
+            numFlights = 0;
+        }
         distanceDriven = parseDouble(inputDistanceDriving);
         transportType = spinnerTransportType.getSelectedItem().toString();
         cyclingTime = parseDouble(inputTimeSpent);
         walkingCyclingDistance = parseDouble(inputDistanceWalking);
-        numFlights = Integer.parseInt(inputNumFlights.getText().toString());
         flightType = spinnerFlightType.getSelectedItem().toString();
         mealType = spinnerMealType.getSelectedItem().toString();
-        numServings = Integer.parseInt(inputServings.getText().toString());
-        numClothes = Integer.parseInt(inputNumClothes.getText().toString());
         deviceType = spinnerDeviceType.getSelectedItem().toString();
-        numDevices = Integer.parseInt(inputNumDevices.getText().toString());
         purchaseType = spinnerPurchaseType.getSelectedItem().toString();
-        numPurchases = Integer.parseInt(inputNumOtherPurchases.getText().toString());
         BillAmount = parseDouble(inputBillAmount);
         BillType = spinnerBillType.getSelectedItem().toString();
 
@@ -377,7 +409,8 @@ public class LogActivitiesActivity extends AppCompatActivity {
         DatabaseCommunicator databaseCommunicator = new DatabaseCommunicator(database);
 
         //take user id and date
-        String userId = "USER_ID";
+        FirebaseAuth mauth = FirebaseAuth.getInstance();
+        String userId = String.valueOf(mauth.getUid());
         long selectedDate = System.currentTimeMillis();
 
         //then save the emission data to Firebase
