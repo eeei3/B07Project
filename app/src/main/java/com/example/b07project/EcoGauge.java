@@ -1,5 +1,6 @@
 package com.example.b07project;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
@@ -23,9 +24,7 @@ public class EcoGauge extends AppCompatActivity {
 
 
     // UI components
-    private PieChart pieChart;
-    private TextView totalEmissionsText, shopping, transportation, comparisonText,
-            foodConsumption, energyUse, yourEmissionsNumber, GlobalEmissions;
+    private TextView comparisonText,yourEmissionsNumber, GlobalEmissions;
     private Spinner timeSpinner;
     private ValueLineChart chart;  // Changed to ValueLineChart
 
@@ -39,38 +38,31 @@ public class EcoGauge extends AppCompatActivity {
         initializeUI(); //set the vas
         setupTimeSpinners(); //set the timeSpinner
 
-        // get the timeSpinner val
+        // Get the selected time period from Spinner
         String time = (String) timeSpinner.getSelectedItem();
+        if (time == null) {
+            time = "default_time";
+        }
 
-        // Get updated chart using PieChartUpdate class and text
-        PieChartUpdate chartUpdate = new PieChartUpdate(totalEmissionsText, transportation, foodConsumption, shopping, energyUse, pieChart);
-        chartUpdate.updateChartForTimePeriod(time);
-        chartUpdate.updateTotalEmissionsText(time);
+        // Safely retrieve data from the Intent
+        Intent intent = getIntent();
+        String location = intent != null ? intent.getStringExtra("location") : "unknown location";
+        double totalEmissions = intent != null ? intent.getDoubleExtra("totalEmissions", 0) : 0;
 
-        //Get updated ComparisonText
-        String location = getIntent().getStringExtra("location");
-        double totalEmissions = getIntent().getDoubleExtra("totalEmissions", 0);
-
+        // Update the comparison text
         ComparisonText comparisonTextObj = new ComparisonText(comparisonText, yourEmissionsNumber, GlobalEmissions);
         comparisonTextObj.updateComparisonText(location, totalEmissions);
 
-        //Get updated Linechart
+        // Update the LineChart
         LineChart lineChart = new LineChart(chart); // Pass the ValueLineChart to the LineChart class
         lineChart.getDataForChart(); // Update the line chart
-
     }
 
     /**
      * Initializes UI components.
      */
     private void initializeUI() {
-        pieChart = findViewById(R.id.piechart);
-        totalEmissionsText = findViewById(R.id.totalEmissionsText);
         timeSpinner = findViewById(R.id.timeSpinner);
-        shopping = findViewById(R.id.shopping);
-        transportation = findViewById(R.id.transportation);
-        foodConsumption = findViewById(R.id.foodConsumption);
-        energyUse = findViewById(R.id.energyUse);
         yourEmissionsNumber = findViewById(R.id.yourEmissionsNumber);
         GlobalEmissions = findViewById(R.id.GlobalEmissions);
         chart = findViewById(R.id.chart);

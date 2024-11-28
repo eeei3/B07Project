@@ -1,6 +1,8 @@
 package com.example.b07project;
 
 import android.graphics.Color;
+import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
 
+
 import java.util.Arrays;
 
 public class PieChartUpdate extends AppCompatActivity {
@@ -27,14 +30,33 @@ public class PieChartUpdate extends AppCompatActivity {
     private TextView energyUse;
     private TextView shopping;
     private PieChart pieChart;
-    public PieChartUpdate(TextView totalEmissionsText, TextView transportation, TextView foodConsumption, TextView shopping, TextView energyUse, PieChart pieChart) {
-        this.totalEmissionsText = totalEmissionsText;
-        this.transportation = transportation;
-        this.foodConsumption = foodConsumption;
-        this.shopping = shopping;
-        this.pieChart = pieChart;
-        this.energyUse = energyUse;
+
+    public static final String EXTRA_TOTAL_TRANSPO = "totalTranspo";
+    public static final String EXTRA_TOTAL_FOOD = "totalFood";
+    public static final String EXTRA_TOTAL_SHOPPING = "totalShopping";
+    public static final String EXTRA_TIME_PERIOD = "timePeriod";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.eco_gauge);
+
+        // Initialize UI components
+        transportation = findViewById(R.id.transportation);
+        foodConsumption = findViewById(R.id.foodConsumption);
+        shopping = findViewById(R.id.shopping);
+        energyUse = findViewById(R.id.energyUse);
+        pieChart = findViewById(R.id.piechart);
+
+        // Retrieve the time period and update the chart
+        String timePeriod = getIntent().getStringExtra(EXTRA_TIME_PERIOD);
+        if (timePeriod != null) {
+            updateChartForTimePeriod(timePeriod);
+        } else {
+            Log.e("PieChartUpdate", "No time period provided in the Intent");
+            Toast.makeText(this, "Error: Time period is missing.", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     /**
      * Updates the chart based on the selected time period.
@@ -42,6 +64,7 @@ public class PieChartUpdate extends AppCompatActivity {
      * @param timePeriod The selected time period.
      */
     protected void updateChartForTimePeriod(String timePeriod) {
+        if (timePeriod == null) return;
         switch (timePeriod) {
             case "Daily":
                 updateForDaily();
@@ -62,6 +85,12 @@ public class PieChartUpdate extends AppCompatActivity {
      * Updates the chart based for daily
      */
     private void updateForDaily() {
+        if (getIntent() == null) {
+            Log.e("PieChartUpdate", "Intent is null");
+            Toast.makeText(this, "Error: No data provided.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Retrieve the total emissions passed from the EcoTracker
         double totalTranspo = getIntent().getDoubleExtra("totalTranspo", 0);
         double totalFood = getIntent().getDoubleExtra("totalFood", 0);
@@ -84,14 +113,14 @@ public class PieChartUpdate extends AppCompatActivity {
     private void updateForMonthly() {
         // Initialize the Firebase database reference
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();  // Get the current authenticated user
+        FirebaseUser user = auth.getCurrentUser();
 
-        //case for when user not found
+        // Check if the user is authenticated, otherwise, set userId as empty string
         String userId;
         if (user != null) {
-            userId = user.getUid();
+            userId = user.getUid();  // Get the UID of the authenticated user
         } else {
-            userId = "";
+            userId = "";  // If no user is authenticated, set userId as an empty string
         }
 
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("ecotracker");
@@ -148,6 +177,12 @@ public class PieChartUpdate extends AppCompatActivity {
      * Updates the chart based for yearly
      */
     private void updateForYearly() {
+
+        if (getIntent() == null) {
+            Log.e("PieChartUpdate", "Intent is null");
+            Toast.makeText(this, "Error: No data provided.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         // Retrieve the total emissions passed from the SurveyActivity
         double transportationEmissions = getIntent().getDoubleExtra("transportationEmissions", 0);
         double foodEmissions = getIntent().getDoubleExtra("foodEmissions", 0);
@@ -179,6 +214,7 @@ public class PieChartUpdate extends AppCompatActivity {
      * @param timePeriod The comparison string.
      */
     void updateTotalEmissionsText(String timePeriod) {
+        if (timePeriod == null) return;
        switch (timePeriod){
            case "Daily":
                double totalEmission1 = getIntent().getDoubleExtra("totalEmission", 0);
