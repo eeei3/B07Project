@@ -1,5 +1,6 @@
 package com.example.b07project;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Calendar;
 
 public class LogActivitiesActivity extends AppCompatActivity {
 
@@ -281,14 +284,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
             return 0.0;
         }
     }
-    UserEmissionData.RawInputs rawInputs = new UserEmissionData.RawInputs(
-            inputDistance, "Car", timeSpent, inputCyclingDistance, inputNumFlights, "Commercial", "Vegetarian", inputServings,
-            inputNumClothes, "Electronics", inputNumDevices, "Other", inputNumOtherPurchases
-    );
 
-    UserEmissionData.CalculatedEmissions calculatedEmissions = new UserEmissionData.CalculatedEmissions(
-            transportationEmissions, foodEmissions, shoppingEmissions, energyBillsEmissions, System.currentTimeMillis()
-    );
 
 
     private void setupSaveButton(Button saveButton) {
@@ -363,5 +359,29 @@ public class LogActivitiesActivity extends AppCompatActivity {
 
     private void displayToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    // Method to show DatePickerDialog and handle the selected date
+    private void showDatePickerDialog() {
+        // Get the current date
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // Create a DatePickerDialog
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    // Format the selected date and set it on the TextView
+                    String formattedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                    inputDate.setText(formattedDate);
+                },
+                year,
+                month,
+                day
+        );
+
+        datePickerDialog.show();
     }
 }

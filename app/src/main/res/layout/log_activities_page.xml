@@ -22,13 +22,14 @@
 
         <!-- Date input field -->
         <TextView
+            android:id="@+id/input_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Date: YYYY-MM-DD"
+            android:background="@android:drawable/editbox_background"
+            android:hint="Choose a date"
             android:inputType="date"
             android:padding="8dp"
-            android:background="@android:drawable/editbox_background"
-            android:id="@+id/input_date" />
+            android:textSize="16sp" />
 
         <!-- Transportation Details -->
         <TextView

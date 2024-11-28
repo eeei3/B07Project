@@ -1,6 +1,7 @@
 package com.example.b07project;
 
 // Import required packages
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class DetailPageActivity extends AppCompatActivity {
@@ -187,6 +189,29 @@ public class DetailPageActivity extends AppCompatActivity {
         spinnerDeviceType.setEnabled(isEnabled);
         spinnerPurchaseType.setEnabled(isEnabled);
         spinnerBillType.setEnabled(isEnabled);
+    }
+
+    private void showDatePickerDialog() {
+        // Get the current date
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // Create a DatePickerDialog
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    // Format the selected date and set it on the TextView
+                    String formattedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                    inputDate.setText(formattedDate);
+                },
+                year,
+                month,
+                day
+        );
+
+        datePickerDialog.show();
     }
 
     //save data to firebase implementation
