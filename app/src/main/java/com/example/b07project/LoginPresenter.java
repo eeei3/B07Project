@@ -21,6 +21,16 @@ public class LoginPresenter {
     }
 
     /**
+     * LoginPresenter - Constructor mainly for testing
+     * @param lView
+     */
+    public LoginPresenter(LoginFragment lView, FirebaseAuthHandler model) {
+        super();
+        this.lView = lView;
+        this.model = model;
+    }
+
+    /**
      * setEmail - sets the email the user wishes to login to
      * @param email - the user's account email
      */
