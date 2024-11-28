@@ -226,117 +226,6 @@ public class DetailPageActivity extends AppCompatActivity {
     }
 
 
-    //copy pasted from logactivitiesactivity: emission calculations - will refactor later on
-    private double calculateVehicleEmission() {
-        double emission;
-
-        if ("Gasoline".equals(vehicleType)) {
-            emission = 0.24 * distanceDriven;
-        } else if ("Diesel".equals(vehicleType)) {
-            emission = 0.27 * distanceDriven;
-        } else if ("Electric".equals(vehicleType)) {
-            emission = 0.05 * distanceDriven;
-        } else if ("Hybrid".equals(vehicleType)) {
-            emission = 0.16 * distanceDriven;
-        } else {
-            emission = 0.0;
-        }
-        return emission;
-    }
-
-    private double calculatePublicTransportEmission() {
-
-        double emission = 0.0;
-
-        // Calculate emission using if-else logic
-        if (transportType.equals("Bus")) {
-            emission = 0.18 * cyclingTime;
-        } else if (transportType.equals("Train")) {
-            emission = 0.04 * cyclingTime;
-        } else if (transportType.equals("Subway")) {
-            emission = 0.03 * cyclingTime;
-        } else {
-            emission = 0.0;
-        }
-        return emission;
-    }
-
-    private double calculateCyclingEmission() {
-        double emission = 0.0;
-        return emission;
-    }
-
-    private double calculateFlightEmission() {
-        double emission = 0.0;
-
-        if (flightType.equals("Short-haul(less than 1500 km)")) {
-            emission = numFlights * 225;
-        } else if (flightType.equals("Long-haul(more than 1500 km)")) {
-            emission = numFlights * 825;
-        } else {
-            emission = 0.0;
-        }
-        return emission;
-    }
-
-    private double calculateMealEmission() {
-        double emission = 0.0;
-
-        if (mealType.equals("Beef")) {
-            emission = 10 * numServings;
-        } else if (mealType.equals("Pork")) {
-            emission = 5 * numServings;
-        } else if (mealType.equals("Chicken")) {
-            emission = 3* numServings;
-        } else if (mealType.equals("Fish")) {
-            emission = 2 * numServings;
-        } else if (mealType.equals("Plant Based")) {
-            emission = numServings;
-        } else {
-            emission = 0.0;
-        }
-        return emission;
-    }
-
-    private double calculateClothesEmission(){
-        double emission = 0.0;
-
-        if (numClothes >= 1) {
-            return numClothes * 25;
-        }
-        return emission;
-    }
-
-    private double calculateElectronicsEmission() {
-        double emission = 0.0;
-
-        if (deviceType.equals("Phone")) {
-            emission = 250 * numDevices;
-        } else if (deviceType.equals("Laptop")) {
-            emission = 400 * numDevices;
-        } else if (deviceType.equals("TV")) {
-            emission = 600 * numDevices;
-        } else {
-            emission = 0.0;
-        }
-
-        return emission;
-    }
-
-    private double calculateOtherPurchasesEmission() {
-        double emission = 0.0;
-
-        if (purchaseType.equals("Furniture")) {
-            emission = 250 * numPurchases;
-        } else if (purchaseType.equals("Appliance")) {
-            emission = 800 * numPurchases;
-        } else if (purchaseType.equals("Book")) {
-            emission = 5 * numPurchases;
-        } else {
-            emission = 0.0;
-        }
-        return emission;
-    }
 
 
     private double parseDouble(EditText editText) {
@@ -346,49 +235,6 @@ public class DetailPageActivity extends AppCompatActivity {
         } catch (NumberFormatException e) {
             return 0.0;
         }
-    }
-    double totalTranspo = 0.0;
-    double totalFood = 0.0;
-    double totalShopping = 0.0;
-
-    private void calculateTransportationEmissions() {
-
-        if (isInputVisible(vehicleDetailsLayout)) {
-            totalTranspo += calculateVehicleEmission();
-        }
-
-        if (isInputVisible(publicTransportLayout)) {
-            totalTranspo += calculatePublicTransportEmission();
-        }
-
-        if (isInputVisible(cyclingWalkingLayout)) {
-            totalTranspo += calculateCyclingEmission();
-        }
-
-        if (isInputVisible(flightLayout)) {
-            totalTranspo += calculateFlightEmission();
-        }
-    }
-
-    private void calculateFoodEmissions() {
-        if (isInputVisible(mealLayout)) {
-            totalFood += calculateMealEmission();
-        }
-    }
-
-    private void calculateShoppingEmissions() {
-        if (isInputVisible(clothesLayout)) {
-            totalShopping += calculateClothesEmission();
-        }
-
-        if (isInputVisible(electronicsLayout)) {
-            totalShopping += calculateElectronicsEmission();
-        }
-
-        if (isInputVisible(otherPurchasesLayout)) {
-            totalShopping += calculateOtherPurchasesEmission();
-        }
-
     }
 
     private boolean isInputVisible(View layout) {
@@ -406,29 +252,83 @@ public class DetailPageActivity extends AppCompatActivity {
     //update the firebase database
 
     private void saveDataToFirebase() {
+        String vehicleType;
+        double distanceDriven;
+        String transportType;
+        double cyclingTime;
+        int numFlights;
+        String flightType;
+        String mealType;
+        int numServings;
+        int numClothes;
+        int numDevices;
+        int numPurchases;
+        String deviceType;
+        String purchaseType;
+        double BillAmount;
+        String BillType;
+        double walkingCyclingDistance;
 
-        String vehicleType = spinnerVehicleType.getSelectedItem().toString();
-        double distanceDriven = parseDouble(inputDistanceDriving);
-        double cyclingTime = parseDouble(inputTimeSpent);
-        double walkingCyclingDistance = parseDouble(inputDistanceWalking);
-        int numFlights = Integer.parseInt(inputNumFlights.getText().toString());
-        int numServings = Integer.parseInt(inputServings.getText().toString());
-        int numClothes = Integer.parseInt(inputNumClothes.getText().toString());
-        int numDevices = Integer.parseInt(inputNumDevices.getText().toString());
-        int numPurchases = Integer.parseInt(inputNumOtherPurchases.getText().toString());
-        double BillAmount = parseDouble(inputBillAmount);
-        String flightType = spinnerFlightType.getSelectedItem().toString();
-        String transportType = spinnerTransportType.getSelectedItem().toString();
-        String mealType = spinnerMealType.getSelectedItem().toString();
-        String deviceType = spinnerDeviceType.getSelectedItem().toString();
-        String purchaseType = spinnerPurchaseType.getSelectedItem().toString();
-        String BillType = spinnerBillType.getSelectedItem().toString();
+        vehicleType = spinnerVehicleType.getSelectedItem().toString();
+        distanceDriven = parseDouble(inputDistanceDriving);
+        cyclingTime = parseDouble(inputTimeSpent);
+        walkingCyclingDistance = parseDouble(inputDistanceWalking);
+        try {
+            numFlights = Integer.parseInt(inputNumFlights.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numFlights = 0;
+        }
+        try {
+            numServings = Integer.parseInt(inputServings.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numServings = 0;
+        }
+        try {
+            numClothes = Integer.parseInt(inputNumClothes.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numClothes = 0;
+        }
+        try {
+            numDevices = Integer.parseInt(inputNumDevices.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numDevices = 0;
+        }
+        try {
+            numPurchases = Integer.parseInt(inputNumOtherPurchases.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numPurchases = 0;
+        }
+        BillAmount = parseDouble(inputBillAmount);
+        flightType = spinnerFlightType.getSelectedItem().toString();
+        transportType = spinnerTransportType.getSelectedItem().toString();
+        mealType = spinnerMealType.getSelectedItem().toString();
+        deviceType = spinnerDeviceType.getSelectedItem().toString();
+        purchaseType = spinnerPurchaseType.getSelectedItem().toString();
+        BillType = spinnerBillType.getSelectedItem().toString();
 
+        EcoTrackerCalculations calculator = new EcoTrackerCalculations(vehicleType,
+                                                                        distanceDriven,
+                                                                        transportType,
+                                                                        cyclingTime,
+                                                                        numFlights,
+                                                                        flightType,
+                                                                        mealType,
+                                                                        numServings,
+                                                                        numClothes,
+                                                                        numDevices,
+                                                                        numPurchases,
+                                                                        deviceType,
+                                                                        purchaseType);
         // these methods currently belong in LogActivitiesActivity
         // for now, just duplicate the calculations that will occur
-        double totalTranspo = calculateTransportationEmissions(vehicleType, distanceDriven, transportType, cyclingTime, numFlights, flightType);
-        double totalFood = calculateFoodEmissions(mealType, numServings);
-        double totalShopping = calculateShoppingEmissions(numClothes, numDevices, numPurchases, deviceType, purchaseType);
+        double totalTranspo = calculator.calculateTransportationEmissions();
+        double totalFood = calculator.calculateFoodEmissions();
+        double totalShopping = calculator.calculateShoppingEmissions();
 
         // recreate RawInputs and CalculatedEmissions objects
         UserEmissionData.RawInputs rawInputs = new UserEmissionData.RawInputs(
@@ -447,8 +347,7 @@ public class DetailPageActivity extends AppCompatActivity {
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         DatabaseCommunicator databaseCommunicator = new DatabaseCommunicator(database);
-        databaseCommunicator.saveUserEmissionData(userId, selectedDate, user)
-
+        databaseCommunicator.saveUserEmissionData(userId, selectedDate, user);
     }
 
 }
