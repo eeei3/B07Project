@@ -1,9 +1,10 @@
-
 package com.example.b07project;
 
-import android.content.Intent;
+// Import required packages
+import static java.lang.Double.parseDouble;
+
+import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,48 +21,53 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class LogActivitiesActivity extends AppCompatActivity {
+import java.util.Calendar;
+import java.util.HashMap;
 
-    //ui elements
+public class DetailPageActivity extends AppCompatActivity {
+
+    //main functionalities:
+    //inflates the activity_detail_page
+    //display all of the current information from database to the textviews and spinners
+
+
+    // General UI elements
     private TextView titleTextView, inputDate;
-    private Button buttonSave;
+    private Button buttonSave, buttonEdit;
 
-    //transporation details
+    // Transportation Details
     private CheckBox checkboxDriveVehicle, checkboxPublicTransport, checkboxCyclingWalking, checkboxFlight;
     private LinearLayout vehicleDetailsLayout, publicTransportLayout, cyclingWalkingLayout, flightLayout;
     private EditText inputDistanceDriving, inputTimeSpent, inputDistanceWalking, inputNumFlights;
     private Spinner spinnerVehicleType, spinnerTransportType, spinnerFlightType;
 
-    //food consumption details
+    // Food Consumption Activities
     private CheckBox checkboxMeal;
     private LinearLayout mealLayout;
     private EditText inputServings;
     private Spinner spinnerMealType;
 
-    //consumption and shopping details
+    // Consumption and Shopping Activities
     private CheckBox checkboxClothes, checkboxElectronics, checkboxOtherPurchases;
     private LinearLayout clothesLayout, electronicsLayout, otherPurchasesLayout;
     private EditText inputNumClothes, inputNumDevices, inputNumOtherPurchases;
     private Spinner spinnerDeviceType, spinnerPurchaseType;
 
-    //energy bills section
+    // Energy Bills Section
     private CheckBox checkboxEnergyBills;
     private LinearLayout energyBillsLayout;
     private Spinner spinnerBillType;
     private EditText inputBillAmount;
 
-    //global variables
-    private String vehicleType, transportType, flightType, mealType, deviceType, purchaseType, BillType;
-    private double distanceDriven, cyclingTime, walkingCyclingDistance, BillAmount;
-    private int numFlights, numClothes, numDevices, numPurchases, numServings;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.log_activities_page);
+        setContentView(R.layout.activity_detail_page);
 
+        // Initialize UI components
         initializeUIComponents();
 
+        // Set up spinners
         setupSpinner(spinnerVehicleType, R.array.vehicle_types);
         setupSpinner(spinnerTransportType, R.array.transport_types);
         setupSpinner(spinnerFlightType, R.array.flight_types);
@@ -70,6 +76,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
         setupSpinner(spinnerPurchaseType, R.array.other_purchase_types);
         setupSpinner(spinnerBillType, R.array.energy_bill_types);
 
+        // Set up checkboxes
         setupCheckbox(checkboxDriveVehicle, vehicleDetailsLayout);
         setupCheckbox(checkboxPublicTransport, publicTransportLayout);
         setupCheckbox(checkboxCyclingWalking, cyclingWalkingLayout);
@@ -80,17 +87,37 @@ public class LogActivitiesActivity extends AppCompatActivity {
         setupCheckbox(checkboxOtherPurchases, otherPurchasesLayout);
         setupCheckbox(checkboxEnergyBills, energyBillsLayout);
 
-        buttonSave.setOnClickListener(v -> saveData());
+        // Initially disable inputs and hide Save button
+        enableEditing(false);
+        buttonSave.setVisibility(View.GONE);
+
+        // Edit button logic
+        buttonEdit.setOnClickListener(v -> {
+            enableEditing(true);
+            buttonEdit.setVisibility(View.GONE);
+            buttonSave.setVisibility(View.VISIBLE);
+        });
+
+        // Save button logic
+        buttonSave.setOnClickListener(v -> {
+            // Save data to Firebase
+            //saveDataToFirebase(); //not sure how to implement this with firebase
+
+            // Disable editing and toggle buttons
+            enableEditing(false);
+            buttonSave.setVisibility(View.GONE);
+            buttonEdit.setVisibility(View.VISIBLE);
+        });
 
     }
 
-    //initialize UI components by matching to front end IDs
     private void initializeUIComponents() {
         titleTextView = findViewById(R.id.title_text_view);
         inputDate = findViewById(R.id.input_date);
         buttonSave = findViewById(R.id.button_save);
+        buttonEdit = findViewById(R.id.button_edit);
 
-        //transportation UI
+        // Transportation UI
         checkboxDriveVehicle = findViewById(R.id.checkbox_drive_vehicle);
         checkboxPublicTransport = findViewById(R.id.checkbox_public_transport);
         checkboxCyclingWalking = findViewById(R.id.checkbox_cycling_walking);
@@ -107,13 +134,13 @@ public class LogActivitiesActivity extends AppCompatActivity {
         spinnerTransportType = findViewById(R.id.spinner_transport_type);
         spinnerFlightType = findViewById(R.id.spinner_flight_type);
 
-        //food UI
+        // Food UI
         checkboxMeal = findViewById(R.id.checkbox_meal);
         mealLayout = findViewById(R.id.meal_layout);
         inputServings = findViewById(R.id.input_servings);
         spinnerMealType = findViewById(R.id.spinner_meal_type);
 
-        //consumption and shopping UI
+        // Consumption and Shopping UI
         checkboxClothes = findViewById(R.id.checkbox_clothes);
         checkboxElectronics = findViewById(R.id.checkbox_electronics);
         checkboxOtherPurchases = findViewById(R.id.checkbox_other_purchases);
@@ -126,14 +153,14 @@ public class LogActivitiesActivity extends AppCompatActivity {
         spinnerDeviceType = findViewById(R.id.spinner_device_type);
         spinnerPurchaseType = findViewById(R.id.spinner_purchase_type);
 
-        //energy Bills UI
+        // Energy Bills UI
         checkboxEnergyBills = findViewById(R.id.checkbox_energy_bills);
         energyBillsLayout = findViewById(R.id.energy_bills_layout);
         inputBillAmount = findViewById(R.id.input_bill_amount);
         spinnerBillType = findViewById(R.id.spinner_bill_type);
     }
 
-    //spinner setup for user to choose between options
+    // Sets up a spinner with the provided array resource
     private void setupSpinner(Spinner spinner, int arrayResId) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
@@ -144,15 +171,62 @@ public class LogActivitiesActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
     }
 
-    //checkbox set up for toggle down
+    // Sets up a checkbox to toggle the visibility of its associated layout
     private void setupCheckbox(CheckBox checkbox, LinearLayout layout) {
-        checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // Show or hide the associated input layout based on the checkbox state
-            layout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-        });
+        checkbox.setOnCheckedChangeListener((buttonView, isChecked) ->
+                layout.setVisibility(isChecked ? View.VISIBLE : View.GONE)
+        );
+        layout.setVisibility(checkbox.isChecked() ? View.VISIBLE : View.GONE);
     }
 
-    //emission calculations
+    // Enable or disable editing for all input fields and spinners
+    private void enableEditing(boolean isEnabled) {
+        inputDate.setEnabled(isEnabled);
+        inputDistanceDriving.setEnabled(isEnabled);
+        inputTimeSpent.setEnabled(isEnabled);
+        inputDistanceWalking.setEnabled(isEnabled);
+        inputNumFlights.setEnabled(isEnabled);
+        inputServings.setEnabled(isEnabled);
+        inputNumClothes.setEnabled(isEnabled);
+        inputNumDevices.setEnabled(isEnabled);
+        inputNumOtherPurchases.setEnabled(isEnabled);
+        inputBillAmount.setEnabled(isEnabled);
+
+        spinnerVehicleType.setEnabled(isEnabled);
+        spinnerTransportType.setEnabled(isEnabled);
+        spinnerFlightType.setEnabled(isEnabled);
+        spinnerMealType.setEnabled(isEnabled);
+        spinnerDeviceType.setEnabled(isEnabled);
+        spinnerPurchaseType.setEnabled(isEnabled);
+        spinnerBillType.setEnabled(isEnabled);
+    }
+
+    //judy will change this to just reflect the user's selected date
+    private void showDatePickerDialog() {
+        // Get the current date
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // Create a DatePickerDialog
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    // Format the selected date and set it on the TextView
+                    String formattedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                    inputDate.setText(formattedDate);
+                },
+                year,
+                month,
+                day
+        );
+
+        datePickerDialog.show();
+    }
+
+
+    //copy pasted from logactivitiesactivity: emission calculations - will refactor later on
     private double calculateVehicleEmission() {
         double emission;
 
@@ -273,7 +347,6 @@ public class LogActivitiesActivity extends AppCompatActivity {
             return 0.0;
         }
     }
-
     double totalTranspo = 0.0;
     double totalFood = 0.0;
     double totalShopping = 0.0;
@@ -326,120 +399,56 @@ public class LogActivitiesActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void saveData() {
-        try {
-            vehicleType = spinnerVehicleType.getSelectedItem().toString();
-        } catch (NumberFormatException e) {
-            vehicleType = "";
-        }
+    //when user clicks save --> calculate the emissions (similar to how LogActivitiesActivity does it)
+    //after the user edits whatever they want to edit
+    //update the rawinput and the calculatedemissions of the user
+    //call the UserEmissionData --> pass the new rawinput and pass the new calculated emissions
+    //update the firebase database
 
-        try {
-            numFlights = Integer.parseInt(inputNumFlights.getText().toString());
-        } catch (NumberFormatException e) {
-            numFlights = 0;
-        }
-        try {
-            numServings = Integer.parseInt(inputServings.getText().toString());
-        } catch (NumberFormatException e) {
-            numServings = 0;
-        }
-        try {
-            numClothes = Integer.parseInt(inputNumClothes.getText().toString());
-        } catch (NumberFormatException e) {
-            numClothes = 0;
-        }
-        try {
-            numDevices = Integer.parseInt(inputNumDevices.getText().toString());
-        } catch (NumberFormatException e) {
-            numDevices = 0;
-        }
-        try {
-            numPurchases = Integer.parseInt(inputNumOtherPurchases.getText().toString());
-        } catch (NumberFormatException e) {
-            numPurchases = 0;
-        }
-        try {
+    private void saveDataToFirebase() {
 
-        } catch (NumberFormatException e) {
-            numFlights = 0;
-        }
-        distanceDriven = parseDouble(inputDistanceDriving);
-        transportType = spinnerTransportType.getSelectedItem().toString();
-        cyclingTime = parseDouble(inputTimeSpent);
-        walkingCyclingDistance = parseDouble(inputDistanceWalking);
-        flightType = spinnerFlightType.getSelectedItem().toString();
-        mealType = spinnerMealType.getSelectedItem().toString();
-        deviceType = spinnerDeviceType.getSelectedItem().toString();
-        purchaseType = spinnerPurchaseType.getSelectedItem().toString();
-        BillAmount = parseDouble(inputBillAmount);
-        BillType = spinnerBillType.getSelectedItem().toString();
+        String vehicleType = spinnerVehicleType.getSelectedItem().toString();
+        double distanceDriven = parseDouble(inputDistanceDriving);
+        double cyclingTime = parseDouble(inputTimeSpent);
+        double walkingCyclingDistance = parseDouble(inputDistanceWalking);
+        int numFlights = Integer.parseInt(inputNumFlights.getText().toString());
+        int numServings = Integer.parseInt(inputServings.getText().toString());
+        int numClothes = Integer.parseInt(inputNumClothes.getText().toString());
+        int numDevices = Integer.parseInt(inputNumDevices.getText().toString());
+        int numPurchases = Integer.parseInt(inputNumOtherPurchases.getText().toString());
+        double BillAmount = parseDouble(inputBillAmount);
+        String flightType = spinnerFlightType.getSelectedItem().toString();
+        String transportType = spinnerTransportType.getSelectedItem().toString();
+        String mealType = spinnerMealType.getSelectedItem().toString();
+        String deviceType = spinnerDeviceType.getSelectedItem().toString();
+        String purchaseType = spinnerPurchaseType.getSelectedItem().toString();
+        String BillType = spinnerBillType.getSelectedItem().toString();
 
-        calculateTransportationEmissions();
-        calculateFoodEmissions();
-        calculateShoppingEmissions();
+        // these methods currently belong in LogActivitiesActivity
+        // for now, just duplicate the calculations that will occur
+        double totalTranspo = calculateTransportationEmissions(vehicleType, distanceDriven, transportType, cyclingTime, numFlights, flightType);
+        double totalFood = calculateFoodEmissions(mealType, numServings);
+        double totalShopping = calculateShoppingEmissions(numClothes, numDevices, numPurchases, deviceType, purchaseType);
 
-        //create a RawInputs object using the input values
+        // recreate RawInputs and CalculatedEmissions objects
         UserEmissionData.RawInputs rawInputs = new UserEmissionData.RawInputs(
-                distanceDriven,         // e.g., inputDistance
-                vehicleType,            // e.g., "Car"
-                transportType,          // e.g., "Bus" or "Train"
-                cyclingTime,            // e.g., inputCyclingDistance (or time spent cycling, depending on your data)
-                numFlights,             // e.g., inputNumFlights
-                flightType,             // e.g., "Commercial"
-                mealType,               // e.g., "Vegetarian"
-                numServings,            // e.g., inputServings
-                numClothes,             // e.g., inputNumClothes
-                deviceType,             // e.g., "Electronics" or "Phone", etc.
-                numDevices,             // e.g., inputNumDevices
-                purchaseType,           // e.g., "Other" or "Furniture", etc.
-                numPurchases,           // e.g., inputNumOtherPurchases
-                BillAmount,             // e.g., inputBillAmount
-                BillType                // e.g., "Electricity" or "Gas"
-        );
-
-        //create a calculatedEmissions object using the total emissions data
+                distanceDriven, vehicleType, transportType, cyclingTime, numFlights, flightType, mealType, numServings,
+                numClothes, deviceType, numDevices, purchaseType, numPurchases, BillAmount, BillType);
 
         UserEmissionData.CalculatedEmissions calculatedEmissions = new UserEmissionData.CalculatedEmissions(
                 totalTranspo, totalFood, totalShopping);
 
-        //create the UserEmissionData object with raw inputs and calculated emissions
         UserEmissionData userEmissionData = new UserEmissionData(rawInputs, calculatedEmissions);
 
-        //pass the database reference
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        DatabaseCommunicator databaseCommunicator = new DatabaseCommunicator(database);
-
-        //take user id and date
+        // will review and fix
         FirebaseAuth mauth = FirebaseAuth.getInstance();
-        String userId = String.valueOf(mauth.getUid());
+        String userId = mauth.getUid();
         long selectedDate = System.currentTimeMillis();
 
-        //then save the emission data to Firebase
-        databaseCommunicator.saveUserEmissionData(userId, selectedDate, userEmissionData);
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        DatabaseCommunicator databaseCommunicator = new DatabaseCommunicator(database);
+        databaseCommunicator.saveUserEmissionData(userId, selectedDate, user)
 
-        //show the success message
-        Toast.makeText(getApplicationContext(), "Data saved successfully!", Toast.LENGTH_SHORT).show();
-
-        //after we save the data to the database, send it to the DetailPageActivity
-        Intent intent = new Intent(LogActivitiesActivity.this, DetailPageActivity.class);
-
-        // Pass collected data to the next Activity as extras
-        intent.putExtra("vehicleType", rawInputs.getVehicleType());
-        intent.putExtra("distanceDriven", rawInputs.getDistanceDriven());
-        intent.putExtra("numFlights", rawInputs.getNumFlights());
-        intent.putExtra("mealType", rawInputs.getMealType());
-        intent.putExtra("numClothes", rawInputs.getNumClothes());
-        intent.putExtra("numServings", rawInputs.getNumServings());
-        intent.putExtra("cyclingTime", rawInputs.getCyclingTime());
-        intent.putExtra("deviceType", rawInputs.getDeviceType());
-        intent.putExtra("numDevices", rawInputs.getNumDevices());
-        intent.putExtra("purchaseType", rawInputs.getPurchaseType());
-        intent.putExtra("numPurchases", rawInputs.getNumOtherPurchases());
-        intent.putExtra("BillAmount", rawInputs.getBillAmount());
-        intent.putExtra("BillType", rawInputs.getBillType());
-        intent.putExtra("totalEmissions", totalTranspo + totalFood + totalShopping);
-
-        // Start the DetailPageActivity
-        startActivity(intent);
     }
+
 }

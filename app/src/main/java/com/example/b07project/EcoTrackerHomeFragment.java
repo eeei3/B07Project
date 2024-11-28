@@ -73,6 +73,15 @@ public class EcoTrackerHomeFragment extends Fragment {
 //        buttonDetails.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
+
+        //if no info --> toast: please log activity
+
+        //take the userID
+        //take the date selected
+        //in order take the user from the database
+        //start the DetailPageActivity
+
+
 //                FirebaseAuth auth = FirebaseAuth.getInstance();
 //                FirebaseUser user = auth.getCurrentUser();
 
