@@ -53,10 +53,14 @@ public class PieChartUpdate extends AppCompatActivity {
                 updateForYearly();
                 break;
             case "Select a time period":
+                updateForDaily();
                 break;
         }
     }
 
+    /**
+     * Updates the chart based for daily
+     */
     private void updateForDaily() {
         // Retrieve the total emissions passed from the EcoTracker
         double totalTranspo = getIntent().getDoubleExtra("totalTranspo", 0);
@@ -74,11 +78,22 @@ public class PieChartUpdate extends AppCompatActivity {
         pieChart.addPieSlice(new PieModel("Shopping", (int) totalShopping, Color.parseColor("#EF5350")));
     }
 
+    /**
+     * Updates the chart based for monthly
+     */
     private void updateForMonthly() {
         // Initialize the Firebase database reference
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();  // Get the current authenticated user
-        String userId = user.getUid();
+
+        //case for when user not found
+        String userId;
+        if (user != null) {
+            userId = user.getUid();
+        } else {
+            userId = "";
+        }
+
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("ecotracker");
 
         // Get current time and calculate the start and end of the current month
@@ -129,6 +144,9 @@ public class PieChartUpdate extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Updates the chart based for yearly
+     */
     private void updateForYearly() {
         // Retrieve the total emissions passed from the SurveyActivity
         double transportationEmissions = getIntent().getDoubleExtra("transportationEmissions", 0);
@@ -154,6 +172,7 @@ public class PieChartUpdate extends AppCompatActivity {
         pieChart.addPieSlice(new PieModel("Energy Use",Integer.parseInt(energyUse.getText().toString()),
                 Color.parseColor("#29B6F6")));
     }
+
     /**
      * Updates the comparison totalEmissionsText
      *
