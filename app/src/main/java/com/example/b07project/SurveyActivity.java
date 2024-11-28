@@ -3,7 +3,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -15,9 +14,12 @@ import android.widget.RadioGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.util.concurrent.ThreadFactory;
 
+/**
+ * SurveyActivity class containing methods and fields related to the Emissions survey activity
+ */
 public class SurveyActivity extends AppCompatActivity {
+
     private RadioGroup CarOwnership, CarUsage, CarMiles, PublicTransport, PublicTransportUse,
             ShortFlights, LongFlights, Diet, BeefConsumption, PorkConsumption,
             ChickenConsumption, FishConsumption, FoodWaste, Housing, HousingPeople,
@@ -26,6 +28,14 @@ public class SurveyActivity extends AppCompatActivity {
     private Button btnSubmit;
     private LinearLayout groupCarQuestionsLayout, dietQuestionsLayout;
 
+    /**
+     * onCreate - Method run when SurveyActivity is created
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.
+     *                           <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +70,9 @@ public class SurveyActivity extends AppCompatActivity {
         Recycle = findViewById(R.id.radioRecycle);
 
         String[] categories = getResources().getStringArray(R.array.location_array);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, categories);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                                                            R.layout.spinner_item,
+                                                            categories);
         Spinner locationSpinner = findViewById(R.id.locationSpinner);
         locationSpinner.setAdapter(adapter);
 
@@ -70,7 +82,8 @@ public class SurveyActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // Show the additional questions if "I own a car" or "I lease a car" is selected
                 if (checkedId == R.id.radioYes) {
-                    groupCarQuestionsLayout.setVisibility(View.VISIBLE); // Show the hidden questions
+                    // Show the hidden questions
+                    groupCarQuestionsLayout.setVisibility(View.VISIBLE);
                     makeChildrenVisible(groupCarQuestionsLayout);
                 } else if (checkedId == R.id.radioNo) {
                     groupCarQuestionsLayout.setVisibility(View.GONE); // Hide the hidden questions
@@ -110,8 +123,11 @@ public class SurveyActivity extends AppCompatActivity {
                         Clothes, Thrift, Electronic, Recycle};
 
                 // Check if a radio button is selected
-                if (!areAllQuestionsAnswered(allRadioGroups) || locationSpinner.getSelectedItem().equals("Select a Country")) {
-                    Toast.makeText(SurveyActivity.this, "Please answer all questions", Toast.LENGTH_SHORT).show();
+                if (!areAllQuestionsAnswered(allRadioGroups)
+                        || locationSpinner.getSelectedItem().equals("Select a Country")) {
+                    Toast.makeText(SurveyActivity.this,
+                            "Please answer all questions",
+                            Toast.LENGTH_SHORT).show();
                 } else {
                     if (!locationSpinner.getSelectedItem().toString().equals(("Select a Country"))){
                     // Create an instance of EmissionsCalculator
@@ -119,14 +135,39 @@ public class SurveyActivity extends AppCompatActivity {
                     EmissionsCalculator emissionsCalculator = new EmissionsCalculator();
 
                     // Calculate the transportation emissions (you can adjust method signature if necessary)
-                    transportationEmissions = emissionsCalculator.getTransportationEmissions(SelectedOption(CarOwnership), SelectedOption(CarUsage), SelectedOption(CarMiles), SelectedOption(PublicTransport), SelectedOption(PublicTransportUse), SelectedOption(ShortFlights), SelectedOption(LongFlights));
-                    foodEmissions = emissionsCalculator.getFoodEmissions(SelectedOption(Diet), SelectedOption(BeefConsumption), SelectedOption(PorkConsumption), SelectedOption(ChickenConsumption), SelectedOption(FishConsumption), SelectedOption(FoodWaste));
-                    housingEmissions = emissionsCalculator.getHousingEmissions(SelectedOption(Housing), SelectedOption(HousingSize), SelectedOption(HousingPeople), SelectedOption(Energy), SelectedOption(EnergyWater), SelectedOption(Bill), SelectedOption(Renewable));
-                    consumptionEmissions = emissionsCalculator.getConsumptionEmissions(SelectedOption(Clothes), SelectedOption(Thrift), SelectedOption(Electronic), SelectedOption(Recycle));
-                    totalEmissions = transportationEmissions + foodEmissions + housingEmissions + consumptionEmissions;
+                    transportationEmissions = emissionsCalculator
+                            .getTransportationEmissions(SelectedOption(CarOwnership),
+                                                        SelectedOption(CarUsage),
+                                                        SelectedOption(CarMiles),
+                                                        SelectedOption(PublicTransport),
+                                                        SelectedOption(PublicTransportUse),
+                                                        SelectedOption(ShortFlights),
+                                                        SelectedOption(LongFlights));
+                    foodEmissions = emissionsCalculator
+                            .getFoodEmissions(SelectedOption(Diet),
+                                                SelectedOption(BeefConsumption),
+                                                SelectedOption(PorkConsumption),
+                                                SelectedOption(ChickenConsumption),
+                                                SelectedOption(FishConsumption),
+                                                SelectedOption(FoodWaste));
+                    housingEmissions = emissionsCalculator
+                            .getHousingEmissions(SelectedOption(Housing),
+                                                    SelectedOption(HousingSize),
+                                                    SelectedOption(HousingPeople),
+                                                    SelectedOption(Energy),
+                                                    SelectedOption(EnergyWater),
+                                                    SelectedOption(Bill),
+                                                    SelectedOption(Renewable));
+                    consumptionEmissions = emissionsCalculator
+                            .getConsumptionEmissions(SelectedOption(Clothes),
+                                                        SelectedOption(Thrift),
+                                                        SelectedOption(Electronic),
+                                                        SelectedOption(Recycle));
+                    totalEmissions = transportationEmissions
+                                        + foodEmissions
+                                        + housingEmissions
+                                        + consumptionEmissions;
                     user.totalEmissions = totalEmissions;
-                    //carbon.footprint = CalculateCarOwnership(SelectedOption(CarOwnership)) + CalculatePublicTransportation(SelectedOption(PublicTransport), SelectedOption(PublicTransportUse)) + CalculateShortFlight(SelectedOption(ShortFlights)) + CalculateLongFlight(SelectedOption(LongFlights));
-                    //Toast.makeText(SurveyActivity.this, "Carbon Footprint: " + totalEmissions, Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -146,7 +187,13 @@ public class SurveyActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * SelectedOption - Method for reading value from RadioGroup or Spinner
+     * @param view - the view that contains the radiobuttons
+     * @return - Data from RadioGroup or Spinner
+     */
     private String SelectedOption(View view) {
+
         if (view instanceof RadioGroup) {
             // Handle RadioGroup selection
             RadioGroup radioGroup = (RadioGroup) view;
@@ -159,6 +206,7 @@ public class SurveyActivity extends AppCompatActivity {
             RadioButton selectedRadioButton = findViewById(selectedId); // 'this' is implied
             return selectedRadioButton.getText().toString();
         }
+
         else if (view instanceof Spinner) {
             // Handle Spinner selection
             Spinner spinner = (Spinner) view;
@@ -174,11 +222,19 @@ public class SurveyActivity extends AppCompatActivity {
         return null; // Return null if neither RadioGroup nor Spinner
     }
 
+    /**
+     * areAllQuestionsAnswered - Check if all questions in the survey are answered
+     * @param radioGroups - Arraey of all RadioGroups
+     * @return - True or false if the survey is completed or not respectively
+     */
     private static boolean areAllQuestionsAnswered(RadioGroup[] radioGroups) {
+
         for (RadioGroup group : radioGroups) {
             // Print the current visibility state of the group
-            System.out.print("Group ID: " + group.getResources().getResourceEntryName(group.getId())
-                    + " Visibility: " + (group.getVisibility() == View.VISIBLE ? "VISIBLE" : "GONE") + "\n");
+            System.out.print("Group ID: "
+                    + group.getResources().getResourceEntryName(group.getId())
+                    + " Visibility: "
+                    + (group.getVisibility() == View.VISIBLE ? "VISIBLE" : "GONE") + "\n");
 
             // Check if the group is visible and if no option has been selected
             if (group.getVisibility() == View.VISIBLE) {
@@ -187,7 +243,9 @@ public class SurveyActivity extends AppCompatActivity {
 
                 if (checkedId == -1) {
                     // Print the unanswered question for visible groups only
-                    System.out.print("Unanswered question: " + group.getResources().getResourceEntryName(group.getId()) + "\n");
+                    System.out.print("Unanswered question: "
+                            + group.getResources().getResourceEntryName(group.getId())
+                            + "\n");
                     return false; // At least one visible question is not answered
                 }
             }
@@ -210,6 +268,5 @@ public class SurveyActivity extends AppCompatActivity {
             child.setVisibility(View.GONE);
         }
     }
-
 
 }

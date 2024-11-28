@@ -1,15 +1,25 @@
 package com.example.b07project;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+
+/**
+ * EntryActivity class containing methods relating to the main menu of the application
+ */
 public class EntryActivity extends AppCompatActivity {
+
+    /**
+     * onCreate - Method run when EntryActivity is created
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,14 +41,19 @@ public class EntryActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * loadFragment - Method for handling the loading of a fragment
+     * @param fragment - fragment to load
+     */
     private void loadFragment(Fragment fragment) {
         // Use the correct FragmentManager for activities
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);  // Optional transition
-        transaction.replace(R.id.fragment_container, fragment);  // R.id.fragment_container is your container's ID
-        transaction.addToBackStack(null);  // Optional: allows fragment to be popped back
+        // Optional transition
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        // R.id.fragment_container is your container's ID
+        transaction.replace(R.id.fragment_container, fragment);
+        // Optional: allows fragment to be popped back
+        transaction.addToBackStack(null);
         transaction.commit();
     }
 }
-
-
