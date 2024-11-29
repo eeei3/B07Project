@@ -4,6 +4,8 @@ import static android.provider.Settings.System.getString;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,7 +46,17 @@ public class DatabaseCommunicator {
     }
 
 
-
+    private void setSpinnerSelection(Spinner spinner, String value) {
+        SpinnerAdapter adapter = spinner.getAdapter();
+        if (adapter != null) {
+            for (int i = 0; i < adapter.getCount(); i++) {
+                if (value.equals(adapter.getItem(i).toString())) {
+                    spinner.setSelection(i);
+                    return;
+                }
+            }
+        }
+    }
 
     //display the data on the homescreen
     public void serverCalcEmissionReader(Long selectedDate) {
@@ -85,7 +97,7 @@ public class DatabaseCommunicator {
                         waiter.onObjectReady();
                     }
                     calciter++;
-                    ecotrackerhomefragment.foodEmissions.setText("Total food emissions:" + String.valueOf(calc.getTotalEmission()));
+                    ecotrackerhomefragment.foodEmissions.setText("Food: " + String.valueOf(calc.getTotalEmission()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -107,7 +119,7 @@ public class DatabaseCommunicator {
                     }
                     calciter++;
                     // This is where you should put how View should handle the data.
-                    ecotrackerhomefragment.shoppingEmissions.setText("Transportation: " + String.valueOf(calc.getTotalEmission()));
+                    ecotrackerhomefragment.shoppingEmissions.setText("Shopping: " + String.valueOf(calc.getTotalEmission()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -129,6 +141,7 @@ public class DatabaseCommunicator {
                     }
                     calciter++;
                     // This is where you should put how View should handle the data.
+                    ecotrackerhomefragment.foodEmissions.setText("Energy bills: " + String.valueOf(calc.getTotalEmission()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -154,6 +167,7 @@ public class DatabaseCommunicator {
                     }
                     rawiter++;
                     // This is where you should put how View should handle the data.
+                    detailPageActivity.inputDistanceWalking.setText(String.valueOf(task.getResult().getValue()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -174,7 +188,7 @@ public class DatabaseCommunicator {
                         waiter.onObjectReady();
                     }
                     rawiter++;
-                    // This is where you should put how View should handle the data.
+                    setSpinnerSelection(detailPageActivity.spinnerVehicleType,String.valueOf(task.getResult().getValue()));
 
                 }
                 else {
@@ -197,6 +211,7 @@ public class DatabaseCommunicator {
                     }
                     rawiter++;
                     // This is where you should put how View should handle the data.
+                    setSpinnerSelection(detailPageActivity.spinnerTransportType,String.valueOf(task.getResult().getValue()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -218,7 +233,7 @@ public class DatabaseCommunicator {
                     }
                     rawiter++;
                     // This is where you should put how View should handle the data.
-                    detailPageActivity.inputDistanceWalking.setText();
+                    detailPageActivity.inputDistanceWalking.setText(String.valueOf(task.getResult().getValue()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -240,6 +255,7 @@ public class DatabaseCommunicator {
                     }
                     rawiter++;
                     // This is where you should put how View should handle the data.
+                    detailPageActivity.inputNumFlights.setText(String.valueOf(task.getResult().getValue()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -261,6 +277,7 @@ public class DatabaseCommunicator {
                     }
                     rawiter++;
                     // This is where you should put how View should handle the data.
+                    setSpinnerSelection(detailPageActivity.spinnerFlightType,String.valueOf(task.getResult().getValue()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -282,6 +299,7 @@ public class DatabaseCommunicator {
                     }
                     rawiter++;
                     // This is where you should put how View should handle the data.
+                    setSpinnerSelection(detailPageActivity.spinnerMealType,String.valueOf(task.getResult().getValue()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -303,6 +321,7 @@ public class DatabaseCommunicator {
                     }
                     rawiter++;
                     // This is where you should put how View should handle the data.
+                    detailPageActivity.inputServings.setText(String.valueOf(task.getResult().getValue()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -324,6 +343,7 @@ public class DatabaseCommunicator {
                     }
                     rawiter++;
                     // This is where you should put how View should handle the data.
+                    detailPageActivity.inputNumClothes.setText(String.valueOf(task.getResult().getValue()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -344,8 +364,8 @@ public class DatabaseCommunicator {
                         waiter.onObjectReady();
                     }
                     rawiter++;
-
                     // This is where you should put how View should handle the data.
+                    setSpinnerSelection(detailPageActivity.spinnerDeviceType,String.valueOf(task.getResult().getValue()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -367,6 +387,7 @@ public class DatabaseCommunicator {
                     }
                     rawiter++;
                     // This is where you should put how View should handle the data.
+                    detailPageActivity.inputNumDevices.setText(String.valueOf(task.getResult().getValue()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -388,6 +409,7 @@ public class DatabaseCommunicator {
                     }
                     rawiter++;
                     // This is where you should put how View should handle the data.
+                    setSpinnerSelection(detailPageActivity.spinnerPurchaseType,String.valueOf(task.getResult().getValue()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -409,6 +431,7 @@ public class DatabaseCommunicator {
                     }
                     rawiter++;
                     // This is where you should put how View should handle the data.
+                    detailPageActivity.inputNumOtherPurchases.setText(String.valueOf(task.getResult().getValue()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -430,6 +453,7 @@ public class DatabaseCommunicator {
                     }
                     rawiter++;
                     // This is where you should put how View should handle the data.
+                    detailPageActivity.inputBillAmount.setText(String.valueOf(task.getResult().getValue()));
                 }
                 else {
                     throw new RuntimeException("Database read error");
@@ -451,6 +475,7 @@ public class DatabaseCommunicator {
                     }
                     rawiter++;
                     // This is where you should put how View should handle the data.
+                    setSpinnerSelection(detailPageActivity.spinnerBillType,String.valueOf(task.getResult().getValue()));
                 }
                 else {
                     throw new RuntimeException("Database read error");

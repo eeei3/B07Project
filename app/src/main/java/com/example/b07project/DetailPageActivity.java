@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -343,7 +344,7 @@ public class DetailPageActivity extends AppCompatActivity {
         long selectedDate = System.currentTimeMillis();
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        DatabaseCommunicator presenter = new DatabaseCommunicator(database);
+        DatabaseCommunicator presenter = new DatabaseCommunicator(database, this);
         presenter.saveUserEmissionData(userId, selectedDate, userEmissionData);
     }
 

@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="Transportation: Not logged yet"
+                android:text="Transportation: No Data"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="Food: Not logged yet"
+                android:text="Food: No Data"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="Shopping: Not logged yet"
+                android:text="Shopping: No Data"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -130,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="Energy bills: Not logged yet"
+                android:text="Energy bills: No Data"
                 android:textSize="16sp" />
         </LinearLayout>
 
