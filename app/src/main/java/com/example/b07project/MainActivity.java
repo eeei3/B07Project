@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         if (user == null) {
             Log.d("MainActivity", "User not logged in");
             if (savedInstanceState == null) {
-                loadFragment(new LoginFragment());  //if user is not logged in, load the loginfragment
+                loadFragment(new EcoTrackerHomeFragment());  //if user is not logged in, load the loginfragment
             }
         } else {
             Log.d("MainActivity", "User logged in: " + user.getUid());

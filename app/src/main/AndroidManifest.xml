@@ -20,7 +20,7 @@
         <!--app's launcher activity -->
 
         <activity
-            android:name=".EntryActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Registration">
@@ -33,6 +33,9 @@
 
         <!--app's LogActivitiesActivity -->
         <activity android:name=".LogActivitiesActivity" />
+
+        <!--app's DetailPageActivity -->
+        <activity android:name=".DetailPageActivity" />
 
 
     </application>

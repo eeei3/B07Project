@@ -5,6 +5,7 @@ import static java.lang.Double.parseDouble;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -61,7 +62,11 @@ public class DetailPageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        Log.d("reach here", "try" );
+
         setContentView(R.layout.activity_detail_page);
 
         // Initialize UI components

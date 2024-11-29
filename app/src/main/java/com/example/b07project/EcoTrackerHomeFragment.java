@@ -69,37 +69,22 @@ public class EcoTrackerHomeFragment extends Fragment {
                 }
             }
         });
+        buttonDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedDate > 0) {
 
-//        buttonDetails.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), DetailPageActivity.class);
+                    intent.putExtra("selectedDate", selectedDate);
+                    intent.putExtra("user_id", userId);
+                    startActivity(intent);
 
-        //if no info --> toast: please log activity
-
-        //take the userID
-        //take the date selected
-        //in order take the user from the database
-        //start the DetailPageActivity
-
-
-//                FirebaseAuth auth = FirebaseAuth.getInstance();
-//                FirebaseUser user = auth.getCurrentUser();
-
-//                if (selectedDate > 0) {
-//                    String userId = user.getUid();
-//                    Intent intent = new Intent(getActivity(), ActivityBreakdownActivity.class);
-//
-//                    Pass the selected date as an extra
-//                    intent.putExtra("selectedDate", selectedDate);
-//
-//                    intent.putExtra("user_id", userId);
-//
-//                    startActivity(intent);
-//                } else {
-//                    Toast.makeText(getActivity(), "Please select a date", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+                } else {
+                    //if no date is selected, show to user
+                    Toast.makeText(getActivity(), "Please select a date", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         return view;
     }
 }
