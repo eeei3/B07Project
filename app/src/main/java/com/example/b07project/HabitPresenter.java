@@ -102,7 +102,8 @@ public class HabitPresenter {
     }
 
 
-    // TOMMY notes - removed the "filter" param as this is taken care of by the adapter of the RecyclerView
+    // TOMMY notes
+    // this method should be responsible for populating userGoals in the view
     /**
      * userGetGoal gets the list of goals that the user has active
      *
@@ -113,7 +114,7 @@ public class HabitPresenter {
             @Override
             public void onObjectReady(AsyncComms betweener) {
                 if (mp.res) {
-                    HabitsMenu.userGoals.addAll(mp.usergoals);
+                    view.userGoals.addAll(mp.usergoals);
                 }
             }
         });
@@ -148,6 +149,8 @@ public class HabitPresenter {
             public void onObjectReady(AsyncComms betweener) {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
                 if (plug.res) {
+                    // update the progress and aim in the view for the specified goal
+
                     view.progress = plug.value;
                     // view.aim = plug.???
                 }
