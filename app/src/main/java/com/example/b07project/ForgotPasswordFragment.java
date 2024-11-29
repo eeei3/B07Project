@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,22 +41,8 @@ public class ForgotPasswordFragment extends Fragment {
                 String email = editTextUserEmail.getText().toString().trim();
                 // Create communication channel with the Presenter
                 presenter.setEmail(email);
-                // Create object to hold if operation is successful or not
-                SuccessListener watcher = new SuccessListener();
-                // Create Listener to check if password reset successful or not.
-                presenter.setViewPipe(new LoginPresenter.PresenterViewPipe() {
-                    @Override
-                    public void onObjectReady(SuccessListener watcher) {
-                        if (watcher.success) {
-                            success();
-                        }
-                        else {
-                            failure();
-                        }
-                    }
-                });
                 // Reset password
-                presenter.beginReset(watcher);
+                presenter.beginReset();
                 finishLoading(btnResetPassword, btnProgressReset);
             }
         });
@@ -90,11 +75,6 @@ public class ForgotPasswordFragment extends Fragment {
     public void failure() {
         Toast.makeText(getContext(), "Failure", Toast.LENGTH_SHORT).show();
     }
-
-    public void getEmail() {
-
-    }
-
 
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
