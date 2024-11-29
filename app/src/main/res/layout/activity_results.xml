@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/totalEmissionsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:padding="3dp"
+        android:fontFamily="@font/custom_font"
+        android:text="Total Carbon Footprint:"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/transportationTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:padding="3dp"
+        android:fontFamily="@font/custom_font"
+        android:text="Transportation:"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/foodTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:padding="3dp"
+        android:fontFamily="@font/custom_font"
+        android:text="Food:"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/housingTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:padding="3dp"
+        android:fontFamily="@font/custom_font"
+        android:text="Housing:"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/consumptionTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:padding="3dp"
+        android:fontFamily="@font/custom_font"
+        android:text="Consumption:"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/comparisonTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:padding="3dp"
+        android:fontFamily="@font/custom_font"
+        android:text="Comparison to National Average: "
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/globalTargetComparisonTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:padding="3dp"
+        android:fontFamily="@font/custom_font"
+        android:text="Comparison to Global Target: "
+        android:textSize="18sp"/>
+
+
+</LinearLayout>

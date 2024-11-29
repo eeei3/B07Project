@@ -1,6 +1,8 @@
 package com.example.b07project;
 
 // Import required packages
+import static java.lang.Double.parseDouble;
+
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
@@ -9,12 +11,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -22,9 +26,17 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class DetailPageActivity extends AppCompatActivity {
+
+    //main functionalities:
+    //inflates the activity_detail_page
+    //display all of the current information from database to the textviews and spinners
+
+
     // General UI elements
     private TextView titleTextView, inputDate;
     private Button buttonSave, buttonEdit;
+    private LinearLayout mainLayout;
+    private ProgressBar progressBar;
 
     // Transportation Details
     private CheckBox checkboxDriveVehicle, checkboxPublicTransport, checkboxCyclingWalking, checkboxFlight;
@@ -99,6 +111,7 @@ public class DetailPageActivity extends AppCompatActivity {
             buttonSave.setVisibility(View.GONE);
             buttonEdit.setVisibility(View.VISIBLE);
         });
+
     }
 
     private void initializeUIComponents() {
@@ -106,6 +119,8 @@ public class DetailPageActivity extends AppCompatActivity {
         inputDate = findViewById(R.id.input_date);
         buttonSave = findViewById(R.id.button_save);
         buttonEdit = findViewById(R.id.button_edit);
+        mainLayout = findViewById(R.id.main_layout);
+        progressBar = findViewById(R.id.progress_bar);
 
         // Transportation UI
         checkboxDriveVehicle = findViewById(R.id.checkbox_drive_vehicle);
@@ -191,31 +206,145 @@ public class DetailPageActivity extends AppCompatActivity {
         spinnerBillType.setEnabled(isEnabled);
     }
 
-    private void showDatePickerDialog() {
-        // Get the current date
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        // Create a DatePickerDialog
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                this,
-                (view, selectedYear, selectedMonth, selectedDay) -> {
-                    // Format the selected date and set it on the TextView
-                    String formattedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
-                    inputDate.setText(formattedDate);
-                },
-                year,
-                month,
-                day
-        );
-
-        datePickerDialog.show();
+    private double parseDouble(EditText editText) {
+        String text = editText.getText().toString();
+        try {
+            return Double.parseDouble(text);
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
     }
 
-    //save data to firebase implementation
+    private void fetchDataFromFirebase() {
+        ProgressBar progressBar = findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+        mainLayout.setVisibility(View.GONE);
 
-    //display user's data on the detail page
+        FirebaseDatabase.getInstance().getReference("put user's path to the data here").get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                       //where to call the method to display the user's input data
+                    } else {
+                        // Show error message
+                        displayToast("Failed to retrieve data.");
+                        progressBar.setVisibility(View.GONE);
+                        mainLayout.setVisibility(View.VISIBLE);  // To show the  main part, but with default values
+                    }
+                });
+    }
+
+
+    private boolean isInputVisible(View layout) {
+        return layout.getVisibility() == View.VISIBLE;
+    }
+
+    private void displayToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    //when user clicks save --> calculate the emissions (similar to how LogActivitiesActivity does it)
+    //after the user edits whatever they want to edit
+    //update the rawinput and the calculatedemissions of the user
+    //call the UserEmissionData --> pass the new rawinput and pass the new calculated emissions
+    //update the firebase database
+
+    private void saveDataToFirebase() {
+        String vehicleType;
+        double distanceDriven;
+        String transportType;
+        double cyclingTime;
+        int numFlights;
+        String flightType;
+        String mealType;
+        int numServings;
+        int numClothes;
+        int numDevices;
+        int numPurchases;
+        String deviceType;
+        String purchaseType;
+        double BillAmount;
+        String BillType;
+        double walkingCyclingDistance;
+
+        vehicleType = spinnerVehicleType.getSelectedItem().toString();
+        distanceDriven = parseDouble(inputDistanceDriving);
+        cyclingTime = parseDouble(inputTimeSpent);
+        walkingCyclingDistance = parseDouble(inputDistanceWalking);
+        try {
+            numFlights = Integer.parseInt(inputNumFlights.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numFlights = 0;
+        }
+        try {
+            numServings = Integer.parseInt(inputServings.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numServings = 0;
+        }
+        try {
+            numClothes = Integer.parseInt(inputNumClothes.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numClothes = 0;
+        }
+        try {
+            numDevices = Integer.parseInt(inputNumDevices.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numDevices = 0;
+        }
+        try {
+            numPurchases = Integer.parseInt(inputNumOtherPurchases.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numPurchases = 0;
+        }
+        BillAmount = parseDouble(inputBillAmount);
+        flightType = spinnerFlightType.getSelectedItem().toString();
+        transportType = spinnerTransportType.getSelectedItem().toString();
+        mealType = spinnerMealType.getSelectedItem().toString();
+        deviceType = spinnerDeviceType.getSelectedItem().toString();
+        purchaseType = spinnerPurchaseType.getSelectedItem().toString();
+        BillType = spinnerBillType.getSelectedItem().toString();
+
+        EcoTrackerCalculations calculator = new EcoTrackerCalculations(vehicleType,
+                                                                        distanceDriven,
+                                                                        transportType,
+                                                                        cyclingTime,
+                                                                        numFlights,
+                                                                        flightType,
+                                                                        mealType,
+                                                                        numServings,
+                                                                        numClothes,
+                                                                        numDevices,
+                                                                        numPurchases,
+                                                                        deviceType,
+                                                                        purchaseType);
+        // these methods currently belong in LogActivitiesActivity
+        // for now, just duplicate the calculations that will occur
+        double totalTranspo = calculator.calculateTransportationEmissions();
+        double totalFood = calculator.calculateFoodEmissions();
+        double totalShopping = calculator.calculateShoppingEmissions();
+
+        // recreate RawInputs and CalculatedEmissions objects
+        UserEmissionData.RawInputs rawInputs = new UserEmissionData.RawInputs(
+                distanceDriven, vehicleType, transportType, cyclingTime, numFlights, flightType, mealType, numServings,
+                numClothes, deviceType, numDevices, purchaseType, numPurchases, BillAmount, BillType);
+
+        UserEmissionData.CalculatedEmissions calculatedEmissions = new UserEmissionData.CalculatedEmissions(
+                totalTranspo, totalFood, totalShopping);
+
+        UserEmissionData userEmissionData = new UserEmissionData(rawInputs, calculatedEmissions);
+
+        // will review and fix
+        FirebaseAuth mauth = FirebaseAuth.getInstance();
+        String userId = mauth.getUid();
+        long selectedDate = System.currentTimeMillis();
+
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        DatabaseCommunicator presenter = new DatabaseCommunicator(database);
+        presenter.saveUserEmissionData(userId, selectedDate, userEmissionData);
+    }
 
 }
