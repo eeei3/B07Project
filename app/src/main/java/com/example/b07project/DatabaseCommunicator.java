@@ -35,6 +35,10 @@ public class DatabaseCommunicator {
         this.calciter = 0;
     }
 
+    public void setWaiter(Waiter waiter) {
+        this.waiter = waiter;
+    }
+
     public void serverCalcEmissionReader(Long selectedDate) {
         this.calc = new UserEmissionData.CalculatedEmissions();
         DatabaseReference userRef = database.child("users")
