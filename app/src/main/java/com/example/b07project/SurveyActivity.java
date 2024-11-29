@@ -51,7 +51,7 @@ public class SurveyActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitivity_survey);
-        view = this;
+        SurveyActivity view = this;
 
         CarOwnership = findViewById(R.id.radioGroupCarOwnership);
         CarUsage = findViewById(R.id.radioGroupCarUsage);
@@ -235,7 +235,7 @@ public class SurveyActivity extends AppCompatActivity {
 
     /**
      * areAllQuestionsAnswered - Check if all questions in the survey are answered
-     * @param radioGroups - Arraey of all RadioGroups
+     * @param radioGroups - Array of all RadioGroups
      * @return - True or false if the survey is completed or not respectively
      */
     private static boolean areAllQuestionsAnswered(RadioGroup[] radioGroups) {
