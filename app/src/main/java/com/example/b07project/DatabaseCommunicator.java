@@ -56,6 +56,8 @@ public class DatabaseCommunicator {
                     }
                     calciter++;
                     // This is where you should put how View should handle the data.
+
+
                 }
                 else {
                     throw new RuntimeException("Database read error");

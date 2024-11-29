@@ -27,11 +27,6 @@ import java.util.HashMap;
 
 public class DetailPageActivity extends AppCompatActivity {
 
-    //main functionalities:
-    //inflates the activity_detail_page
-    //display all of the current information from database to the textviews and spinners
-
-
     // General UI elements
     private TextView titleTextView, inputDate;
     private Button buttonSave, buttonEdit;
@@ -105,8 +100,8 @@ public class DetailPageActivity extends AppCompatActivity {
 
         // Save button logic
         buttonSave.setOnClickListener(v -> {
-            // Save data to Firebase
-            //saveDataToFirebase(); //not sure how to implement this with firebase
+            //Save data to Firebase
+            //saveDataToFirebase();
 
             // Disable editing and toggle buttons
             enableEditing(false);
@@ -247,11 +242,6 @@ public class DetailPageActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    //when user clicks save --> calculate the emissions (similar to how LogActivitiesActivity does it)
-    //after the user edits whatever they want to edit
-    //update the rawinput and the calculatedemissions of the user
-    //call the UserEmissionData --> pass the new rawinput and pass the new calculated emissions
-    //update the firebase database
 
     private void saveDataToFirebase() {
         String vehicleType;
@@ -351,5 +341,40 @@ public class DetailPageActivity extends AppCompatActivity {
         DatabaseCommunicator presenter = new DatabaseCommunicator(database);
         presenter.saveUserEmissionData(userId, selectedDate, userEmissionData);
     }
+
+    private void setSpinnerSelection(Spinner spinner, String value) {
+        SpinnerAdapter adapter = spinner.getAdapter();
+        if (adapter != null) {
+            for (int i = 0; i < adapter.getCount(); i++) {
+                if (value.equals(adapter.getItem(i).toString())) {
+                    spinner.setSelection(i);
+                    return;
+                }
+            }
+        }
+    }
+
+    //once database communicator gets all the required data
+
+    DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+
+    DatabaseCommunicator model = new DatabaseCommunicator(database);
+    model.setWaiter(new DatabaseCommunicator.Waiter() {
+
+        @Override public void onObjectReady() {
+
+            //input all of the frontend updates that have to happen here
+
+
+            //set spinner
+            //input the vehicletype from database to spinner
+
+            model.raw.getVehicleType() // put this to the frontend id
+            model.raw.getFlightType()
+
+            } });
+
+        model.serverCalcEmissionReader(date);
+
 
 }
