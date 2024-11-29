@@ -198,10 +198,17 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
                 if (currentHabitModel.getHabitDesc().equals(getArguments().getString(argHabitDesc))) {
                     HabitsMenu.userHabitsModels.add(currentHabitModel);
 
+                    // add goal/habit to the firebase
+                    // HabitsMenu.presenter.userAddGoal(currentHabitModel.getHabitName());
+
                     // Notify the adapter that the habit has been updated
                     if (getActivity() instanceof OnHabitUpdatedListener) {
                         ((OnHabitUpdatedListener) getActivity()).onHabitUpdated(currentHabitModel);
                     }
+
+                    // close the dialog
+                    dismiss();
+                    break;
                 }
             }
 

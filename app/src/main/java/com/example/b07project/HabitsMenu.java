@@ -31,6 +31,8 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
     // !!! NOTE: userHabitsModels needs to be replaced with the user's habits pulled from the firebase
     public static final boolean[] currentMenu = {false}; // false for all habits, true for user's habits, final bcs android studio complains
 
+    public static HabitPresenter presenter = new HabitPresenter(); // static to be reached from various other dialogs
+
     @SuppressLint("StaticFieldLeak")
     public static HabitsAdapter adapter;
 
