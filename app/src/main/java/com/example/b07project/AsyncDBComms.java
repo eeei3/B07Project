@@ -6,7 +6,7 @@ import java.util.HashSet;
  * SuccessListener - Class representing the results of our asynchronous calls to Firebase auth
  */
 public class AsyncDBComms extends AsyncComms {
-    int value;
+    long value;
     HashSet<Goal> usergoals;
     HashSet<String> listgoals;
 
@@ -23,7 +23,7 @@ public class AsyncDBComms extends AsyncComms {
      * setValue - Modify the value field
      * @param value - The new value of value
      */
-    public void setValue(int value) {
+    public void setValue(long value) {
         this.value = value;
     }
 

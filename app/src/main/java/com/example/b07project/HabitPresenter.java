@@ -12,6 +12,8 @@ public class HabitPresenter {
     FirebaseModel model;
     HabitsMenu view;
 
+    Model.ModelPresenterPipe listener;
+
     // TOMMY Notes - added field HabitsMenu view and initialize the view in constructor
     /**
      * HabitPresenter - Default Constructor that sets userid and creates an instance of
@@ -151,7 +153,7 @@ public class HabitPresenter {
                 if (plug.res) {
                     // update the progress and aim in the view for the specified goal
 
-                    view.progress = plug.value;
+                    view.progress = (int) plug.value;
                     // view.aim = plug.???
                 }
                 else {

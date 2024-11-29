@@ -21,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
  */
 class Goal {
     String name;
-    int prog;
+    long prog;
     int aim;
     String impact;
     String category;
@@ -46,7 +46,7 @@ class Goal {
      * @param name - Name of the goal the program is fetching
      * @param prog - Progress of the goal
      */
-    public Goal(String name, int prog) {
+    public Goal(String name, long prog) {
         this.name = name;
         this.prog = prog;
     }
@@ -65,7 +65,7 @@ class Goal {
         return name;
     }
 
-    public int getProg() {
+    public long getProg() {
         return prog;
     }
 
@@ -119,7 +119,15 @@ final public class FirebaseModel extends Model {
     final private DatabaseReference dbworker;
     private String userid;
 
-    FirebaseAuthHandler.ModelPresenterPipe listener;
+    ModelPresenterPipe listener;
+
+    /**
+     * setModelPipe - To permit communications between Model and Presenter
+     * @param listener - How we notify the Presenter that the results are ready
+     */
+    public void setModelPipe(ModelPresenterPipe listener) {
+        this.listener = listener;
+    }
 
     /**
      * GeneralServerCommunicator - Constructor, creates a reference to the Firebase Database,
@@ -127,7 +135,8 @@ final public class FirebaseModel extends Model {
      * @param userid - the id of the user
      */
     private FirebaseModel(String userid) {
-        this.userid = userid;
+//        this.userid = userid;  //This is the production line
+        this.userid = "1111111"; // This is for testing
         db = FirebaseDatabase.getInstance("https://b07project-b43b0-default-rtdb.firebaseio.com/");
         dbworker = db.getInstance().getReference();
     }
@@ -161,15 +170,14 @@ final public class FirebaseModel extends Model {
      * Get the list of goals the user is currently working on
      */
     void getGoals(AsyncDBComms watcher) {
-        Query usergoals = dbworker.child("users").child(userid);
+        Query usergoals = dbworker.child("users").child(userid).child("habits");
         usergoals.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 HashSet<Goal> res = new HashSet<Goal>();
                 for (DataSnapshot goals: snapshot.getChildren()) {
                     try {
-                        int prog = goals.getValue(Integer.class);
-                        Goal temp = new Goal(goals.getKey(), prog);
+                        Goal temp = new Goal(goals.getKey(), (long) goals.child("prog").getValue());;
                         res.add(temp);
                     }
                     catch (NullPointerException ex) {
@@ -194,7 +202,8 @@ final public class FirebaseModel extends Model {
      * Set a new goal for the user
      */
     void setGoals(String goal, AsyncDBComms watcher) {
-        dbworker.child("users").child(userid).setValue(goal)
+//        Goal goalobj = new Goal(goal, 0);
+        dbworker.child("users").child(userid).child("habits").child(goal).child("prog").setValue(0)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -213,13 +222,13 @@ final public class FirebaseModel extends Model {
      * Get the progress of a goal that the user is working on
      */
     void getProg(String goal, AsyncDBComms watcher) {
-        dbworker.child("users").child(userid).child("habits").child(goal)
+        dbworker.child("users").child(userid).child("habits").child(goal).child("prog")
                 .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         if (task.isSuccessful()) {
                             // Fetch the values we want
-                            watcher.value = Integer.parseInt((String) task.getResult().getValue());
+                            watcher.value = (long) task.getResult().getValue();
                             watcher.setResult(true);
                             listener.onObjectReady(watcher);
                         }
@@ -236,7 +245,7 @@ final public class FirebaseModel extends Model {
      * Set the progress of a goal that the user is working on
      */
     void setProg(String goalname, int prog, AsyncDBComms watcher) {
-        dbworker.child("users").child(userid).child(goalname).setValue(prog)
+        dbworker.child("users").child(userid).child("habits").child(goalname).child("prog").setValue(prog)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
