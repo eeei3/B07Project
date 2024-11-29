@@ -4,17 +4,49 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DatabaseCommunicator {
 
-    private DatabaseReference database;
-    private Context context;
+    final DatabaseReference database;
+    public Context context;
+    String data;
 
-    public DatabaseCommunicator(DatabaseReference databaseReference) {
-        this.database = databaseReference;
+    public DatabaseCommunicator(DatabaseReference db) {
+        this.database = db;
+        data = "";
+    }
+
+    /**
+     * readData - Read data from the database
+     * @param path - The path which the data lies in. 'users' as the first directory is assumed
+     */
+    public void readRaw(ArrayList<String> path) {
+        DatabaseReference userRef = database.child("users");
+        for (String i: path) {
+            userRef = userRef.child(i);
+        }
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    data = String.valueOf(task.getResult().getValue());
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+
     }
 
     /**

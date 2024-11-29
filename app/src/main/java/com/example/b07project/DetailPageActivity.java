@@ -225,9 +225,6 @@ public class DetailPageActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-
-
-
     private double parseDouble(EditText editText) {
         String text = editText.getText().toString();
         try {
@@ -346,8 +343,8 @@ public class DetailPageActivity extends AppCompatActivity {
         long selectedDate = System.currentTimeMillis();
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        DatabaseCommunicator databaseCommunicator = new DatabaseCommunicator(database);
-        databaseCommunicator.saveUserEmissionData(userId, selectedDate, user);
+        DatabaseCommunicator presenter = new DatabaseCommunicator(database);
+        presenter.saveUserEmissionData(userId, selectedDate, userEmissionData);
     }
 
 }
