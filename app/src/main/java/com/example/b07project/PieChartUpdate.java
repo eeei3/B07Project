@@ -51,6 +51,7 @@ public class PieChartUpdate extends AppCompatActivity {
         String timePeriod = getIntent().getStringExtra(EXTRA_TIME_PERIOD);
         if (timePeriod != null) {
             updateChartForTimePeriod(timePeriod);
+            updateTotalEmissionsText(timePeriod);
         } else {
             Log.e("PieChartUpdate", "No time period provided in the Intent");
             Toast.makeText(this, "Error: Time period is missing.", Toast.LENGTH_SHORT).show();
@@ -177,7 +178,6 @@ public class PieChartUpdate extends AppCompatActivity {
      * Updates the chart based for yearly
      */
     private void updateForYearly() {
-
         if (getIntent() == null) {
             Log.e("PieChartUpdate", "Intent is null");
             Toast.makeText(this, "Error: No data provided.", Toast.LENGTH_SHORT).show();
@@ -214,7 +214,6 @@ public class PieChartUpdate extends AppCompatActivity {
      * @param timePeriod The comparison string.
      */
     void updateTotalEmissionsText(String timePeriod) {
-        if (timePeriod == null) return;
        switch (timePeriod){
            case "Daily":
                double totalEmission1 = getIntent().getDoubleExtra("totalEmission", 0);

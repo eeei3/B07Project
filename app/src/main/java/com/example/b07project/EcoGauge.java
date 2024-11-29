@@ -46,8 +46,19 @@ public class EcoGauge extends AppCompatActivity {
 
         // Safely retrieve data from the Intent
         Intent intent = getIntent();
-        String location = intent != null ? intent.getStringExtra("location") : "unknown location";
-        double totalEmissions = intent != null ? intent.getDoubleExtra("totalEmissions", 0) : 0;
+        String location;
+        if (intent == null) {
+            location = "unknown location";
+        } else {
+            location = intent.getStringExtra("location");
+        }
+
+        double totalEmissions;
+        if (intent == null) {
+            totalEmissions = 0;
+        } else {
+            totalEmissions = intent.getDoubleExtra("totalEmissions", 0);
+        }
 
         // Update the comparison text
         ComparisonText comparisonTextObj = new ComparisonText(comparisonText, yourEmissionsNumber, GlobalEmissions);

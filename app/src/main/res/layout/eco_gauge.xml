@@ -27,6 +27,12 @@
 
 
         <!-- Time Period Selector -->
+
+
+        <!-- Total Emissions Overview -->
+
+
+        <!-- Pies -->
         <Spinner
             android:id="@+id/timeSpinner"
             android:layout_width="wrap_content"
@@ -36,13 +42,6 @@
             android:layout_marginBottom="10dp"
             android:entries="@array/timeValues" />
 
-
-
-
-        <!-- Total Emissions Overview -->
-
-
-        <!-- Pies -->
         <TextView
             android:id="@+id/totalEmissionsText"
             android:layout_width="wrap_content"
