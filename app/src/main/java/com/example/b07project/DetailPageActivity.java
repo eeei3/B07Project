@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -108,7 +109,55 @@ public class DetailPageActivity extends AppCompatActivity {
             buttonSave.setVisibility(View.GONE);
             buttonEdit.setVisibility(View.VISIBLE);
         });
+        //once database communicator gets all the required data
 
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+
+        DatabaseCommunicator model = new DatabaseCommunicator(database);
+        model.setWaiter(new DatabaseCommunicator.Waiter() {
+
+            @Override
+            public void onObjectReady() {
+                // Input all of the frontend updates that have to happen here
+
+                // Set spinner
+                // Input the vehicle type from database to spinner
+                inputDistanceDriving.setText(String.valueOf(model.raw.getDistanceDriven()));
+                setSpinnerSelection(spinnerVehicleType, model.raw.getVehicleType());
+
+                // Public transport
+                setSpinnerSelection(spinnerTransportType, model.raw.getTransportType());
+                inputTimeSpent.setText(String.valueOf(model.raw.getCyclingTime()));
+
+                // Cycling or walking
+                inputDistanceWalking.setText(String.valueOf(model.raw.getCyclingTime()));
+
+                // Flight
+                inputNumFlights.setText(String.valueOf(model.raw.getNumFlights()));
+                setSpinnerSelection(spinnerFlightType, model.raw.getFlightType());
+
+                // Meal
+                setSpinnerSelection(spinnerMealType, model.raw.getMealType());
+                inputServings.setText(String.valueOf(model.raw.getNumServings()));
+
+                // Buy new clothes
+                inputNumClothes.setText(String.valueOf(model.raw.getNumClothes()));
+
+                // Devices
+                setSpinnerSelection(spinnerDeviceType, model.raw.getDeviceType());
+                inputNumDevices.setText(String.valueOf(model.raw.getNumDevices()));
+
+                // Other purchases
+                setSpinnerSelection(spinnerPurchaseType, model.raw.getPurchaseType());
+                inputNumOtherPurchases.setText(String.valueOf(model.raw.getNumOtherPurchases()));
+
+                // Energy bills
+                inputBillAmount.setText(String.valueOf(model.raw.getBillAmount()));
+                setSpinnerSelection(spinnerBillType, model.raw.getBillType());
+            }
+        });
+
+        //model.serverCalcEmissionReader(inputDate);
     }
 
     private void initializeUIComponents() {
@@ -304,18 +353,18 @@ public class DetailPageActivity extends AppCompatActivity {
         BillType = spinnerBillType.getSelectedItem().toString();
 
         EcoTrackerCalculations calculator = new EcoTrackerCalculations(vehicleType,
-                                                                        distanceDriven,
-                                                                        transportType,
-                                                                        cyclingTime,
-                                                                        numFlights,
-                                                                        flightType,
-                                                                        mealType,
-                                                                        numServings,
-                                                                        numClothes,
-                                                                        numDevices,
-                                                                        numPurchases,
-                                                                        deviceType,
-                                                                        purchaseType);
+                distanceDriven,
+                transportType,
+                cyclingTime,
+                numFlights,
+                flightType,
+                mealType,
+                numServings,
+                numClothes,
+                numDevices,
+                numPurchases,
+                deviceType,
+                purchaseType);
         // these methods currently belong in LogActivitiesActivity
         // for now, just duplicate the calculations that will occur
         double totalTranspo = calculator.calculateTransportationEmissions();
@@ -353,28 +402,6 @@ public class DetailPageActivity extends AppCompatActivity {
             }
         }
     }
-
-    //once database communicator gets all the required data
-
-    DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-
-    DatabaseCommunicator model = new DatabaseCommunicator(database);
-    model.setWaiter(new DatabaseCommunicator.Waiter() {
-
-        @Override public void onObjectReady() {
-
-            //input all of the frontend updates that have to happen here
-
-
-            //set spinner
-            //input the vehicletype from database to spinner
-
-            model.raw.getVehicleType() // put this to the frontend id
-            model.raw.getFlightType()
-
-            } });
-
-        model.serverCalcEmissionReader(date);
 
 
 }
