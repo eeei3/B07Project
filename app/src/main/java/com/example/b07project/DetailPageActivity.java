@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,40 +32,38 @@ public class DetailPageActivity extends AppCompatActivity {
 
 
     // General UI elements
-    private TextView titleTextView, inputDate;
-    private Button buttonSave, buttonEdit;
-    private LinearLayout mainLayout;
-    private ProgressBar progressBar;
+    public TextView titleTextView, inputDate;
+    public Button buttonSave, buttonEdit;
 
     // Transportation Details
-    private CheckBox checkboxDriveVehicle, checkboxPublicTransport, checkboxCyclingWalking, checkboxFlight;
-    private LinearLayout vehicleDetailsLayout, publicTransportLayout, cyclingWalkingLayout, flightLayout;
-    private EditText inputDistanceDriving, inputTimeSpent, inputDistanceWalking, inputNumFlights;
-    private Spinner spinnerVehicleType, spinnerTransportType, spinnerFlightType;
+    public CheckBox checkboxDriveVehicle, checkboxPublicTransport, checkboxCyclingWalking, checkboxFlight;
+    public LinearLayout vehicleDetailsLayout, publicTransportLayout, cyclingWalkingLayout, flightLayout;
+    public EditText inputDistanceDriving, inputTimeSpent, inputDistanceWalking, inputNumFlights;
+    public Spinner spinnerVehicleType, spinnerTransportType, spinnerFlightType;
 
     // Food Consumption Activities
-    private CheckBox checkboxMeal;
-    private LinearLayout mealLayout;
-    private EditText inputServings;
-    private Spinner spinnerMealType;
+    public CheckBox checkboxMeal;
+    public LinearLayout mealLayout;
+    public EditText inputServings;
+    public Spinner spinnerMealType;
 
     // Consumption and Shopping Activities
-    private CheckBox checkboxClothes, checkboxElectronics, checkboxOtherPurchases;
-    private LinearLayout clothesLayout, electronicsLayout, otherPurchasesLayout;
-    private EditText inputNumClothes, inputNumDevices, inputNumOtherPurchases;
-    private Spinner spinnerDeviceType, spinnerPurchaseType;
+    public CheckBox checkboxClothes, checkboxElectronics, checkboxOtherPurchases;
+    public LinearLayout clothesLayout, electronicsLayout, otherPurchasesLayout;
+    public EditText inputNumClothes, inputNumDevices, inputNumOtherPurchases;
+    public Spinner spinnerDeviceType, spinnerPurchaseType;
 
     // Energy Bills Section
-    private CheckBox checkboxEnergyBills;
-    private LinearLayout energyBillsLayout;
-    private Spinner spinnerBillType;
-    private EditText inputBillAmount;
+    public CheckBox checkboxEnergyBills;
+    public LinearLayout energyBillsLayout;
+    public Spinner spinnerBillType;
+    public EditText inputBillAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_page);
-
+        EcoTrackerHomeFragment.db.detailPageActivity = this;
         // Initialize UI components
         initializeUIComponents();
 
@@ -119,8 +116,6 @@ public class DetailPageActivity extends AppCompatActivity {
         inputDate = findViewById(R.id.input_date);
         buttonSave = findViewById(R.id.button_save);
         buttonEdit = findViewById(R.id.button_edit);
-        mainLayout = findViewById(R.id.main_layout);
-        progressBar = findViewById(R.id.progress_bar);
 
         // Transportation UI
         checkboxDriveVehicle = findViewById(R.id.checkbox_drive_vehicle);
@@ -206,6 +201,30 @@ public class DetailPageActivity extends AppCompatActivity {
         spinnerBillType.setEnabled(isEnabled);
     }
 
+    //judy will change this to just reflect the user's selected date
+    private void showDatePickerDialog() {
+        // Get the current date
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // Create a DatePickerDialog
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    // Format the selected date and set it on the TextView
+                    String formattedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                    inputDate.setText(formattedDate);
+                },
+                year,
+                month,
+                day
+        );
+
+        datePickerDialog.show();
+    }
+
     private double parseDouble(EditText editText) {
         String text = editText.getText().toString();
         try {
@@ -214,25 +233,6 @@ public class DetailPageActivity extends AppCompatActivity {
             return 0.0;
         }
     }
-
-    private void fetchDataFromFirebase() {
-        ProgressBar progressBar = findViewById(R.id.progress_bar);
-        progressBar.setVisibility(View.VISIBLE);
-        mainLayout.setVisibility(View.GONE);
-
-        FirebaseDatabase.getInstance().getReference("put user's path to the data here").get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                       //where to call the method to display the user's input data
-                    } else {
-                        // Show error message
-                        displayToast("Failed to retrieve data.");
-                        progressBar.setVisibility(View.GONE);
-                        mainLayout.setVisibility(View.VISIBLE);  // To show the  main part, but with default values
-                    }
-                });
-    }
-
 
     private boolean isInputVisible(View layout) {
         return layout.getVisibility() == View.VISIBLE;

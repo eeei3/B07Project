@@ -105,4 +105,9 @@
         <item>Water</item>
     </string-array>
 
+    <string name="transportation_label">Transportation: </string>
+    <string name="food_label">Food: </string>
+    <string name="shopping_label">Shopping: </string>
+    <string name="energy_bills_label">Energy bills: </string>
+
 </resources>
