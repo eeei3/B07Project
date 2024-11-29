@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/ecogauge"
-        android:title="Eco Gauge"/>
 
-    <item
-        android:id="@+id/ecotracker"
-        android:title="Eco Tracker"/>
+        <item
+            android:id="@+id/ecogauge"
+            android:title="Eco Gauge"
+            android:icon="@drawable/baseline_auto_graph_24"/>
+
+        <item
+            android:id="@+id/ecotracker"
+            android:title="Eco Tracker"
+            android:icon="@drawable/checklist"/>
 </menu>
