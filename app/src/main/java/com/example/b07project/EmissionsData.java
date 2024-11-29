@@ -1,15 +1,25 @@
 package com.example.b07project;
 
+/**
+ * EmissionsData class containing fields relating to calculating emissions
+ */
 public class EmissionsData {
+
     //Transportation Data
     public static double[][] carEmission = {
             //gas, diesel, hybrid, electric, not sure
-            {0.24 * 5000, 0.27 * 5000, 0.16 * 5000, 0.05 * 5000, 0.18 * 5000},  // "Up to 5,000 km"
-            {0.24 * 10000, 0.27 * 10000, 0.16 * 10000, 0.05 * 10000, 0.18 * 10000},  // "5,000–10,000 km"
-            {0.24 * 15000, 0.27 * 15000, 0.16 * 15000, 0.05 * 15000, 0.18 * 15000},  // "10,000–15,000 km"
-            {0.24 * 20000, 0.27 * 20000, 0.16 * 20000, 0.05 * 20000, 0.18 * 20000},  // "15,000–20,000 km"
-            {0.24 * 25000, 0.27 * 25000, 0.16 * 25000, 0.05 * 25000, 0.18 * 25000},  // "20,000–25,000 km"
-            {0.24 * 35000, 0.27 * 35000, 0.16 * 35000, 0.05 * 35000, 0.18 * 35000}   // "More than 25,000 km"
+            // "Up to 5,000 km"
+            {0.24 * 5000, 0.27 * 5000, 0.16 * 5000, 0.05 * 5000, 0.18 * 5000},
+            // "5,000–10,000 km"
+            {0.24 * 10000, 0.27 * 10000, 0.16 * 10000, 0.05 * 10000, 0.18 * 10000},
+            // "10,000–15,000 km"
+            {0.24 * 15000, 0.27 * 15000, 0.16 * 15000, 0.05 * 15000, 0.18 * 15000},
+            // "15,000–20,000 km"
+            {0.24 * 20000, 0.27 * 20000, 0.16 * 20000, 0.05 * 20000, 0.18 * 20000},
+            // "20,000–25,000 km"
+            {0.24 * 25000, 0.27 * 25000, 0.16 * 25000, 0.05 * 25000, 0.18 * 25000},
+            // "More than 25,000 km"
+            {0.24 * 35000, 0.27 * 35000, 0.16 * 35000, 0.05 * 35000, 0.18 * 35000}
     };
     public static double[][] publictransportEmission = {
             //never, occasionally, frequently, always
@@ -707,6 +717,7 @@ public class EmissionsData {
                     }
             }
     };
+
     //Consumption Data
     public static double[][] clothesEmission = {
             //monthly, quarterly, annually, rarely
@@ -729,58 +740,138 @@ public class EmissionsData {
             {-60, -120. -180, -240}, //frequently
             {-90, -180, -270, -360} //always
     };
-
     public static double[] globalAverages = {
-            0.29536375, 0.99422127, 1.7432004, 3.9272263, 4.6171236, 0.45155162, 8.752724, 6.4218745, 4.2378173, 2.3045583,
-            8.133404, 4.611434, 4.017375, 14.985412, 6.8781943, 3.6746833, 5.1708703, 25.672274, 0.5964455, 4.3772573, 6.1669006,
-            7.6875386, 1.7894346, 0.631487, 6.9370627, 1.3489918, 1.7583066, 4.083284, 6.1034565, 2.838951, 2.2454574, 5.0039577,
-            23.950201, 6.8044534, 0.26295447, 0.06194545, 1.1900775, 0.34292704, 14.249212, 0.9588915, 0.040548485, 0.13367727,
-            4.3041654, 7.992761, 1.9223082, 0.49327007, 1.2447897, 3.9950094, 1.5226681, 0.41668788, 4.348515, 1.8659163, 9.189007,
-            5.616782, 9.3357525, 0.036375992, 4.940161, 0.40418932, 2.1058853, 2.1051137, 0.49869007, 2.3117273, 2.333106, 1.2174718,
-            3.0307202, 0.18914719, 7.77628, 1.0527312, 0.15458965, 6.8578663, 7.886797, 8.817789, 6.1743994, 5.983708, 14.084624,
-            1.1550449, 6.5267396, 4.603891, 2.8509297, 2.3882635, 0.2847278, 2.962545, 7.9837584, 0.6215505, 5.7451057, 10.473997,
-            2.7133646, 1.0756185, 0.35742033, 0.15518051, 4.3736935, 0.21119381, 10.132565, 1.0696708, 4.081913, 4.449911, 9.499798,
-            1.9966822, 2.6456614, 7.7993317, 4.024638, 7.7211185, 6.208912, 5.726825, 2.2945588, 8.501681, 2.0301995, 13.979704,
-            0.45998666, 0.5184742, 4.830646, 25.578102, 1.4251612, 3.0803475, 3.561689, 4.3543963, 1.3594668, 0.1653753, 9.242238,
-            3.8097827, 4.606163, 0.28005043, 1.777996, 11.618432, 1.5127679, 0.14871116, 0.10262384, 8.576508, 3.2475724, 0.31153768,
-            3.1035979, 3.6353714, 0.957337, 3.2697906, 4.0153365, 1.3243006, 1.6565942, 11.150772, 3.6558185, 4.8447766, 1.8263615,
-            0.24274588, 0.6445672, 1.5399038, 4.1700416, 0.5074035, 7.1372175, 17.641167, 6.212154, 0.79879653, 0.116688, 0.5891771,
-            3.8729508, 10.5346775, 4.741475, 1.9513915, 3.6245701, 7.5093055, 9.85179, 15.730261, 0.84893465, 12.123921, 0.6660658,
-            2.699258, 0.77131313, 1.3299496, 1.7891879, 1.3014648, 8.106886, 4.050785, 37.601273, 3.739777, 11.416899, 0.112346195,
-            3.2986484, 4.708081, 2.6149206, 10.293288, 2.2964725, 1.1218625, 0.5816142, 18.197495, 0.6738352, 6.024712, 6.1495123,
-            0.13124847, 8.911513, 14.352394, 6.051555, 5.9979916, 0.41232163, 0.03676208, 6.7461643, 2.4865332, 11.598764, 0.1680176,
-            5.1644425, 0.7936504, 0.4696261, 5.8029985, 3.6069093, 4.0478554, 1.2490375, 11.630868, 1.0064901, 0.23771806, 3.7762568,
-            0.2910665, 1.7686282, 22.423758, 2.879285, 5.1052055, 11.03418, 7.636793, 1.0004411, 0.12744623, 3.5578535, 25.833244,
-            4.7201805, 14.949616, 6.2268133, 2.3060381, 3.4830604, 0.6363055, 2.7168686, 3.4995174, 2.2819076, 4.658219, 0.33701748,
-            0.44570068, 0.542628
+            0.29536375, 0.99422127, 1.7432004, 3.9272263, 4.6171236, 0.45155162, 8.752724,
+            6.4218745, 4.2378173, 2.3045583, 8.133404, 4.611434, 4.017375, 14.985412, 6.8781943,
+            3.6746833, 5.1708703, 25.672274, 0.5964455, 4.3772573, 6.1669006, 7.6875386, 1.7894346,
+            0.631487, 6.9370627, 1.3489918, 1.7583066, 4.083284, 6.1034565, 2.838951, 2.2454574,
+            5.0039577, 23.950201, 6.8044534, 0.26295447, 0.06194545, 1.1900775, 0.34292704,
+            14.249212, 0.9588915, 0.040548485, 0.13367727, 4.3041654, 7.992761, 1.9223082,
+            0.49327007, 1.2447897, 3.9950094, 1.5226681, 0.41668788, 4.348515, 1.8659163, 9.189007,
+            5.616782, 9.3357525, 0.036375992, 4.940161, 0.40418932, 2.1058853, 2.1051137,
+            0.49869007, 2.3117273, 2.333106, 1.2174718, 3.0307202, 0.18914719, 7.77628, 1.0527312,
+            0.15458965, 6.8578663, 7.886797, 8.817789, 6.1743994, 5.983708, 14.084624, 1.1550449,
+            6.5267396, 4.603891, 2.8509297, 2.3882635, 0.2847278, 2.962545, 7.9837584, 0.6215505,
+            5.7451057, 10.473997, 2.7133646, 1.0756185, 0.35742033, 0.15518051, 4.3736935,
+            0.21119381, 10.132565, 1.0696708, 4.081913, 4.449911, 9.499798, 1.9966822, 2.6456614,
+            7.7993317, 4.024638, 7.7211185, 6.208912, 5.726825, 2.2945588, 8.501681, 2.0301995,
+            13.979704, 0.45998666, 0.5184742, 4.830646, 25.578102, 1.4251612, 3.0803475, 3.561689,
+            4.3543963, 1.3594668, 0.1653753, 9.242238, 3.8097827, 4.606163, 0.28005043, 1.777996,
+            11.618432, 1.5127679, 0.14871116, 0.10262384, 8.576508, 3.2475724, 0.31153768,
+            3.1035979, 3.6353714, 0.957337, 3.2697906, 4.0153365, 1.3243006, 1.6565942, 11.150772,
+            3.6558185, 4.8447766, 1.8263615, 0.24274588, 0.6445672, 1.5399038, 4.1700416, 0.5074035,
+            7.1372175, 17.641167, 6.212154, 0.79879653, 0.116688, 0.5891771, 3.8729508, 10.5346775,
+            4.741475, 1.9513915, 3.6245701, 7.5093055, 9.85179, 15.730261, 0.84893465, 12.123921,
+            0.6660658, 2.699258, 0.77131313, 1.3299496, 1.7891879, 1.3014648, 8.106886, 4.050785,
+            37.601273, 3.739777, 11.416899, 0.112346195, 3.2986484, 4.708081, 2.6149206, 10.293288,
+            2.2964725, 1.1218625, 0.5816142, 18.197495, 0.6738352, 6.024712, 6.1495123, 0.13124847,
+            8.911513, 14.352394, 6.051555, 5.9979916, 0.41232163, 0.03676208, 6.7461643, 2.4865332,
+            11.598764, 0.1680176, 5.1644425, 0.7936504, 0.4696261, 5.8029985, 3.6069093, 4.0478554,
+            1.2490375, 11.630868, 1.0064901, 0.23771806, 3.7762568, 0.2910665, 1.7686282, 22.423758,
+            2.879285, 5.1052055, 11.03418, 7.636793, 1.0004411, 0.12744623, 3.5578535, 25.833244,
+            4.7201805, 14.949616, 6.2268133, 2.3060381, 3.4830604, 0.6363055, 2.7168686, 3.4995174,
+            2.2819076, 4.658219, 0.33701748, 0.44570068, 0.542628
     };
 
     //ALL OPTIONS
-    private static String[] carOwnership = { "Yes", "No" };
-    public static String[] carTypes = { "Gasoline", "Diesel", "Hybrid", "Electric", "I don't know" };
-    public static String[] annualKmDriven = {"Up to 5,000 km (3,000 miles)", "5,000–10,000 km (3,000–6,000 miles)", "10,000–15,000 km (6,000–9,000 miles)", "15,000–20,000 km (9,000–12,000 miles)", "20,000–25,000 km (12,000–15,000 miles)", "More than 25,000 km (15,000 miles)"};
-    public static String[] publicTransportFrequency = {"Never", "Occasionally (1-2 times/week)", "Frequently (3-4 times/week)", "Always (5+ times/week)"};
-    public static String[] publicTransportTime = {"Under 1 hour", "1-3 hours", "3-5 hours", "5-10 hours", "More than 10 hours"};
-    public static String[] shortHaulFlights = {"None", "1-2 flights", "3-5 flights", "6-10 flights", "More than 10 flights"};
-    public static String[] longHaulFlights = {"None", "1-2 flights", "3-5 flights", "6-10 flights", "More than 10 flights"};
-    public static String[] dietTypes = {"Vegetarian", "Vegan", "Pescatarian (fish/seafood)", "Meat-based (eat all types of animal products)"};
-    public static String[] beefFrequency = { "Daily", "Frequently (3-5 times/week)", "Occasionally (1-2 times/week)", "Never" };
-    public static String[] porkFrequency = { "Daily", "Frequently (3-5 times/week)", "Occasionally (1-2 times/week)", "Never" };
-    public static String[] chickenFrequency = { "Daily", "Frequently (3-5 times/week)", "Occasionally (1-2 times/week)", "Never" };
-    public static String[] fishSeafoodFrequency = { "Daily", "Frequently (3-5 times/week)", "Occasionally (1-2 times/week)", "Never" };
-    public static String[][] meatFrequencies = {beefFrequency, porkFrequency, chickenFrequency, fishSeafoodFrequency};
-    public static String[] foodWasteFrequency = { "Never", "Rarely", "Occasionally", "Frequently" };
-    public static String[] homeTypes = { "Detached house", "Semi-detached house", "Townhouse", "Condo/Apartment", "Other" };
+    // Travel related options
+    public static String[] carTypes = { "Gasoline",
+                                        "Diesel",
+                                        "Hybrid",
+                                        "Electric",
+                                        "I don't know" };
+    public static String[] annualKmDriven = {"Up to 5,000 km (3,000 miles)",
+                                            "5,000–10,000 km (3,000–6,000 miles)",
+                                            "10,000–15,000 km (6,000–9,000 miles)",
+                                            "15,000–20,000 km (9,000–12,000 miles)",
+                                            "20,000–25,000 km (12,000–15,000 miles)",
+                                            "More than 25,000 km (15,000 miles)"};
+    public static String[] publicTransportFrequency = {"Never",
+                                                        "Occasionally (1-2 times/week)",
+                                                        "Frequently (3-4 times/week)",
+                                                        "Always (5+ times/week)"};
+    public static String[] publicTransportTime = {"Under 1 hour",
+                                                    "1-3 hours",
+                                                    "3-5 hours",
+                                                    "5-10 hours",
+                                                    "More than 10 hours"};
+    public static String[] shortHaulFlights = {"None",
+                                                "1-2 flights",
+                                                "3-5 flights",
+                                                "6-10 flights",
+                                                "More than 10 flights"};
+    public static String[] longHaulFlights = {"None",
+                                                "1-2 flights",
+                                                "3-5 flights",
+                                                "6-10 flights",
+                                                "More than 10 flights"};
+
+    // Diet related options
+    public static String[] dietTypes = {"Vegetarian",
+                                        "Vegan",
+                                        "Pescatarian (fish/seafood)",
+                                        "Meat-based (eat all types of animal products)"};
+    public static String[] beefFrequency = { "Daily",
+                                            "Frequently (3-5 times/week)",
+                                            "Occasionally (1-2 times/week)",
+                                            "Never" };
+    public static String[] porkFrequency = { "Daily",
+                                                "Frequently (3-5 times/week)",
+                                                "Occasionally (1-2 times/week)",
+                                                "Never" };
+    public static String[] chickenFrequency = { "Daily",
+                                                "Frequently (3-5 times/week)",
+                                                "Occasionally (1-2 times/week)",
+                                                "Never" };
+    public static String[] fishSeafoodFrequency = { "Daily",
+                                                    "Frequently (3-5 times/week)",
+                                                    "Occasionally (1-2 times/week)",
+                                                    "Never" };
+    public static String[][] meatFrequencies = {beefFrequency,
+                                                porkFrequency,
+                                                chickenFrequency,
+                                                fishSeafoodFrequency};
+    public static String[] foodWasteFrequency = { "Never",
+                                                    "Rarely",
+                                                    "Occasionally",
+                                                    "Frequently" };
+
+    // Residence related options
+    public static String[] homeTypes = { "Detached house",
+                                            "Semi-detached house",
+                                            "Townhouse",
+                                            "Condo/Apartment",
+                                            "Other" };
     public static String[] householdSizes = {"1", "2", "3-4", "5 or more"};
-    public static String[] housingSizes = {"Under 1000 sq. ft.", "1000-2000 sq. ft.", "Over 2000 sq. ft."};
-    public static String[] heatingTypes = { "Natural Gas", "Electricity", "Oil", "Propane", "Wood", "Other" };
-    public static String[] electricityBills = { "Under $50", "$50-$100", "$100-$150", "$150-$200", "Over $200" };
-    public static String[] waterHeatingTypes = { "Natural Gas", "Electricity", "Oil", "Propane", "Solar", "Other" };
-    public static String[] renewableEnergyUsage = { "Yes, primarily", "Yes, partially", "No" };
-    public static String[] clothingPurchaseFrequency = { "Monthly", "Quarterly", "Annually", "Rarely" };
-    public static String[] secondHandPurchaseFrequency = { "Yes, regularly", "Yes, occasionally", "No" };
+    public static String[] housingSizes = {"Under 1000 sq. ft.",
+                                            "1000-2000 sq. ft.", "Over 2000 sq. ft."};
+    public static String[] heatingTypes = { "Natural Gas",
+                                            "Electricity",
+                                            "Oil",
+                                            "Propane",
+                                            "Wood",
+                                            "Other" };
+    public static String[] electricityBills = { "Under $50",
+                                                "$50-$100",
+                                                "$100-$150",
+                                                "$150-$200",
+                                                "Over $200" };
+    public static String[] renewableEnergyUsage = { "Yes, primarily",
+                                                    "Yes, partially",
+                                                    "No" };
+
+    // Consumption related options
+    public static String[] clothingPurchaseFrequency = { "Monthly",
+                                                            "Quarterly",
+                                                            "Annually",
+                                                            "Rarely" };
+    public static String[] secondHandPurchaseFrequency = { "Yes, regularly",
+                                                            "Yes, occasionally",
+                                                            "No" };
     public static String[] electronicDevicesPurchased = { "None", "1", "2", "3 or more" };
     public static String[] recyclingFrequency = { "Never", "Occasionally", "Frequently", "Always" };
+
+    // Array of supported countries
     public static String[] countries = {
             "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
             "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan",
