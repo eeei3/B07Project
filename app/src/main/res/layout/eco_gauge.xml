@@ -24,22 +24,15 @@
             android:textSize="14pt"
             tools:ignore="HardcodedText" />
 
+        <!-- Spinner aligned to the right and vertically centered with TextView -->
 
-
-        <!-- Time Period Selector -->
-
-
-        <!-- Total Emissions Overview -->
-
-
-        <!-- Pies -->
         <Spinner
             android:id="@+id/timeSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/custom_font"
             android:entries="@array/timeValues" />
 
         <TextView
@@ -439,11 +432,15 @@
 
 
         <!-- Choose country to compare your global average -->
+        <!-- Spinner aligned to the right and vertically centered with TextView -->
+
         <Spinner
             android:id="@+id/countrySpinner"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="0dp"
+            android:fontFamily="@font/custom_font"
             android:entries="@array/location_array" />
 
 

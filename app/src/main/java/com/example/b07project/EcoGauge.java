@@ -80,6 +80,6 @@ public class EcoGauge extends AppCompatActivity {
     private void setupTimeSpinners() {
             String[] categories = getResources().getStringArray(R.array.timeValues);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, categories);
-            timeSpinner.setAdapter(adapter);
+            timeSpinner.setAdapter(adapter);;
     }
 }
