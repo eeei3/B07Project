@@ -12,5 +12,5 @@ public interface OnHabitUpdatedListener {
      *              This object represents the habit that was modified,
      *              allowing the listener to take appropriate action.
      */
-    void onHabitUpdated(HabitsModel habit);
+    void onHabitUpdated(Goal habit);
 }

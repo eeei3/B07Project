@@ -112,17 +112,17 @@ public class HabitsDetailsDialogFragment extends DialogFragment {
         habitImageView.setImageResource(habitImage);
 
         // get the current HabitsModel that the dialog is displaying details about
-        HabitsModel currModel = null;
-        for (int i = 0; i < HabitsMenu.habitsModels.size(); i++) {
-            if (HabitsMenu.habitsModels.get(i).getHabitDesc().equals(habitDesc)) {
-                currModel = HabitsMenu.habitsModels.get(i);
+        Goal currModel = null;
+        for (int i = 0; i < HabitsMenu.allGoals.size(); i++) {
+            if (HabitsMenu.allGoals.get(i).getHabitDesc().equals(habitDesc)) {
+                currModel = HabitsMenu.allGoals.get(i);
             }
         }
-        final HabitsModel habit = currModel;
+        final Goal habit = currModel;
 
         // define behaviour for when the "Adopt Habit" button is clicked
         habitAdopt.setOnClickListener(v -> {
-            if (HabitsMenu.userHabitsModels.contains(habit)) {
+            if (HabitsMenu.userGoals.contains(habit)) {
                 // handle when habit had already been adopted
                 Toast.makeText(requireContext(), "Habit already added.", Toast.LENGTH_SHORT).show();
             } else {

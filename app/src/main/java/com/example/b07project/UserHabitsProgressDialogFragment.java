@@ -25,9 +25,6 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
 
     private ProgressBar userHabitProgressBar;
     private EditText userHabitNumDaysInt;
-
-    private int goal = 5;
-    private int progress;
     // Note for Back-End
     // this information, "progress", is deleted after dialog is closed.
     // needs to get this user's info from outside the class. (note this is for a single specific habit)
@@ -83,8 +80,23 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
         userHabitNumDaysInt = view.findViewById(R.id.userHabitNumDaysInt);
         Button logActivity = view.findViewById(R.id.logActivityButton);
 
-        // set the goal for the ProgressBar
-        userHabitProgressBar.setMax(goal);
+        // find the corresponding HabitsModel in the User's page that the dialog is displaying progress about
+        Goal currHabitModel = null;
+        for (int i = 0; i < HabitsMenu.userGoals.size(); i++) {
+            assert getArguments() != null;
+            if (HabitsMenu.userGoals.get(i).getName().equals(getArguments().getString(argHabitName))) {
+                currHabitModel = HabitsMenu.userGoals.get(i);
+            }
+        }
+        final Goal habit = currHabitModel;
+
+        // this should update both the fields progress and aim of HabitsMenu
+        HabitsMenu.presenter.userGetProg(habit.getName());
+
+        // set the max length and current progress for the ProgressBar and the EditText
+        userHabitProgressBar.setMax(HabitsMenu.aim);
+        setProgressBar();
+        setTextNumDays();
 
         // NOTE FOR BACK-END:
         // this is for logging activities, when finished, i.e. progress = goal
@@ -92,9 +104,10 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
         // if user does renew, from the way I've done, u can simply reset the old goal to new goal, and progress to 0
         // if the "Log Activity" button is clicked, increment both the Progressbar and EditText
         logActivity.setOnClickListener(v -> {
-            if (progress < goal) {
-                // if goal is not reached, simply increment the progress
-                progress++;
+
+            if (HabitsMenu.progress < HabitsMenu.aim) {
+                // if goal is not reached,
+                HabitsMenu.presenter.userSetProg(habit.getName(), 1); // increment by one day???
                 setProgressBar();
                 setTextNumDays();
 
@@ -104,15 +117,7 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
 
             } else {
                 // if goal is reached,
-                // find the corresponding HabitsModel in the User's page that the dialog is displaying progress about
-                HabitsModel currHabitModel = null;
-                for (int i = 0; i < HabitsMenu.userHabitsModels.size(); i++) {
-                    assert getArguments() != null;
-                    if (HabitsMenu.userHabitsModels.get(i).getHabitName().equals(getArguments().getString(argHabitName))) {
-                        currHabitModel = HabitsMenu.userHabitsModels.get(i);
-                    }
-                }
-                final HabitsModel habit = currHabitModel;
+
 
                 // launch a confirmation dialog on whether to set a new goal or not
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
@@ -125,8 +130,8 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
                                     Toast.LENGTH_SHORT).show();
 
                             // remove habit and notify the adapter to remove the item at the position
-                            int pos = HabitsMenu.userHabitsModels.indexOf(habit);
-                            HabitsMenu.userHabitsModels.remove(habit);
+                            int pos = HabitsMenu.userGoals.indexOf(habit);
+                            HabitsMenu.userGoals.remove(habit);
                             HabitsMenu.adapter.notifyItemRemoved(pos);
                         })
                         .setNegativeButton("Yes", (dialog, id) -> {
@@ -138,8 +143,8 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
                             fragment.show(getParentFragmentManager(), "SetGoalsDialog");
 
                             // remove habit and notify the adapter to remove the item at the position
-                            int pos = HabitsMenu.userHabitsModels.indexOf(habit);
-                            HabitsMenu.userHabitsModels.remove(habit);
+                            int pos = HabitsMenu.userGoals.indexOf(habit);
+                            HabitsMenu.userGoals.remove(habit);
                             HabitsMenu.adapter.notifyItemRemoved(pos);
                         });
                 // Create and show the dialog
@@ -156,7 +161,7 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
      *
      */
     private void setProgressBar() {
-        userHabitProgressBar.setProgress(progress);
+        userHabitProgressBar.setProgress(HabitsMenu.progress);
     }
 
     /**
@@ -164,6 +169,6 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
      *
      */
     private void setTextNumDays() {
-        userHabitNumDaysInt.setText(String.valueOf(progress));
+        userHabitNumDaysInt.setText(String.valueOf(HabitsMenu.progress));
     }
 }

@@ -27,7 +27,7 @@ import java.util.ArrayList;
  */
 public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHolder> {
     Context context;
-    ArrayList<HabitsModel> habitsModels;
+    ArrayList<Goal> habitsModels;
 
     /**
      * Constructor for HabitsAdapter.
@@ -35,7 +35,7 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
      * @param context the context to be set as the adapter's field.
      * @param habitsModels the ArrayList of HabitsModels to be set as the adapter's field.
      */
-    public HabitsAdapter(Context context, ArrayList<HabitsModel> habitsModels) {
+    public HabitsAdapter(Context context, ArrayList<Goal> habitsModels) {
         this.context = context;
         this.habitsModels = habitsModels;
     }
@@ -46,7 +46,7 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
      * @param habitsModels the ArrayList of HabitsModels to be set as the adapter's field
      */
     @SuppressLint("NotifyDataSetChanged")
-    public void setHabitsModels(ArrayList<HabitsModel> habitsModels) {
+    public void setHabitsModels(ArrayList<Goal> habitsModels) {
         this.habitsModels = habitsModels;
         notifyDataSetChanged();
     }
@@ -82,8 +82,8 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull HabitsAdapter.MyViewHolder holder, int position) {
         // set the components for the current habit
-        HabitsModel habit = habitsModels.get(position);
-        holder.habitName.setText(habit.getHabitName());
+        Goal habit = habitsModels.get(position);
+        holder.habitName.setText(habit.getName());
         holder.habitImage.setImageResource(habit.getImage());
         holder.habitImpact.setText(habit.getImpact());
 
@@ -95,7 +95,7 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
         // define behaviour/look of components other than the cancel button (if visible)
         if (!HabitsMenu.currentMenu[0]) {
             // if on All Habits menu, correctly display adopted habits, if any
-            if (HabitsMenu.userHabitsModels.contains(habit)) {
+            if (HabitsMenu.userGoals.contains(habit)) {
                 int planetzeColour2 = ContextCompat.getColor(context, R.color.planetze_colour_2);
                 holder.habitCard.setCardBackgroundColor(planetzeColour2);
             }
@@ -114,7 +114,7 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
                         .setNegativeButton("Yes", (dialog, id) -> {
                             // Handle the "Yes" action
                             int pos = habitsModels.indexOf(habit);
-                            HabitsMenu.userHabitsModels.remove(habit);
+                            HabitsMenu.userGoals.remove(habit);
                             // Notify the adapter to remove the item at the position
                             notifyItemRemoved(pos);
                             Toast.makeText(context, "Habit Removed", Toast.LENGTH_SHORT).show();
@@ -138,7 +138,7 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
                         "habit_details_dialog");
             } else {
                 // if on User's Habits menu, launch a dialog to display and log the habit's activities
-                UserHabitsProgressDialogFragment habitDialog = UserHabitsProgressDialogFragment.newInstance(habit.getHabitName());
+                UserHabitsProgressDialogFragment habitDialog = UserHabitsProgressDialogFragment.newInstance(habit.getName());
                 habitDialog.show(((AppCompatActivity) context).getSupportFragmentManager(),
                         "user_progress" );
             }

@@ -13,6 +13,8 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 
+// Merged HabitsModel into Goal so renamed a lot of fields to better reflect that
+
 /**
  * HabitsMenu class contains fields and methods related to the Habits activity
  *
@@ -25,13 +27,17 @@ import java.util.ArrayList;
  * @see OnHabitUpdatedListener
  */
 public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListener{
-    public static ArrayList<HabitsModel> habitsModels = new ArrayList<>();
-    public static ArrayList<HabitsModel> filteredHabitsModels = new ArrayList<>();
-    public static ArrayList<HabitsModel> userHabitsModels = new ArrayList<>();
+    public static ArrayList<Goal> allGoals = new ArrayList<>();
+    public static ArrayList<Goal> filteredGoals = new ArrayList<>();
+    public static ArrayList<Goal> userGoals = new ArrayList<>();
     // !!! NOTE: userHabitsModels needs to be replaced with the user's habits pulled from the firebase
     public static final boolean[] currentMenu = {false}; // false for all habits, true for user's habits, final bcs android studio complains
 
-    public static HabitPresenter presenter = new HabitPresenter(); // static to be reached from various other dialogs
+    // tommy - static in order to be reached from various other dialog fragments classes
+    public static HabitPresenter presenter;
+    public static int progress;
+
+    public static int aim;
 
     @SuppressLint("StaticFieldLeak")
     public static HabitsAdapter adapter;
@@ -54,6 +60,9 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.habits_main_page);
 
+        // initialize the presenter
+        presenter = new HabitPresenter(this);
+
         // get all interactive components from habits_main_page.xml
         Button allHabits = findViewById(R.id.allHabitsButton);
         Button usersHabits = findViewById(R.id.userHabitsButton);
@@ -69,11 +78,15 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         allHabits.setBackgroundColor(planetzeColour3);
         usersHabits.setBackgroundColor(planetzeColour4);
 
-        // set up the RecyclerView
-        setUpHabitModels();
-        adapter = new HabitsAdapter(this, habitsModels);
+        // set up the RecyclerView and its adapter
+        setUpAllGoals();
+        adapter = new HabitsAdapter(this, allGoals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        // tommy - get the user's goals which initializes the field userHabitsModels
+        presenter.userGetGoal();
+
 
         // define behaviour for when the "Your Habits" button is clicked
         usersHabits.setOnClickListener(v -> {
@@ -168,7 +181,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
      * Method to set up the set of all HabitsModel.
      *
      */
-    private void setUpHabitModels(){
+    private void setUpAllGoals(){
         String[] habitsNames = getResources().getStringArray(R.array.habits_list);
         String[] habitsCategories = getResources().getStringArray(R.array.habits_categories);
         String[] habitsImpacts = getResources().getStringArray(R.array.habits_impacts);
@@ -176,9 +189,9 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         String[] habitsImpactsDesc = getResources().getStringArray(R.array.habits_impact_desc);
 
         for (int i = 0; i < habitsNames.length; i++) {
-            habitsModels.add(new HabitsModel(habitsNames[i], habitsImages[i],
+            allGoals.add(new Goal(habitsNames[i], 0,
                     habitsImpacts[i], habitsCategories[i],
-                    habitsDesc[i], habitsImpactsDesc[i]));
+                    habitsDesc[i], habitsImpactsDesc[i], habitsImages[i]));
         }
     }
 
@@ -187,7 +200,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
      *
      */
     private static void setFilteredArrayForAdapter() {
-        adapter.setHabitsModels(filteredHabitsModels);
+        adapter.setHabitsModels(filteredGoals);
     }
 
     /**
@@ -195,7 +208,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
      *
      */
     private static void setUserArrayForAdapter() {
-        adapter.setHabitsModels(userHabitsModels);
+        adapter.setHabitsModels(userGoals);
     }
 
     /**
@@ -203,7 +216,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
      *
      */
     private static void setOriginalArrayForAdapter() {
-        adapter.setHabitsModels(habitsModels);
+        adapter.setHabitsModels(allGoals);
     }
 
     /**
@@ -215,8 +228,8 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
      */
     public static void filterHabits(ArrayList<String> checkedCategories,
                                             ArrayList<String> checkedImpacts) {
-        filteredHabitsModels.clear();
-        ArrayList<HabitsModel> toBeFilteredHabitsModels = currentMenu[0] ? userHabitsModels : habitsModels;
+        filteredGoals.clear();
+        ArrayList<Goal> toBeFilteredHabitsModels = currentMenu[0] ? userGoals : allGoals;
 
         if (checkedCategories.isEmpty() && checkedImpacts.isEmpty()) {
             // if no filters are selected, simply restore the original dataset
@@ -230,14 +243,14 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
             // if no levels of impacts are selected, filter based on categories
             for (int i = 0; i < toBeFilteredHabitsModels.size(); i++) {
                 if (checkedCategories.contains(toBeFilteredHabitsModels.get(i).getCategory())) {
-                    filteredHabitsModels.add(toBeFilteredHabitsModels.get(i));
+                    filteredGoals.add(toBeFilteredHabitsModels.get(i));
                 }
             }
         } else if (checkedCategories.isEmpty()) {
             // if no categories selected, filter based on levels of impacts
             for (int i = 0; i < toBeFilteredHabitsModels.size(); i++) {
                 if (checkedImpacts.contains(toBeFilteredHabitsModels.get(i).getImpact())) {
-                    filteredHabitsModels.add(toBeFilteredHabitsModels.get(i));
+                    filteredGoals.add(toBeFilteredHabitsModels.get(i));
                 }
             }
         } else {
@@ -245,7 +258,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
             for (int i = 0; i < toBeFilteredHabitsModels.size(); i++) {
                 if (checkedCategories.contains(toBeFilteredHabitsModels.get(i).getCategory())
                         && checkedImpacts.contains(toBeFilteredHabitsModels.get(i).getImpact())) {
-                    filteredHabitsModels.add(toBeFilteredHabitsModels.get(i));
+                    filteredGoals.add(toBeFilteredHabitsModels.get(i));
                 }
             }
         }
@@ -259,15 +272,15 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
      * @param newText text queried by the user.
      */
     public void filterBySearch(String newText) {
-        filteredHabitsModels.clear();
-        ArrayList<HabitsModel> toBeFilteredHabitsModels = currentMenu[0] ? userHabitsModels : habitsModels;
+        filteredGoals.clear();
+        ArrayList<Goal> toBeFilteredHabitsModels = currentMenu[0] ? userGoals : allGoals;
 
         // keep the habit if either the its name, desc, or impact desc contains the queried text newText
-        for (HabitsModel habit : toBeFilteredHabitsModels) {
-            if (habit.getHabitName().toLowerCase().contains(newText.toLowerCase())
+        for (Goal habit : toBeFilteredHabitsModels) {
+            if (habit.getName().toLowerCase().contains(newText.toLowerCase())
                     || habit.getHabitDesc().toLowerCase().contains(newText.toLowerCase())
                     || habit.getImpactDesc().toLowerCase().contains(newText.toLowerCase())) {
-                filteredHabitsModels.add(habit);
+                filteredGoals.add(habit);
             }
         }
         setFilteredArrayForAdapter();
@@ -280,8 +293,8 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
      * @param habit the HabitsModel to be considered for a background colour update.
      */
     @Override
-    public void onHabitUpdated(HabitsModel habit) {
-        int position = habitsModels.indexOf(habit);
+    public void onHabitUpdated(Goal habit) {
+        int position = allGoals.indexOf(habit);
         if (position != -1) {
             // Update the background colour for the corresponding habit
             adapter.notifyItemChanged(position);

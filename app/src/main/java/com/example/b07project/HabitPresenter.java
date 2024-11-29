@@ -10,12 +10,15 @@ import java.util.Objects;
  */
 public class HabitPresenter {
     FirebaseModel model;
+    HabitsMenu view;
 
+    // TOMMY Notes - added field HabitsMenu view and initialize the view in constructor
     /**
      * HabitPresenter - Default Constructor that sets userid and creates an instance of
      * GeneralServerCommunicator to permit communication between Presenter and View
      */
-    public HabitPresenter() {
+    public HabitPresenter(HabitsMenu view) {
+        this.view = view;
         FirebaseAuth mauth = FirebaseAuth.getInstance();
         this.model = FirebaseModel.createInstance(
                 String.valueOf(mauth.getCurrentUser()));
@@ -34,6 +37,7 @@ public class HabitPresenter {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
                 for (Goal g: plug.usergoals) {
                     if (Objects.equals(g.name, filter)) {
+
                     }
                 }
 //                listener.onObjectReady(pv);
@@ -54,7 +58,7 @@ public class HabitPresenter {
             public void onObjectReady(AsyncComms betweener) {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
                 for (Goal g: plug.usergoals) {
-                    if (g.types.contains(filter)) {
+                    if (g.category.contains(filter)) {
                     }
                 }
 //                listener.onObjectReady(pv);
@@ -97,20 +101,19 @@ public class HabitPresenter {
         this.model.setGoals(goal, mp);
     }
 
+
+    // TOMMY notes - removed the "filter" param as this is taken care of by the adapter of the RecyclerView
     /**
      * userGetGoal gets the list of goals that the user has active
-     * @param filter - If the user chooses to filter the results
+     *
      */
-    public void userGetGoal(String filter) {
+    public void userGetGoal() {
         AsyncDBComms mp = new AsyncDBComms();
         this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncComms betweener) {
                 if (mp.res) {
-                    for (Goal g : mp.usergoals) {
-                        if ((filter != null) || (Objects.equals(filter, g.name))) {
-                        }
-                    }
+                    HabitsMenu.userGoals.addAll(mp.usergoals);
                 }
             }
         });
@@ -133,6 +136,7 @@ public class HabitPresenter {
         this.model.setProg(goal, prog, mp);
     }
 
+    // TOMMY Notes - will need to change a few other functions/classes to also yield the aim (i.e. the no. of days to complete)
     /**
      * userGetProg, fetches the user's progress towards a goal
      * @param goal - The goal whose progress the user wishes to fetch
@@ -144,6 +148,8 @@ public class HabitPresenter {
             public void onObjectReady(AsyncComms betweener) {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
                 if (plug.res) {
+                    view.progress = plug.value;
+                    // view.aim = plug.???
                 }
                 else {
                 }

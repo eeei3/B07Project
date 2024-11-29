@@ -12,24 +12,33 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+
+// TOMMY notes - changed the field HashSet<String> types to just String category.
+// - On 2nd thought, im combining Goal and HabitsModel cuz they practically have the same purpose
+
 /**
  * Goal - Class representing the Goal object for storing information about user goals
  */
 class Goal {
     String name;
     int prog;
-    HashSet<String> types;
+    int aim;
+    String impact;
+    String category;
+    String habitDesc;
+    String impactDesc;
+    int image;
 
     /**
      * Goal - Constructor that takes the goal's name, intended for creating new user goal
      *
      * @param name  - Name of the goal the user is starting
-     * @param types - Categories the goal belongs to
+     * @param category - Categories the goal belongs to
      */
-    public Goal(String name, HashSet<String> types) {
+    public Goal(String name, String category) {
         this.name = name;
         this.prog = 0;
-        this.types = new HashSet<>();
+        this.category = category;
     }
 
     /**
@@ -40,7 +49,44 @@ class Goal {
     public Goal(String name, int prog) {
         this.name = name;
         this.prog = prog;
-        this.types = new HashSet<>();
+    }
+
+    public Goal(String name, int prog, String impact, String category, String habitDesc, String impactDesc, int image) {
+        this.name = name;
+        this.prog = prog;
+        this.impact = impact;
+        this.category = category;
+        this.habitDesc = habitDesc;
+        this.impactDesc = impactDesc;
+        this.image = image;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getProg() {
+        return prog;
+    }
+
+    public String getImpact() {
+        return impact;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getHabitDesc() {
+        return habitDesc;
+    }
+
+    public String getImpactDesc() {
+        return impactDesc;
+    }
+
+    public int getImage() {
+        return image;
     }
 }
 
@@ -147,8 +193,8 @@ final public class FirebaseModel extends Model {
     /**
      * Set a new goal for the user
      */
-    void setGoals(String goalname, AsyncDBComms watcher) {
-        dbworker.child("users").child(userid).setValue(new Goal(goalname, 0))
+    void setGoals(String goal, AsyncDBComms watcher) {
+        dbworker.child("users").child(userid).setValue(goal)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

@@ -65,7 +65,6 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.presenter = new HabitPresenter();
         View view = inflater.inflate(R.layout.setting_goals_user, container, false);
 
         // find all interactive/core components of this view
@@ -190,24 +189,24 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
 
             // find the corresponding HabitsModel that the dialog is currently setting goals for
             // and add the habit to the set of the user's habits
-            HabitsModel currentHabitModel;
-            for (int i = 0; i < HabitsMenu.habitsModels.size(); i++) {
-                currentHabitModel = HabitsMenu.habitsModels.get(i);
+            Goal habit;
+            for (int i = 0; i < HabitsMenu.allGoals.size(); i++) {
+                habit = HabitsMenu.allGoals.get(i);
 
                 assert getArguments() != null;
-                if (currentHabitModel.getHabitDesc().equals(getArguments().getString(argHabitDesc))) {
-                    HabitsMenu.userHabitsModels.add(currentHabitModel);
+                if (habit.getHabitDesc().equals(getArguments().getString(argHabitDesc))) {
+                    HabitsMenu.userGoals.add(habit);
 
-                    // add goal/habit to the firebase
-                    // HabitsMenu.presenter.userAddGoal(currentHabitModel.getHabitName());
+                    // tommy: add goal/habit to the firebase
+                    HabitsMenu.presenter.userAddGoal(habit.getName());
 
                     // Notify the adapter that the habit has been updated
                     if (getActivity() instanceof OnHabitUpdatedListener) {
-                        ((OnHabitUpdatedListener) getActivity()).onHabitUpdated(currentHabitModel);
+                        ((OnHabitUpdatedListener) getActivity()).onHabitUpdated(habit);
                     }
 
                     // close the dialog
-                    dismiss();
+                    success();
                     break;
                 }
             }
