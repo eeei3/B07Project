@@ -44,6 +44,10 @@ public class UserEmissionData {
         private double billAmount;
         private String billType;
 
+
+        public RawInputs() {
+        }
+
         //RawInputs constructor with the necessary paramenteres
         public RawInputs(double distanceDriven, String vehicleType, String transportType,
                          double cyclingTime, int numFlights, String flightType, String mealType,
