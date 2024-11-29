@@ -118,6 +118,9 @@ public class UserEmissionData {
             this.totalEmission = totalTranspo + totalFood + totalShopping; // Calculate total emissions
         }
 
+        public CalculatedEmissions() {
+        }
+
         //getters and setters
         public double getTotalTranspo() { return totalTranspo; }
         public void setTotalTranspo(double totalTranspo) { this.totalTranspo = totalTranspo; }
