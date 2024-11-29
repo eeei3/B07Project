@@ -3,18 +3,11 @@ package com.example.b07project;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-
-import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.charts.ValueLineChart;
 
 /**

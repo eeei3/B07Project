@@ -46,6 +46,7 @@ public class PieChartUpdate extends AppCompatActivity {
         shopping = findViewById(R.id.shopping);
         energyUse = findViewById(R.id.energyUse);
         pieChart = findViewById(R.id.piechart);
+        totalEmissionsText = findViewById(R.id.totalEmissionsText);
 
         // Retrieve the time period and update the chart
         String timePeriod = getIntent().getStringExtra(EXTRA_TIME_PERIOD);
