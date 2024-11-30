@@ -6,7 +6,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.eazegraph.lib.charts.ValueLineChart;
 import org.eazegraph.lib.models.ValueLinePoint;
 import org.eazegraph.lib.models.ValueLineSeries;
 
@@ -47,7 +46,7 @@ public class LineChartData {
                         if (task.isSuccessful()) {
                             double dailyEmissions = 0;
                             for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                                Double emission = snapshot.child("totalEmission").getValue(Double.class);
+                                Double emission = snapshot.child("calculated emissions/totalEmission").getValue(Double.class);
                                 if (emission != null) dailyEmissions += emission;
                             }
                             dailySeries.addPoint(new ValueLinePoint(DatesForDataBase.formatDate(startOfDay), (float) dailyEmissions));
@@ -79,7 +78,7 @@ public class LineChartData {
                         if (task.isSuccessful()) {
                             double dailyEmissions = 0;
                             for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                                Double emission = snapshot.child("totalEmission").getValue(Double.class);
+                                Double emission = snapshot.child("calculated emissions/totalEmission").getValue(Double.class);
                                 if (emission != null) dailyEmissions += emission;
                             }
                             monthlySeries.addPoint(new ValueLinePoint(DatesForDataBase.formatDate(startOfDay), (float) dailyEmissions));
@@ -95,28 +94,40 @@ public class LineChartData {
 
         long currentTime = System.currentTimeMillis();
 
-        // Yearly Emissions: Last 5 Years
-        for (int i = 0; i < 5; i++) {
-            long startOfYear = DatesForDataBase.getStartOfYear(currentTime - i * 365L * 24 * 60 * 60 * 1000); // Go back one year each iteration
-            long endOfYear = DatesForDataBase.getEndOfYear(currentTime - i * 365L * 24 * 60 * 60 * 1000);
+        // Get the start of the year and today's date
+        long startOfYear = DatesForDataBase.getStartOfYear(currentTime);
+        long currentDay = currentTime; // Use the current time for today's date
 
-            int finalI = i;
+        // Iterate from January 1st of this year to the current day
+        for (long day = startOfYear; day <= currentDay; day += 24 * 60 * 60 * 1000) {
+            long startOfDay = DatesForDataBase.getStartOfDay(day);
+            long endOfDay = DatesForDataBase.getEndOfDay(day);
+
             userRef.child("ecotracker")
                     .orderByKey()
-                    .startAt(String.valueOf(startOfYear))
-                    .endAt(String.valueOf(endOfYear))
+                    .startAt(String.valueOf(startOfDay))
+                    .endAt(String.valueOf(endOfDay))
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            double yearlyEmissions = 0;
+                            double dailyEmissions = 0;
+
+                            // Sum the emissions for the current day, if available
                             for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                                Double emission = snapshot.child("totalEmission").getValue(Double.class);
-                                if (emission != null) yearlyEmissions += emission;
+                                Double emission = snapshot.child("calculated emissions/totalEmission").getValue(Double.class);
+                                if (emission != null) {
+                                    dailyEmissions += emission;
+                                }
                             }
-                            annualSeries.addPoint(new ValueLinePoint(String.valueOf(2024 - finalI), (float) yearlyEmissions)); // Label by year
+                            // Get the formatted date for the x-axis label
+                            String dayLabel = DatesForDataBase.formatDate(startOfDay);
+
+                            // Add the daily emissions value to the series
+                            annualSeries.addPoint(new ValueLinePoint(dayLabel, (float) dailyEmissions));
                         }
                     });
         }
+
         return annualSeries;
     }
 

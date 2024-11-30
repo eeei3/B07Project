@@ -64,6 +64,7 @@ public class EcoGauge extends AppCompatActivity {
         // Update the LineChart
         LineChartDisplay lineChart = new LineChartDisplay(chart); // Pass the ValueLineChart to the LineChart class
         lineChart.updateLineChart(); // Update the line chart
+
     }
 
     /**
