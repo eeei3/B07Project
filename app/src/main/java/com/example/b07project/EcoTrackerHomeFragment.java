@@ -31,14 +31,15 @@ public class EcoTrackerHomeFragment extends Fragment {
         // Get a reference to the CalendarView
         CalendarView calendarView = view.findViewById(R.id.calendar_view);
 
+
         // Set a listener to get the selected date
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 // Month is 0-based, so add 1 to the month
+                month++;
+                Toast.makeText(requireContext(), dayOfMonth + "/" + month + "/" + year, Toast.LENGTH_SHORT).show();
                 selectedDate = view.getDate();
-                String selectedDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date(EcoTrackerHomeFragment.this.selectedDate));
-                Toast.makeText(getActivity(), "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
             }
         });
 
