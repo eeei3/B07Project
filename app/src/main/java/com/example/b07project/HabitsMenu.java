@@ -2,6 +2,7 @@ package com.example.b07project;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -42,11 +43,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
     @SuppressLint("StaticFieldLeak")
     public static HabitsAdapter adapter;
 
-    int[] habitsImages = {R.drawable.habits_bringownbag, R.drawable.habits_cycling,
-            R.drawable.habits_lessshoping, R.drawable.habits_limitmeat,
-            R.drawable.habits_localfood, R.drawable.habits_publictrans,
-            R.drawable.habits_recycle, R.drawable.habits_turnlightsoff,
-            R.drawable.habits_walking, R.drawable.habits_washcold};
+
 
 
     /** To be ran when HabitsMenu is created.
@@ -92,6 +89,8 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         usersHabits.setOnClickListener(v -> {
             // switch to the User's Habits page if not already on it
             if (!currentMenu[0]) {
+                HabitsMenu.presenter.userGetGoal();
+//                Log.e("fuck9999", String.valueOf(userGoals.size()));
                 filterChips.clearCheck();
                 usersHabits.setBackgroundColor(planetzeColour3);
                 allHabits.setBackgroundColor(planetzeColour4);
@@ -104,6 +103,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         allHabits.setOnClickListener(v -> {
             // switch to the All Habits page if not already in it
             if (currentMenu[0]) {
+//                userGoals = new ArrayList<>();
                 filterChips.clearCheck();
                 allHabits.setBackgroundColor(planetzeColour3);
                 usersHabits.setBackgroundColor(planetzeColour4);
@@ -182,17 +182,18 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
      *
      */
     private void setUpAllGoals(){
-        String[] habitsNames = getResources().getStringArray(R.array.habits_list);
-        String[] habitsCategories = getResources().getStringArray(R.array.habits_categories);
-        String[] habitsImpacts = getResources().getStringArray(R.array.habits_impacts);
-        String[] habitsDesc = getResources().getStringArray(R.array.habits_desc);
-        String[] habitsImpactsDesc = getResources().getStringArray(R.array.habits_impact_desc);
-
-        for (int i = 0; i < habitsNames.length; i++) {
-            allGoals.add(new Goal(habitsNames[i], 0,
-                    habitsImpacts[i], habitsCategories[i],
-                    habitsDesc[i], habitsImpactsDesc[i], habitsImages[i]));
-        }
+        HabitsMenu.presenter.getAllHabits();
+//        String[] habitsNames = getResources().getStringArray(R.array.habits_list);
+//        String[] habitsCategories = getResources().getStringArray(R.array.habits_categories);
+//        String[] habitsImpacts = getResources().getStringArray(R.array.habits_impacts);
+//        String[] habitsDesc = getResources().getStringArray(R.array.habits_desc);
+//        String[] habitsImpactsDesc = getResources().getStringArray(R.array.habits_impact_desc);
+//
+//        for (int i = 0; i < habitsNames.length; i++) {
+//            allGoals.add(new Goal(habitsNames[i], 0,
+//                    habitsImpacts[i], habitsCategories[i],
+//                    habitsDesc[i], habitsImpactsDesc[i], habitsImages[i]));
+//        }
     }
 
     /**
@@ -207,7 +208,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
      * Method to change the RecyclerView adapter's dataset to usersHabitsModels.
      *
      */
-    private static void setUserArrayForAdapter() {
+    public static void setUserArrayForAdapter() {
         adapter.setHabitsModels(userGoals);
     }
 
@@ -215,7 +216,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
      * Method to change the RecyclerView adapter's dataset to habitsModels (the full set of habits).
      *
      */
-    private static void setOriginalArrayForAdapter() {
+    static void setOriginalArrayForAdapter() {
         adapter.setHabitsModels(allGoals);
     }
 

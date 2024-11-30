@@ -1,6 +1,9 @@
 package com.example.b07project;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
  */
 class Goal {
     String name;
-    long prog;
+    int prog;
     int aim;
     String impact;
     String category;
@@ -46,7 +49,7 @@ class Goal {
      * @param name - Name of the goal the program is fetching
      * @param prog - Progress of the goal
      */
-    public Goal(String name, long prog) {
+    public Goal(String name, int prog) {
         this.name = name;
         this.prog = prog;
     }
@@ -118,8 +121,12 @@ public class FirebaseModel extends Model {
     final private FirebaseDatabase db;
     final private DatabaseReference dbworker;
     private String userid;
-
     ModelPresenterPipe listener;
+    int[] habitsImages = {R.drawable.habits_bringownbag, R.drawable.habits_cycling,
+            R.drawable.habits_lessshoping, R.drawable.habits_limitmeat,
+            R.drawable.habits_localfood, R.drawable.habits_publictrans,
+            R.drawable.habits_recycle, R.drawable.habits_turnlightsoff,
+            R.drawable.habits_walking, R.drawable.habits_washcold};
 
     /**
      * setModelPipe - To permit communications between Model and Presenter
@@ -157,7 +164,8 @@ public class FirebaseModel extends Model {
                             String.valueOf(goals.child("category").getValue()),
                             String.valueOf(goals.child("habitDesc").getValue()),
                             String.valueOf(goals.child("impactDesc").getValue()),
-                            Integer.parseInt(String.valueOf(goals.child("image").getValue()))));
+                            habitsImages[Integer.parseInt(String.valueOf(goals.child("image").getValue()))]
+                    ));
                 }
                 watcher.setResult(true);
                 watcher.setListgoals(res);
@@ -180,17 +188,24 @@ public class FirebaseModel extends Model {
         usergoals.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                HashSet<Goal> res = new HashSet<Goal>();
+                LinkedHashSet<Goal> res = new LinkedHashSet<Goal>();
                 for (DataSnapshot goals: snapshot.getChildren()) {
                     try {
-                        Goal temp = new Goal(goals.getKey(), (long) goals.child("prog").getValue());;
-                        res.add(temp);
+                        res.add(new Goal(goals.getKey(),
+                                0,
+                                String.valueOf(goals.child("impact").getValue()),
+                                String.valueOf(goals.child("category").getValue()),
+                                String.valueOf(goals.child("habitDesc").getValue()),
+                                String.valueOf(goals.child("impactDesc").getValue()),
+                                habitsImages[Integer.parseInt(String.valueOf(goals.child("image").getValue()))]
+                        ));
                     }
                     catch (NullPointerException ex) {
                         Goal temp = new Goal(goals.getKey(), 0);
                         res.add(temp);
                     }
                 }
+                HabitsMenu.userGoals.clear();
                 watcher.setResult(true);
                 watcher.setUsergoals(res);
                 listener.onObjectReady(watcher);

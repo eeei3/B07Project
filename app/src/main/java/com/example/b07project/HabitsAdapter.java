@@ -115,6 +115,7 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
                             // Handle the "Yes" action
                             int pos = habitsModels.indexOf(habit);
                             HabitsMenu.userGoals.remove(habit);
+                            HabitsMenu.presenter.userDeleteGoal(habit.getName(), v.getContext(), 1);
                             // Notify the adapter to remove the item at the position
                             notifyItemRemoved(pos);
                             Toast.makeText(context, "Habit Removed", Toast.LENGTH_SHORT).show();
