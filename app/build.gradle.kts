@@ -53,10 +53,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
     implementation("com.google.firebase:firebase-analytics")
     testImplementation("org.mockito:mockito-all:1.10.19")
-
     implementation ("androidx.cardview:cardview:1.0.0")
-    // Chart and graph library
-    implementation ("com.github.blackfizz:eazegraph:1.2.2@aar")
+    implementation ("com.github.blackfizz:eazegraph:1.2.2")
     implementation ("com.nineoldandroids:library:2.4.0")
 
 }
