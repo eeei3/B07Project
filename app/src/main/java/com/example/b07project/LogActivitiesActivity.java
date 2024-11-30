@@ -22,6 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class LogActivitiesActivity extends AppCompatActivity {
 
+    private long selectedDate;
+    private String userId;
+
     //ui elements
     private TextView titleTextView, inputDate;
     private Button buttonSave;
@@ -59,6 +62,10 @@ public class LogActivitiesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.log_activities_page);
+
+        // get the selected date
+        Intent intent = getIntent();
+        selectedDate = intent.getLongExtra("selectedDate", 0);
 
         initializeUIComponents();
 
@@ -409,13 +416,8 @@ public class LogActivitiesActivity extends AppCompatActivity {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         DatabaseCommunicator databaseCommunicator = new DatabaseCommunicator(database);
 
-        //take user id and date
-        FirebaseAuth mauth = FirebaseAuth.getInstance();
-        String userId = String.valueOf(mauth.getUid());
-        long selectedDate = System.currentTimeMillis();
-
         //then save the emission data to Firebase
-        databaseCommunicator.saveUserEmissionData(userId, selectedDate, userEmissionData);
+        databaseCommunicator.saveUserEmissionData(selectedDate, userEmissionData);
 
         //show the success message
         Toast.makeText(getApplicationContext(), "Data saved successfully!", Toast.LENGTH_SHORT).show();

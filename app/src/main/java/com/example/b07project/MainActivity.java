@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
         //instantiate a databaseCommunicator
-        databaseCommunicator = new DatabaseCommunicator(database);
+        //databaseCommunicator = new DatabaseCommunicator(database);
 
         //get the current user logged in
         FirebaseUser user = mAuth.getCurrentUser();

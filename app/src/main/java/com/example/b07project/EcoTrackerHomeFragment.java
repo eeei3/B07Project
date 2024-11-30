@@ -14,15 +14,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class EcoTrackerHomeFragment extends Fragment {
+    public static String userId;
 
     private long selectedDate;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,7 +41,15 @@ public class EcoTrackerHomeFragment extends Fragment {
                 // Month is 0-based, so add 1 to the month
                 month++;
                 Toast.makeText(requireContext(), dayOfMonth + "/" + month + "/" + year, Toast.LENGTH_SHORT).show();
-                selectedDate = view.getDate();
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month - 1); // Subtract 1 to convert back to 0-based month
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                selectedDate = calendar.getTimeInMillis();
             }
         });
 
@@ -51,13 +61,16 @@ public class EcoTrackerHomeFragment extends Fragment {
         FirebaseUser user = auth.getCurrentUser();  // Get the current authenticated user
 
         //get the user's id
-        String userId = user.getUid();
+        userId = user.getUid();
+
 
         //if user clicks Log button
         buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (selectedDate > 0) {
+                    System.out.println(userId);
+                    System.out.println("hello");
 
                     Intent intent = new Intent(getActivity(), LogActivitiesActivity.class);
                     intent.putExtra("selectedDate", selectedDate);

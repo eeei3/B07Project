@@ -42,6 +42,7 @@ public class DatabaseCommunicator {
     public void serverCalcEmissionReader(Long selectedDate) {
         this.calc = new UserEmissionData.CalculatedEmissions();
         DatabaseReference userRef = database.child("users")
+                                            .child(EcoTrackerHomeFragment.userId)
                                             .child("ecotracker")
                                             .child(String.valueOf(selectedDate))
                                             .child("rawInputs")
@@ -51,7 +52,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     calc.setTotalEmission(Double.parseDouble(String.valueOf(task.getResult().getValue())));
-                    if (calciter <= 4) {
+                    if (calciter >= 4) {
                         waiter.onObjectReady();
                     }
                     calciter++;
@@ -65,6 +66,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -74,7 +76,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     calc.setTotalFood(Double.parseDouble(String.valueOf(task.getResult().getValue())));
-                    if (calciter <= 4) {
+                    if (calciter >= 4) {
                         waiter.onObjectReady();
                     }
                     calciter++;
@@ -86,6 +88,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -95,7 +98,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     calc.setTotalShopping(Double.parseDouble(String.valueOf(task.getResult().getValue())));
-                    if (calciter <= 4) {
+                    if (calciter >= 4) {
                         waiter.onObjectReady();
                     }
                     calciter++;
@@ -107,6 +110,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -116,7 +120,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     calc.setTotalEmission(Double.parseDouble(String.valueOf(task.getResult().getValue())));
-                    if (calciter <= 4) {
+                    if (calciter >= 4) {
                         waiter.onObjectReady();
                     }
                     calciter++;
@@ -132,16 +136,26 @@ public class DatabaseCommunicator {
     public void serverRawInputReader(Long selectedDate) {
         this.raw = new UserEmissionData.RawInputs();
         DatabaseReference userRef = database.child("users")
+                                            .child(EcoTrackerHomeFragment.userId)
                                             .child("ecotracker")
                                             .child(String.valueOf(selectedDate))
-                                            .child("calculatedEmissions")
-                                            .child("");
+                                            .child("rawInputs")
+                                            .child("distanceDriven");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
-                    raw.setDistanceDriven(Double.parseDouble(String.valueOf(task.getResult().getValue())));
-                    if (rawiter <= 15) {
+                    if (task.getResult().getValue() == null) {
+                        System.out.println("task returns null");
+                    }
+                    try {
+                        raw.setDistanceDriven(Double.parseDouble(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setDistanceDriven(2);
+                    }
+
+
+                    if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -153,6 +167,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -162,18 +177,24 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     raw.setVehicleType(String.valueOf(task.getResult().getValue()));
-                    if (rawiter <= 15) {
+                    if (raw.getVehicleType() != null) {
+                        System.out.println("able to grab vehicle type");
+                        System.out.println(raw.getVehicleType());
+                    }
+                    if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
                     // This is where you should put how View should handle the data.
                 }
                 else {
+                    System.out.println("not able to grab vehicle type");
                     throw new RuntimeException("Database read error");
                 }
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -183,7 +204,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     raw.setTransportType(String.valueOf(task.getResult().getValue()));
-                    if (rawiter <= 15) {
+                    if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -195,6 +216,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -203,8 +225,12 @@ public class DatabaseCommunicator {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
-                    raw.setCyclingTime(Double.parseDouble(String.valueOf(task.getResult().getValue())));
-                    if (rawiter <= 15) {
+                    try {
+                        raw.setCyclingTime(Double.parseDouble(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setCyclingTime(0);
+                    }
+                    if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -216,16 +242,17 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
-                .child("numFLights");
+                .child("numFlights");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     raw.setNumFlights(Integer.parseInt(String.valueOf(task.getResult().getValue())));
-                    if (rawiter <= 15) {
+                    if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -237,6 +264,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -246,7 +274,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     raw.setFlightType(String.valueOf(task.getResult().getValue()));
-                    if (rawiter <= 15) {
+                    if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -258,6 +286,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -267,7 +296,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     raw.setMealType(String.valueOf(task.getResult().getValue()));
-                    if (rawiter <= 15) {
+                    if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -279,6 +308,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -287,8 +317,12 @@ public class DatabaseCommunicator {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
-                    raw.setNumServings(Integer.parseInt(String.valueOf(task.getResult().getValue())));
-                    if (rawiter <= 15) {
+                    try {
+                        raw.setNumServings(Integer.parseInt(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setNumServings(0);
+                    }
+                    if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -300,6 +334,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -308,8 +343,12 @@ public class DatabaseCommunicator {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
-                    raw.setNumClothes(Integer.parseInt(String.valueOf(task.getResult().getValue())));
-                    if (rawiter <= 15) {
+                    try {
+                        raw.setNumClothes(Integer.parseInt(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setNumClothes(0);
+                    }
+                    if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -321,6 +360,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -330,7 +370,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     raw.setDeviceType(String.valueOf(task.getResult().getValue()));
-                    if (rawiter <= 15) {
+                    if (rawiter>= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -342,6 +382,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -350,8 +391,12 @@ public class DatabaseCommunicator {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
-                    raw.setNumDevices(Integer.parseInt(String.valueOf(task.getResult().getValue())));
-                    if (rawiter <= 15) {
+                    try {
+                        raw.setNumDevices(Integer.parseInt(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setNumDevices(0);
+                    }
+                    if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -363,6 +408,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -372,7 +418,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     raw.setPurchaseType(String.valueOf(task.getResult().getValue()));
-                    if (rawiter <= 15) {
+                    if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -384,6 +430,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -392,8 +439,12 @@ public class DatabaseCommunicator {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
-                    raw.setNumOtherPurchases(Integer.parseInt(String.valueOf(task.getResult().getValue())));
-                    if (rawiter <= 15) {
+                    try {
+                        raw.setNumOtherPurchases(Integer.parseInt(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setNumOtherPurchases(0);
+                    }
+                    if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -405,6 +456,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -413,8 +465,12 @@ public class DatabaseCommunicator {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
-                    raw.setBillAmount(Double.parseDouble(String.valueOf(task.getResult().getValue())));
-                    if (rawiter <= 15) {
+                    try {
+                        raw.setBillAmount(Double.parseDouble(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setBillAmount(0);
+                    }
+                    if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -426,6 +482,7 @@ public class DatabaseCommunicator {
             }
         });
         userRef = database.child("users")
+                .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
                 .child(String.valueOf(selectedDate))
                 .child("rawInputs")
@@ -435,7 +492,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     raw.setBillType(String.valueOf(task.getResult().getValue()));
-                    if (rawiter <= 15) {
+                    if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -452,13 +509,12 @@ public class DatabaseCommunicator {
     /**
      * Method to save user emission data (raw inputs & calculated emissions)
      * Data is stored under the user ID and date
-     * @param userId the id of the user
      * @param selectedDate the selected date
      * @param data the emission data (raw inputs & calculated emissions)
      */
-    public void saveUserEmissionData(String userId, long selectedDate, UserEmissionData data) {
+    public void saveUserEmissionData(long selectedDate, UserEmissionData data) {
 
-        DatabaseReference userRef = database.child("users").child(userId);
+        DatabaseReference userRef = database.child("users").child(EcoTrackerHomeFragment.userId);
 
         DatabaseReference dateRef = userRef.child("ecotracker").child(String.valueOf(selectedDate));
 
@@ -504,13 +560,12 @@ public class DatabaseCommunicator {
     /**
      * Method to update the emission data (both raw inputs and recalculated emissions) - used later in editing
      * for a specific user and selected date.
-     * @param userId The ID of the user
      * @param selectedDate The date for which the data is to be updated
      * @param data The updated emission data
      */
-    public void updateEmissionData(String userId, long selectedDate, UserEmissionData data) {
+    public void updateEmissionData(long selectedDate, UserEmissionData data) {
 
-        DatabaseReference userRef = database.child("users").child(userId);
+        DatabaseReference userRef = database.child("users").child(EcoTrackerHomeFragment.userId);
 
         DatabaseReference dateRef = userRef.child("emissions").child(String.valueOf(selectedDate));
 
@@ -544,7 +599,7 @@ public class DatabaseCommunicator {
             @Override
             public void onComplete(Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.d("Firebase", "User emission data updated successfully for user: " + userId + " on date: " + selectedDate);
+                    Log.d("Firebase", "User emission data updated successfully for user: " + EcoTrackerHomeFragment.userId + " on date: " + selectedDate);
                 } else {
                     Log.e("Firebase", "Failed to update data", task.getException());
                 }
