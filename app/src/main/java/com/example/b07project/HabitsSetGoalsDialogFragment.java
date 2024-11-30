@@ -199,7 +199,7 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
                     HabitsMenu.userGoals.add(habit);
 
                     // tommy: add goal/habit to the firebase
-                    HabitsMenu.presenter.userAddGoal(habit.getName(), goal);
+                    HabitsMenu.presenter.userAddGoal(habit, goal);
 
                     // Notify the adapter that the habit has been updated
                     if (getActivity() instanceof OnHabitUpdatedListener) {

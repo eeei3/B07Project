@@ -55,6 +55,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseModel.counter = 1;
         setContentView(R.layout.habits_main_page);
 
         // initialize the presenter
@@ -77,12 +78,14 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
 
         // set up the RecyclerView and its adapter
         setUpAllGoals();
+//        FirebaseModel.counter = 0;
         adapter = new HabitsAdapter(this, allGoals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
         // tommy - get the user's goals which initializes the field userHabitsModels
         presenter.userGetGoal();
+
 
 
         // define behaviour for when the "Your Habits" button is clicked

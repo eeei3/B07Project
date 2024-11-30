@@ -1,5 +1,7 @@
 package com.example.b07project;
 
+import android.util.Log;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -63,6 +65,17 @@ class Goal {
         this.impactDesc = impactDesc;
         this.image = image;
     }
+    public Goal(String name, int prog, int aim, String impact, String category, String habitDesc, String impactDesc, int image) {
+        this.name = name;
+        this.prog = prog;
+        this.aim = aim;
+        this.impact = impact;
+        this.category = category;
+        this.habitDesc = habitDesc;
+        this.impactDesc = impactDesc;
+        this.image = image;
+    }
+
 
     public String getName() {
         return name;
@@ -117,6 +130,7 @@ class Goal {
  */
 
 public class FirebaseModel extends Model {
+    public static int counter = 0;
     private static FirebaseModel serverCommunicator;
     final private FirebaseDatabase db;
     final private DatabaseReference dbworker;
@@ -156,20 +170,23 @@ public class FirebaseModel extends Model {
         listgoals.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                HashSet<Goal> res = new HashSet<Goal>();
-                for (DataSnapshot goals: snapshot.getChildren()) {
-                    res.add(new Goal(goals.getKey(),
-                            0,
-                            String.valueOf(goals.child("impact").getValue()),
-                            String.valueOf(goals.child("category").getValue()),
-                            String.valueOf(goals.child("habitDesc").getValue()),
-                            String.valueOf(goals.child("impactDesc").getValue()),
-                            habitsImages[Integer.parseInt(String.valueOf(goals.child("image").getValue()))]
-                    ));
+                if (counter == 1) {
+                    HashSet<Goal> res = new HashSet<Goal>();
+                    for (DataSnapshot goals : snapshot.getChildren()) {
+                        res.add(new Goal(goals.getKey(),
+                                0,
+                                String.valueOf(goals.child("impact").getValue()),
+                                String.valueOf(goals.child("category").getValue()),
+                                String.valueOf(goals.child("habitDesc").getValue()),
+                                String.valueOf(goals.child("impactDesc").getValue()),
+                                habitsImages[Integer.parseInt(String.valueOf(goals.child("image").getValue()))]
+                        ));
+                    }
+                    counter = 0;
+                    watcher.setResult(true);
+                    watcher.setListgoals(res);
+                    listener.onObjectReady(watcher);
                 }
-                watcher.setResult(true);
-                watcher.setListgoals(res);
-                listener.onObjectReady(watcher);
             }
 
             @Override
@@ -191,14 +208,29 @@ public class FirebaseModel extends Model {
                 LinkedHashSet<Goal> res = new LinkedHashSet<Goal>();
                 for (DataSnapshot goals: snapshot.getChildren()) {
                     try {
-                        res.add(new Goal(goals.getKey(),
-                                0,
-                                String.valueOf(goals.child("impact").getValue()),
-                                String.valueOf(goals.child("category").getValue()),
-                                String.valueOf(goals.child("habitDesc").getValue()),
-                                String.valueOf(goals.child("impactDesc").getValue()),
-                                habitsImages[Integer.parseInt(String.valueOf(goals.child("image").getValue()))]
-                        ));
+                        Log.e("fuck90", String.valueOf(goals.child("image").getValue()));
+                        try {
+                            res.add(new Goal(goals.getKey(),
+                                    0,
+                                    0,
+                                    String.valueOf(goals.child("impact").getValue()),
+                                    String.valueOf(goals.child("category").getValue()),
+                                    String.valueOf(goals.child("habitDesc").getValue()),
+                                    String.valueOf(goals.child("impactDesc").getValue()),
+                                    habitsImages[Integer.parseInt(String.valueOf(goals.child("image").getValue()))]
+                            ));
+                        }
+                        catch (NumberFormatException e) {
+                            res.add(new Goal(goals.getKey(),
+                                    0,
+                                    0,
+                                    String.valueOf(goals.child("impact").getValue()),
+                                    String.valueOf(goals.child("category").getValue()),
+                                    String.valueOf(goals.child("habitDesc").getValue()),
+                                    String.valueOf(goals.child("impactDesc").getValue()),
+                                    habitsImages[0]
+                            ));
+                        }
                     }
                     catch (NullPointerException ex) {
                         Goal temp = new Goal(goals.getKey(), 0);
@@ -222,29 +254,143 @@ public class FirebaseModel extends Model {
     /**
      * Set a new goal for the user
      */
-    void setGoals(String goal, String aim, AsyncDBComms watcher) {
-        int completed = 0;
+    void setGoals(Goal goal, AsyncDBComms watcher) {
+        final int[] completed = {0};
+        int image_index = 0;
 //        Goal goalobj = new Goal(goal, 0);
-        dbworker.child("users").child(userid).child("habits").child(goal).child("prog").setValue(0)
+        for (int i = 0 ; i < habitsImages.length; i++) {
+            if (goal.image == habitsImages[i]) {
+                image_index = i;
+                break;
+            }
+        }
+        dbworker.child("users").child(userid).child("habits").child(goal.name).child("prog").setValue(0)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            watcher.setResult(true);
-                            listener.onObjectReady(watcher);
+                            if (completed[0] >= 7) {
+                                watcher.setResult(true);
+                                listener.onObjectReady(watcher);
+//                                counter = 1;
+                            }
+                            else {
+                                completed[0] = completed[0] + 1;
+                            }
                         }
                         else {
                             listener.onObjectReady(watcher);
                         }
                     }
                 });
-        dbworker.child("users").child(userid).child("habits").child(goal).child("aim").setValue(Integer.parseInt(aim))
+        dbworker.child("users").child(userid).child("habits").child(goal.name).child("aim").setValue(goal.aim)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            watcher.setResult(true);
+                            if (completed[0] >= 7) {
+                                watcher.setResult(true);
+                                listener.onObjectReady(watcher);
+//                                counter = 1;
+                            }
+                            else {
+                                completed[0] = completed[0] + 1;
+                            }
+                        }
+                        else {
                             listener.onObjectReady(watcher);
+                        }
+                    }
+                });
+        dbworker.child("users").child(userid).child("habits").child(goal.name).child("habitDesc").setValue(goal.habitDesc)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            if (completed[0] >= 7) {
+                                watcher.setResult(true);
+                                listener.onObjectReady(watcher);
+//                                counter = 1;
+                            }
+                            else {
+                                completed[0] = completed[0] + 1;
+                            }
+                        }
+                        else {
+                            listener.onObjectReady(watcher);
+                        }
+                    }
+                });
+        dbworker.child("users").child(userid).child("habits").child(goal.name).child("category").setValue(goal.category)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            if (completed[0] >= 7) {
+                                watcher.setResult(true);
+                                listener.onObjectReady(watcher);
+//                                counter = 1;
+                            }
+                            else {
+                                completed[0] = completed[0] + 1;
+                            }
+                        }
+                        else {
+                            listener.onObjectReady(watcher);
+                        }
+                    }
+                });
+        dbworker.child("users").child(userid).child("habits").child(goal.name).child("image").setValue(image_index)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            if (completed[0] >= 7) {
+                                watcher.setResult(true);
+                                listener.onObjectReady(watcher);
+//                                counter = 1;
+                            }
+                            else {
+                                completed[0] = completed[0] + 1;
+                            }
+                        }
+                        else {
+                            listener.onObjectReady(watcher);
+                        }
+                    }
+                });
+        dbworker.child("users").child(userid).child("habits").child(goal.name).child("impact").setValue(goal.impact)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            if (completed[0] >= 7) {
+                                watcher.setResult(true);
+                                listener.onObjectReady(watcher);
+//                                counter = 1;
+                            }
+                            else {
+                                completed[0] = completed[0] + 1;
+                            }
+                        }
+                        else {
+                            listener.onObjectReady(watcher);
+                        }
+                    }
+                });
+        dbworker.child("users").child(userid).child("habits").child(goal.name).child("impactDesc").setValue(goal.impactDesc)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            if (completed[0] >= 7) {
+                                watcher.setResult(true);
+                                listener.onObjectReady(watcher);
+//                                counter = 1;
+                            }
+                            else {
+                                completed[0] = completed[0] + 1;
+                            }
                         }
                         else {
                             listener.onObjectReady(watcher);

@@ -18,6 +18,8 @@ public class HabitPresenter {
     HabitsMenu view;
     UserHabitsProgressDialogFragment progdiafrag;
     FirebaseAuth mauth;
+
+    HabitsSetGoalsDialogFragment godiagrag;
     Model.ModelPresenterPipe listener;
 
     // TOMMY Notes - added field HabitsMenu view and initialize the view in constructor
@@ -147,7 +149,8 @@ public class HabitPresenter {
      * userAddGoal updates the goals that the user has active
      * @param goal - The goal the user wishes to work towards
      */
-    public void userAddGoal(String goal, String aim) {
+    public void userAddGoal(Goal goal, String aim) {
+        FirebaseModel.counter = 0;
         AsyncDBComms mp = new AsyncDBComms();
         FirebaseModel model = new FirebaseModel(
                 String.valueOf(mauth.getCurrentUser()));
@@ -155,10 +158,12 @@ public class HabitPresenter {
             @Override
             public void onObjectReady(AsyncComms betweener) {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
+                FirebaseModel.counter = 1;
 //                model.setModelPipe(null);
             }
         });
-        model.setGoals(goal, aim, mp);
+        goal.aim = Integer.parseInt(aim);
+        model.setGoals(goal, mp);
     }
 
     // TOMMY notes
