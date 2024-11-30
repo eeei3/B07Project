@@ -175,7 +175,8 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
 
 
             // extracted data to store information in databases and such...
-            int goal = Integer.parseInt(timesEditText.getText().toString().trim());
+//            int goal = Integer.parseInt(timesEditText.getText().toString().trim());
+            String goal = timesEditText.getText().toString().trim();
             String reminderTime = null;
             String frequency = null;
 
@@ -198,7 +199,7 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
                     HabitsMenu.userGoals.add(habit);
 
                     // tommy: add goal/habit to the firebase
-                    HabitsMenu.presenter.userAddGoal(habit.getName());
+                    HabitsMenu.presenter.userAddGoal(habit.getName(), goal);
 
                     // Notify the adapter that the habit has been updated
                     if (getActivity() instanceof OnHabitUpdatedListener) {

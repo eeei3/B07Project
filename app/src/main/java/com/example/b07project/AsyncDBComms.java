@@ -8,7 +8,7 @@ import java.util.HashSet;
 public class AsyncDBComms extends AsyncComms {
     long value;
     HashSet<Goal> usergoals;
-    HashSet<String> listgoals;
+    HashSet<Goal> listgoals;
 
     /**
      * SuccessListener - Default constructor, sets success to false
@@ -16,7 +16,7 @@ public class AsyncDBComms extends AsyncComms {
     public AsyncDBComms() {
         super();
         this.usergoals = new HashSet<Goal>();
-        this.listgoals = new HashSet<String>();
+        this.listgoals = new HashSet<Goal>();
     }
 
     /**

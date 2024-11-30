@@ -2,6 +2,7 @@ package com.example.b07project;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.HashSet;
 import java.util.Objects;
 
 
@@ -33,13 +34,13 @@ public class HabitPresenter {
     public void searchByName(String filter) {
         // mp is the listener that we use to tell if the Model operation succeeded
         AsyncDBComms mp = new AsyncDBComms();
-        this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
+        this.model.setModelPipe(new Model.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncComms betweener) {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
                 for (Goal g: plug.usergoals) {
                     if (Objects.equals(g.name, filter)) {
-
+                        plug.listgoals.add(g);
                     }
                 }
 //                listener.onObjectReady(pv);
@@ -55,12 +56,13 @@ public class HabitPresenter {
     public void searchByCategory(String filter) {
         // mp is the listener that we use to tell if the Model operation succeeded
         AsyncDBComms mp = new AsyncDBComms();
-        this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
+        this.model.setModelPipe(new Model.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncComms betweener) {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
                 for (Goal g: plug.usergoals) {
                     if (g.category.contains(filter)) {
+                        plug.listgoals.add(g);
                     }
                 }
 //                listener.onObjectReady(pv);
@@ -76,11 +78,14 @@ public class HabitPresenter {
     public void searchByImpact(String filter) {
         // mp is the listener that we use to tell if the Model operation succeeded
         AsyncDBComms mp = new AsyncDBComms();
-        this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
+        this.model.setModelPipe(new Model.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncComms betweener) {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
                 for (Goal g: plug.usergoals) {
+                    if (g.impact.equals(filter)) {
+                        plug.listgoals.add(g);
+                    }
                 }
 //                listener.onObjectReady(pv);
             }
@@ -88,21 +93,43 @@ public class HabitPresenter {
         this.model.getListGoals(mp);
     }
 
+    public void personalSuggestions() {
+        AsyncDBComms mp = new AsyncDBComms();
+        HashSet<Goal> temp = new HashSet<>();
+        HashSet<Goal> temp1 = new HashSet<>();
+        int toggle = 0;
+        this.model.setModelPipe(new Model.ModelPresenterPipe() {
+            @Override
+            public void onObjectReady(AsyncComms betweener) {
+                AsyncDBComms plug = (AsyncDBComms) betweener;
+                if (toggle == 0) {
+                    temp.addAll(plug.usergoals);
+                }
+                else {
+                    temp1.addAll(plug.listgoals);
+                }
+//                listener.onObjectReady(pv);
+            }
+        });
+        this.model.getListGoals(mp);
+        this.model.getGoals(mp);
+
+    }
+
     /**
      * userAddGoal updates the goals that the user has active
      * @param goal - The goal the user wishes to work towards
      */
-    public void userAddGoal(String goal) {
+    public void userAddGoal(String goal, String aim) {
         AsyncDBComms mp = new AsyncDBComms();
-        this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
+        this.model.setModelPipe(new Model.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncComms betweener) {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
             }
         });
-        this.model.setGoals(goal, mp);
+        this.model.setGoals(goal, aim, mp);
     }
-
 
     // TOMMY notes
     // this method should be responsible for populating userGoals in the view
@@ -112,7 +139,7 @@ public class HabitPresenter {
      */
     public void userGetGoal() {
         AsyncDBComms mp = new AsyncDBComms();
-        this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
+        this.model.setModelPipe(new Model.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncComms betweener) {
                 if (mp.res) {
@@ -130,7 +157,7 @@ public class HabitPresenter {
      */
     public void userSetProg(String goal, int prog) {
         AsyncDBComms mp = new AsyncDBComms();
-        this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
+        this.model.setModelPipe(new Model.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncComms betweener) {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
@@ -146,13 +173,12 @@ public class HabitPresenter {
      */
     public void userGetProg(String goal) {
         AsyncDBComms mp = new AsyncDBComms();
-        this.model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
+        this.model.setModelPipe(new Model.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncComms betweener) {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
                 if (plug.res) {
                     // update the progress and aim in the view for the specified goal
-
                     view.progress = (int) plug.value;
                     // view.aim = plug.???
                 }

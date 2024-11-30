@@ -201,9 +201,23 @@ final public class FirebaseModel extends Model {
     /**
      * Set a new goal for the user
      */
-    void setGoals(String goal, AsyncDBComms watcher) {
+    void setGoals(String goal, String aim, AsyncDBComms watcher) {
+        int completed = 0;
 //        Goal goalobj = new Goal(goal, 0);
         dbworker.child("users").child(userid).child("habits").child(goal).child("prog").setValue(0)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            watcher.setResult(true);
+                            listener.onObjectReady(watcher);
+                        }
+                        else {
+                            listener.onObjectReady(watcher);
+                        }
+                    }
+                });
+        dbworker.child("users").child(userid).child("habits").child(goal).child("aim").setValue(Integer.parseInt(aim))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
