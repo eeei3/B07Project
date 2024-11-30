@@ -13,7 +13,6 @@ import org.eazegraph.lib.models.ValueLineSeries;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,105 +49,115 @@ public class LineChart {
      * Retrieves data for daily, monthly, and annual emissions from Firebase and updates the chart.
      */
     public void getDataForChart() {
-        // Create different series for daily, monthly, and annual emissions
-        List<ValueLineSeries> seriesList = new ArrayList<>();
-
+        // Create series for daily, monthly, and yearly emissions
         ValueLineSeries dailySeries = new ValueLineSeries();
-        dailySeries.setColor(Color.RED);  // Set the color of the daily emissions line
+        dailySeries.setColor(Color.RED);
         ValueLineSeries monthlySeries = new ValueLineSeries();
-        monthlySeries.setColor(Color.GREEN);  // Set the color of the monthly emissions line
+        monthlySeries.setColor(Color.GREEN);
         ValueLineSeries annualSeries = new ValueLineSeries();
-        annualSeries.setColor(Color.BLUE);  // Set the color of the annual emissions line
+        annualSeries.setColor(Color.BLUE);
 
-        // Get the current time and calculate start and end of day, month, and year
-        long time = System.currentTimeMillis();
-        long startOfDay = DatesForDataBase.getStartOfDay(time);
-        long endOfDay = DatesForDataBase.getEndOfDay(time);
-        long startOfMonth = DatesForDataBase.getStartOfMonth(time);
-        long endOfMonth = DatesForDataBase.getEndOfMonth(time);
+        long currentTime = System.currentTimeMillis();
+        int completedQueries = 0;
 
-        final int[] completedQueries = {0};  // Array to track the completion of all queries
+        // --- Daily Emissions: Last 7 Days ---
+        for (int i = 0; i < 7; i++) {
+            long startOfDay = DatesForDataBase.getStartOfDay(currentTime - i * 24 * 60 * 60 * 1000); // Go back one day each iteration
+            long endOfDay = DatesForDataBase.getEndOfDay(currentTime - i * 24 * 60 * 60 * 1000);
 
-        // Query to get emissions data for the current day
-        userRef.child("ecotracker")
-                .orderByKey()
-                .startAt(String.valueOf(startOfDay))  // Filter data from the start of the day
-                .endAt(String.valueOf(endOfDay))  // Filter data until the end of the day
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        double totalDailyEmissions = 0;  // Variable to hold total emissions for the day
-                        for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                            Double totalEmission = snapshot.child("totalEmission").getValue(Double.class);
-                            if (totalEmission != null) totalDailyEmissions += totalEmission;  // Sum emissions for the day
+            userRef.child("ecotracker")
+                    .orderByKey()
+                    .startAt(String.valueOf(startOfDay))
+                    .endAt(String.valueOf(endOfDay))
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            double dailyEmissions = 0;
+                            for (DataSnapshot snapshot : task.getResult().getChildren()) {
+                                Double emission = snapshot.child("totalEmission").getValue(Double.class);
+                                if (emission != null) dailyEmissions += emission;
+                            }
+                            dailySeries.addPoint(new ValueLinePoint(DatesForDataBase.formatDate(startOfDay), (float) dailyEmissions));
                         }
-                        dailySeries.addPoint(new ValueLinePoint((float) totalDailyEmissions));  // Add the data point to the daily series
-                    }
-                    completedQueries[0]++;  // Increment the completed queries counter
-                    // If all queries are completed, update the chart with the new data
-                    if (completedQueries[0] == 3) {
-                        updateLineChart(seriesList, dailySeries, monthlySeries, annualSeries);
-                    }
-                });
+                    });
+        }
 
-        // Query to get emissions data for the current month
-        userRef.child("ecotracker")
-                .orderByKey()
-                .startAt(String.valueOf(startOfMonth))  // Filter data from the start of the month
-                .endAt(String.valueOf(endOfMonth))  // Filter data until the end of the month
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        double totalMonthlyEmissions = 0;  // Variable to hold total emissions for the month
-                        for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                            Double totalEmission = snapshot.child("totalEmission").getValue(Double.class);
-                            if (totalEmission != null) totalMonthlyEmissions += totalEmission;  // Sum emissions for the month
-                        }
-                        monthlySeries.addPoint(new ValueLinePoint((float) totalMonthlyEmissions));  // Add the data point to the monthly series
-                    }
-                    completedQueries[0]++;  // Increment the completed queries counter
-                    // If all queries are completed, update the chart with the new data
-                    if (completedQueries[0] == 3) {
-                        updateLineChart(seriesList, dailySeries, monthlySeries, annualSeries);
-                    }
-                });
+        // --- Monthly Emissions: From Login Date to End of Month ---
+        long startOfMonth = DatesForDataBase.getStartOfMonth(currentTime);
+        long endOfMonth = DatesForDataBase.getEndOfMonth(currentTime);
 
-        // Query to get emissions data for the current year (annual emissions)
-        userRef.child("annualEmissions")
-                .child("totalEmission")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Double totalEmission = task.getResult().getValue(Double.class);
-                        if (totalEmission != null) {
-                            annualSeries.addPoint(new ValueLinePoint(totalEmission.floatValue()));  // Add the data point to the annual series
+        for (long day = startOfMonth; day <= endOfMonth; day += 24 * 60 * 60 * 1000) {
+            long startOfDay = DatesForDataBase.getStartOfDay(day);
+            long endOfDay = DatesForDataBase.getEndOfDay(day);
+
+            userRef.child("ecotracker")
+                    .orderByKey()
+                    .startAt(String.valueOf(startOfDay))
+                    .endAt(String.valueOf(endOfDay))
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            double dailyEmissions = 0;
+                            for (DataSnapshot snapshot : task.getResult().getChildren()) {
+                                Double emission = snapshot.child("totalEmission").getValue(Double.class);
+                                if (emission != null) dailyEmissions += emission;
+                            }
+                            monthlySeries.addPoint(new ValueLinePoint(DatesForDataBase.formatDate(startOfDay), (float) dailyEmissions));
                         }
-                    }
-                    completedQueries[0]++;  // Increment the completed queries counter
-                    // If all queries are completed, update the chart with the new data
-                    if (completedQueries[0] == 3) {
-                        updateLineChart(seriesList, dailySeries, monthlySeries, annualSeries);
-                    }
-                });
+                    });
+        }
+
+        // --- Yearly Emissions: Last 5 Years ---
+        for (int i = 0; i < 5; i++) {
+            long startOfYear = DatesForDataBase.getStartOfYear(currentTime - i * 365L * 24 * 60 * 60 * 1000); // Go back one year each iteration
+            long endOfYear = DatesForDataBase.getEndOfYear(currentTime - i * 365L * 24 * 60 * 60 * 1000);
+
+            int finalI = i;
+            userRef.child("ecotracker")
+                    .orderByKey()
+                    .startAt(String.valueOf(startOfYear))
+                    .endAt(String.valueOf(endOfYear))
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            double yearlyEmissions = 0;
+                            for (DataSnapshot snapshot : task.getResult().getChildren()) {
+                                Double emission = snapshot.child("totalEmission").getValue(Double.class);
+                                if (emission != null) yearlyEmissions += emission;
+                            }
+                            annualSeries.addPoint(new ValueLinePoint(String.valueOf(2024 - finalI), (float) yearlyEmissions)); // Label by year
+                        }
+                    });
+        }
+
+        // After all queries, update the chart
+        updateLineChart(dailySeries, monthlySeries, annualSeries);
     }
+
 
     /*
      * Updates the line chart by adding the series for daily, monthly, and annual emissions.
      * This method is called when all calls for data are done
      */
-    private void updateLineChart(List<ValueLineSeries> seriesList, ValueLineSeries dailySeries,
-                                 ValueLineSeries monthlySeries, ValueLineSeries annualSeries) {
-        // Clear any existing series and add the new series for daily, monthly, and annual data
-        seriesList.clear();
-        seriesList.add(dailySeries);
-        seriesList.add(monthlySeries);
-        seriesList.add(annualSeries);
+    private void updateLineChart(ValueLineSeries dailySeries, ValueLineSeries monthlySeries, ValueLineSeries annualSeries) {
+        // Clear existing data to refresh the chart
+        chart.clearChart();
 
-        // Make the chart visible and display the series
-        chart.setVisibility(View.VISIBLE);
-        chart.setShowIndicator(true);  // Show indicators on the chart
-        chart.addSeries(dailySeries);  // Add the daily series to the chart
-        chart.addSeries(monthlySeries);  // Add the monthly series to the chart
-        chart.addSeries(annualSeries);  // Add the annual series to the chart
+        // Add each series to the chart
+        if (!dailySeries.getSeries().isEmpty()) {
+            chart.addSeries(dailySeries); // Add daily emissions line
+        }
+
+        if (!monthlySeries.getSeries().isEmpty()) {
+            chart.addSeries(monthlySeries); // Add monthly emissions line
+        }
+
+        if (!annualSeries.getSeries().isEmpty()) {
+            chart.addSeries(annualSeries); // Add yearly emissions line
+        }
+
+        // Refresh the chart to display the new data
+        chart.startAnimation();
     }
+
 }
