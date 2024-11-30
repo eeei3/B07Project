@@ -1,12 +1,14 @@
 package com.example.b07project;
 
 import java.util.HashSet;
+import java.util.ArrayList;
 
 /**
  * SuccessListener - Class representing the results of our asynchronous calls to Firebase auth
  */
 public class AsyncDBComms extends AsyncComms {
     long value;
+    ArrayList<Object> values;
     HashSet<Goal> usergoals;
     HashSet<Goal> listgoals;
 
@@ -17,6 +19,7 @@ public class AsyncDBComms extends AsyncComms {
         super();
         this.usergoals = new HashSet<Goal>();
         this.listgoals = new HashSet<Goal>();
+        this.values = new ArrayList<>();
     }
 
     /**
@@ -37,5 +40,5 @@ public class AsyncDBComms extends AsyncComms {
      * setListgoals - sets the list of goals to keep track of
      * @param value - the goals' names
      */
-    public void setListgoals(HashSet<String> value) {this.listgoals = value;}
+    public void setListgoals(HashSet<Goal> value) {this.listgoals = value;}
 }

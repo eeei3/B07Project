@@ -1,5 +1,9 @@
 package com.example.b07project;
 
+import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.HashSet;
@@ -12,6 +16,7 @@ import java.util.Objects;
 public class HabitPresenter {
     FirebaseModel model;
     HabitsMenu view;
+    UserHabitsProgressDialogFragment progdiafrag;
 
     Model.ModelPresenterPipe listener;
 
@@ -23,7 +28,7 @@ public class HabitPresenter {
     public HabitPresenter(HabitsMenu view) {
         this.view = view;
         FirebaseAuth mauth = FirebaseAuth.getInstance();
-        this.model = FirebaseModel.createInstance(
+        this.model = new FirebaseModel(
                 String.valueOf(mauth.getCurrentUser()));
     }
 
@@ -175,6 +180,11 @@ public class HabitPresenter {
             @Override
             public void onObjectReady(AsyncComms betweener) {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
+                view.progress = prog;
+//                UserHabitsProgressDialogFragment.logActivity.setEnabled(true);
+//                userGetProg(goal);
+                progdiafrag.setTextNumDays();
+                progdiafrag.setProgressBar();
             }
         });
         this.model.setProg(goal, prog, mp);
@@ -192,14 +202,36 @@ public class HabitPresenter {
             public void onObjectReady(AsyncComms betweener) {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
                 if (plug.res) {
+//                    Log.e("fuck", String.valueOf(plug.res));
                     // update the progress and aim in the view for the specified goal
-                    view.progress = (int) plug.value;
-                    // view.aim = plug.???
+                    view.progress = (int) plug.values.get(0);
+                    view.aim = (int) plug.values.get(1);
+//                    progdiafrag.setProgressBar();
+//                    progdiafrag.setProgressBar();
+                    progdiafrag.setTextNumDays();
                 }
                 else {
                 }
             }
         });
         this.model.getProg(goal, mp);
+    }
+
+    public void userDeleteGoal(String goal, Context con) {
+        AsyncDBComms mp = new AsyncDBComms();
+        this.model.setModelPipe(new Model.ModelPresenterPipe() {
+            @Override
+            public void onObjectReady(AsyncComms betweener) {
+                AsyncDBComms plug = (AsyncDBComms) betweener;
+                if (plug.res) {
+                    Toast.makeText(con, "Goal Finished!",
+                            Toast.LENGTH_SHORT).show();
+                }
+                else {
+
+                }
+            }
+        });
+        this.model.deleteGoal(goal, mp);
     }
 }

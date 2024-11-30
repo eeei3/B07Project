@@ -113,7 +113,7 @@ class Goal {
  * GeneralServerCommunicator - The Model portion of the Habit Suggestion Module
  */
 
-final public class FirebaseModel extends Model {
+public class FirebaseModel extends Model {
     private static FirebaseModel serverCommunicator;
     final private FirebaseDatabase db;
     final private DatabaseReference dbworker;
@@ -134,7 +134,7 @@ final public class FirebaseModel extends Model {
      * follows Singleton SOLID design
      * @param userid - the id of the user
      */
-    private FirebaseModel(String userid) {
+    public FirebaseModel(String userid) {
 //        this.userid = userid;  //This is the production line
         this.userid = "1111111"; // This is for testing
         db = FirebaseDatabase.getInstance("https://b07project-b43b0-default-rtdb.firebaseio.com/");
@@ -149,9 +149,15 @@ final public class FirebaseModel extends Model {
         listgoals.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                HashSet<String> res = new HashSet<String>();
+                HashSet<Goal> res = new HashSet<Goal>();
                 for (DataSnapshot goals: snapshot.getChildren()) {
-                    res.add(goals.getKey());
+                    res.add(new Goal(goals.getKey(),
+                            0,
+                            String.valueOf(goals.child("impact").getValue()),
+                            String.valueOf(goals.child("category").getValue()),
+                            String.valueOf(goals.child("habitDesc").getValue()),
+                            String.valueOf(goals.child("impactDesc").getValue()),
+                            Integer.parseInt(String.valueOf(goals.child("image").getValue()))));
                 }
                 watcher.setResult(true);
                 watcher.setListgoals(res);
@@ -236,13 +242,15 @@ final public class FirebaseModel extends Model {
      * Get the progress of a goal that the user is working on
      */
     void getProg(String goal, AsyncDBComms watcher) {
-        dbworker.child("users").child(userid).child("habits").child(goal).child("prog")
+        dbworker.child("users").child(userid).child("habits").child(goal)
                 .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         if (task.isSuccessful()) {
                             // Fetch the values we want
-                            watcher.value = (long) task.getResult().getValue();
+                            watcher.values.add(Integer.parseInt(String.valueOf(task.getResult().child("prog").getValue())));
+                            watcher.values.add(Integer.parseInt(String.valueOf(task.getResult().child("aim").getValue())));
+//                            watcher.value = (long) task.getResult().getValue();
                             watcher.setResult(true);
                             listener.onObjectReady(watcher);
                         }
@@ -274,10 +282,20 @@ final public class FirebaseModel extends Model {
                 });
     }
 
-    public static FirebaseModel createInstance(String userid) {
-        if (serverCommunicator == null)
-            serverCommunicator = new FirebaseModel(userid);
-        return serverCommunicator;
+    void deleteGoal(String goalname, AsyncDBComms watcher) {
+        dbworker.child("users").child(userid).child("habits").child(goalname)
+                .setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    watcher.setResult(true);
+                    listener.onObjectReady(watcher);
+                }
+                else {
+                    listener.onObjectReady(watcher);
+                }
+            }
+        });
     }
 
 }

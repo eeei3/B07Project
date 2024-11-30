@@ -24,6 +24,7 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
     private final static String argHabitName = "habit_name";
 
     private ProgressBar userHabitProgressBar;
+    public static Button logActivity;
     private EditText userHabitNumDaysInt;
     // Note for Back-End
     // this information, "progress", is deleted after dialog is closed.
@@ -77,8 +78,9 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
 
         // find the core components of the view
         userHabitProgressBar = view.findViewById(R.id.userHabitProgressBar);
+        userHabitProgressBar.setProgress(3);
         userHabitNumDaysInt = view.findViewById(R.id.userHabitNumDaysInt);
-        Button logActivity = view.findViewById(R.id.logActivityButton);
+        logActivity = view.findViewById(R.id.logActivityButton);
 
         // find the corresponding HabitsModel in the User's page that the dialog is displaying progress about
         Goal currHabitModel = null;
@@ -90,13 +92,16 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
         }
         final Goal habit = currHabitModel;
 
+        userHabitProgressBar.setMax(HabitsMenu.aim);
+
+        HabitsMenu.presenter.progdiafrag = this;
+
         // this should update both the fields progress and aim of HabitsMenu
         HabitsMenu.presenter.userGetProg(habit.getName());
 
         // set the max length and current progress for the ProgressBar and the EditText
-        userHabitProgressBar.setMax(HabitsMenu.aim);
-        setProgressBar();
-        setTextNumDays();
+//        setProgressBar();
+//        setTextNumDays();
 
         // NOTE FOR BACK-END:
         // this is for logging activities, when finished, i.e. progress = goal
@@ -106,10 +111,11 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
         logActivity.setOnClickListener(v -> {
 
             if (HabitsMenu.progress < HabitsMenu.aim) {
+                logActivity.setVisibility(View.GONE);
                 // if goal is not reached,
-                HabitsMenu.presenter.userSetProg(habit.getName(), 1); // increment by one day???
-                setProgressBar();
-                setTextNumDays();
+                HabitsMenu.presenter.userSetProg(habit.getName(), (int) (habit.prog + 1)); // increment by one day???
+//                setProgressBar();
+//                setTextNumDays();
 
                 // dismissing the dialog will delete the "progress", need to get the field "progress" elsewhere
                 // dismiss()
@@ -117,17 +123,15 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
 
             } else {
                 // if goal is reached,
-
-
                 // launch a confirmation dialog on whether to set a new goal or not
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
                 builder.setMessage("Congrats! You've finished your goal! Would you like to set a new goal?")
                         .setTitle("Confirm")
                         .setPositiveButton("No", (dialog, id) -> {
                             // Handle the "No" action
+                            HabitsMenu.presenter.userDeleteGoal(habit.getName(), getContext());
                             dismiss();
-                            Toast.makeText(requireContext(), "Goal Finished!",
-                                    Toast.LENGTH_SHORT).show();
+
 
                             // remove habit and notify the adapter to remove the item at the position
                             int pos = HabitsMenu.userGoals.indexOf(habit);
@@ -160,7 +164,7 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
      * Updates the progress bar to reflect the current value of the progress field.
      *
      */
-    private void setProgressBar() {
+    public void setProgressBar() {
         userHabitProgressBar.setProgress(HabitsMenu.progress);
     }
 
@@ -168,7 +172,7 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
      * Updates the text field to display the current progress value in days.
      *
      */
-    private void setTextNumDays() {
+    public void setTextNumDays() {
         userHabitNumDaysInt.setText(String.valueOf(HabitsMenu.progress));
     }
 }
