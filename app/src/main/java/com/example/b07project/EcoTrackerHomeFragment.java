@@ -14,13 +14,21 @@ import androidx.fragment.app.Fragment;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.android.gms.tasks.OnCompleteListener;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 public class EcoTrackerHomeFragment extends Fragment {
     public static String userId;
-
+    private DatabaseReference databaseReference;
     private long selectedDate;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -28,7 +36,7 @@ public class EcoTrackerHomeFragment extends Fragment {
 
         // Get a reference to the CalendarView
         CalendarView calendarView = view.findViewById(R.id.calendar_view);
-
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         // Set a listener to get the selected date
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -62,41 +70,99 @@ public class EcoTrackerHomeFragment extends Fragment {
         }
 
 
-        //if user clicks Log button
+        // Log button click listener
         buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (selectedDate > 0) {
-                    System.out.println(userId);
-                    System.out.println("hello");
-
-                    Intent intent = new Intent(getActivity(), LogActivitiesActivity.class);
-                    intent.putExtra("selectedDate", selectedDate);
-                    intent.putExtra("user_id", userId);
-                    startActivity(intent);
-
+                    // Check if activities have already been logged for this date
+                    checkActivitiesForDate(selectedDate, new OnActivitiesCheckListener() {
+                        @Override
+                        public void onActivitiesChecked(boolean hasActivities) {
+                            if (!hasActivities) {
+                                // No activities logged for this date, proceed to log
+                                Intent intent = new Intent(getActivity(), LogActivitiesActivity.class);
+                                intent.putExtra("selectedDate", selectedDate);
+                                intent.putExtra("user_id", userId);
+                                startActivity(intent);
+                            } else {
+                                // Activities already exist for this date
+                                Toast.makeText(getActivity(), "Activities history found! Please go directly to detail page", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 } else {
-                    //if no date is selected, show to user
+                    // No date selected
                     Toast.makeText(getActivity(), "Please select a date", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+
+        // Details button click listener
         buttonDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (selectedDate > 0) {
-
-                    Intent intent = new Intent(getActivity(), DetailPageActivity.class);
-                    intent.putExtra("selectedDate", selectedDate);
-                    intent.putExtra("user_id", userId);
-                    startActivity(intent);
-
+                    // Check if activities exist for this date before viewing details
+                    checkActivitiesForDate(selectedDate, new OnActivitiesCheckListener() {
+                        @Override
+                        public void onActivitiesChecked(boolean hasActivities) {
+                            //if there are activities logged before, inflate the detail page
+                            if (hasActivities) {
+                                // Activities exist, proceed to view details
+                                Intent intent = new Intent(getActivity(), DetailPageActivity.class);
+                                intent.putExtra("selectedDate", selectedDate);
+                                intent.putExtra("user_id", userId);
+                                startActivity(intent);
+                            } else {
+                                // No activities logged for this date, toast a message
+                                Toast.makeText(getActivity(), "No activities history found! Please log activities first", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 } else {
-                    //if no date is selected, show to user
+                    // No date selected
                     Toast.makeText(getActivity(), "Please select a date", Toast.LENGTH_SHORT).show();
                 }
             }
         });
         return view;
+    }
+
+
+    // Interface to handle activities check callback
+    private interface OnActivitiesCheckListener {
+        void onActivitiesChecked(boolean hasActivities);
+    }
+
+    //To check if there are activities exist in the selected date
+    private void checkActivitiesForDate(long selectedDate, OnActivitiesCheckListener listener) {
+        // Reference to the user's activities for the specific date
+        DatabaseReference userActivitiesRef = databaseReference
+                .child("users")
+                .child(userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDate));
+
+        userActivitiesRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DataSnapshot snapshot = task.getResult();
+                    if (snapshot.exists()) {
+                        // Date exists in the database
+                        listener.onActivitiesChecked(true);
+                    } else {
+                        // Date does not exist in the database
+                        listener.onActivitiesChecked(false);
+                    }
+                } else {
+                    // Handle potential errors
+                    Toast.makeText(getActivity(), "Error checking activities", Toast.LENGTH_SHORT).show();
+                    listener.onActivitiesChecked(false);
+                }
+            }
+        });
     }
 }
