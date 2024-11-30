@@ -8,14 +8,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +33,7 @@ public class EcoTrackerHomeFragment extends Fragment {
         // Set a listener to get the selected date
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 // Month is 0-based, so add 1 to the month
                 month++;
                 Toast.makeText(requireContext(), dayOfMonth + "/" + month + "/" + year, Toast.LENGTH_SHORT).show();
@@ -61,7 +57,9 @@ public class EcoTrackerHomeFragment extends Fragment {
         FirebaseUser user = auth.getCurrentUser();  // Get the current authenticated user
 
         //get the user's id
-        userId = user.getUid();
+        if (user != null) {
+            userId = user.getUid();
+        }
 
 
         //if user clicks Log button

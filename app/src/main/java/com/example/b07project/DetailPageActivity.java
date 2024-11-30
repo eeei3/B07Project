@@ -1,12 +1,9 @@
 package com.example.b07project;
 
 // Import required packages
-import static java.lang.Double.parseDouble;
-
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,21 +14,15 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.Calendar;
-import java.util.HashMap;
 
 public class DetailPageActivity extends AppCompatActivity {
 
     // date and userID
     private long selectedDate;
-    private String userId;
 
     private TextView titleTextView, inputDate;
     private Button buttonSave, buttonEdit;
@@ -68,7 +59,6 @@ public class DetailPageActivity extends AppCompatActivity {
         // get the selected date
         Intent intent = getIntent();
         selectedDate = intent.getLongExtra("selectedDate", 0);
-        userId = intent.getStringExtra("userId");
 
 
         setContentView(R.layout.activity_detail_page);
@@ -124,7 +114,7 @@ public class DetailPageActivity extends AppCompatActivity {
         model.setWaiter(new DatabaseCommunicator.Waiter() {
             @Override
             public void onObjectReady() {
-                ; // get the raw inputs from the firebase
+                // get the raw inputs from the firebase
                 // Input all of the frontend updates that have to happen here
 
                 System.out.println("hello");

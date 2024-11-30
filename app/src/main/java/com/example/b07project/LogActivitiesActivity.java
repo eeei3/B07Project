@@ -3,7 +3,6 @@ package com.example.b07project;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,7 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 public class LogActivitiesActivity extends AppCompatActivity {
 
     private long selectedDate;
-    private String userId;
 
     //ui elements
     private TextView titleTextView, inputDate;
@@ -179,17 +177,22 @@ public class LogActivitiesActivity extends AppCompatActivity {
 
     private double calculatePublicTransportEmission() {
 
-        double emission = 0.0;
+        double emission;
 
         // Calculate emission using if-else logic
-        if (transportType.equals("Bus")) {
-            emission = 0.18 * cyclingTime;
-        } else if (transportType.equals("Train")) {
-            emission = 0.04 * cyclingTime;
-        } else if (transportType.equals("Subway")) {
-            emission = 0.03 * cyclingTime;
-        } else {
-            emission = 0.0;
+        switch (transportType) {
+            case "Bus":
+                emission = 0.18 * cyclingTime;
+                break;
+            case "Train":
+                emission = 0.04 * cyclingTime;
+                break;
+            case "Subway":
+                emission = 0.03 * cyclingTime;
+                break;
+            default:
+                emission = 0.0;
+                break;
         }
         return emission;
     }
@@ -200,7 +203,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
     }
 
     private double calculateFlightEmission() {
-        double emission = 0.0;
+        double emission;
 
         if (flightType.equals("Short-haul(less than 1500 km)")) {
             emission = numFlights * 225;
@@ -215,18 +218,25 @@ public class LogActivitiesActivity extends AppCompatActivity {
     private double calculateMealEmission() {
         double emission = 0.0;
 
-        if (mealType.equals("Beef")) {
-            emission = 10 * numServings;
-        } else if (mealType.equals("Pork")) {
-            emission = 5 * numServings;
-        } else if (mealType.equals("Chicken")) {
-            emission = 3* numServings;
-        } else if (mealType.equals("Fish")) {
-            emission = 2 * numServings;
-        } else if (mealType.equals("Plant Based")) {
-            emission = numServings;
-        } else {
-            emission = 0.0;
+        switch (mealType) {
+            case "Beef":
+                emission = 10 * numServings;
+                break;
+            case "Pork":
+                emission = 5 * numServings;
+                break;
+            case "Chicken":
+                emission = 3 * numServings;
+                break;
+            case "Fish":
+                emission = 2 * numServings;
+                break;
+            case "Plant Based":
+                emission = numServings;
+                break;
+            default:
+                emission = 0.0;
+                break;
         }
         return emission;
     }
@@ -241,32 +251,42 @@ public class LogActivitiesActivity extends AppCompatActivity {
     }
 
     private double calculateElectronicsEmission() {
-        double emission = 0.0;
+        double emission;
 
-        if (deviceType.equals("Phone")) {
-            emission = 250 * numDevices;
-        } else if (deviceType.equals("Laptop")) {
-            emission = 400 * numDevices;
-        } else if (deviceType.equals("TV")) {
-            emission = 600 * numDevices;
-        } else {
-            emission = 0.0;
+        switch (deviceType) {
+            case "Phone":
+                emission = 250 * numDevices;
+                break;
+            case "Laptop":
+                emission = 400 * numDevices;
+                break;
+            case "TV":
+                emission = 600 * numDevices;
+                break;
+            default:
+                emission = 0.0;
+                break;
         }
 
         return emission;
     }
 
     private double calculateOtherPurchasesEmission() {
-        double emission = 0.0;
+        double emission;
 
-        if (purchaseType.equals("Furniture")) {
-            emission = 250 * numPurchases;
-        } else if (purchaseType.equals("Appliance")) {
-            emission = 800 * numPurchases;
-        } else if (purchaseType.equals("Book")) {
-            emission = 5 * numPurchases;
-        } else {
-            emission = 0.0;
+        switch (purchaseType) {
+            case "Furniture":
+                emission = 250 * numPurchases;
+                break;
+            case "Appliance":
+                emission = 800 * numPurchases;
+                break;
+            case "Book":
+                emission = 5 * numPurchases;
+                break;
+            default:
+                emission = 0.0;
+                break;
         }
         return emission;
     }
@@ -365,11 +385,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
         } catch (NumberFormatException e) {
             numPurchases = 0;
         }
-        try {
 
-        } catch (NumberFormatException e) {
-            numFlights = 0;
-        }
         distanceDriven = parseDouble(inputDistanceDriving);
         transportType = spinnerTransportType.getSelectedItem().toString();
         cyclingTime = parseDouble(inputTimeSpent);

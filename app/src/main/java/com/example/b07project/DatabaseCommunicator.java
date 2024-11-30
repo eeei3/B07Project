@@ -597,7 +597,7 @@ public class DatabaseCommunicator {
 
         dateRef.setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onComplete(Task<Void> task) {
+            public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Log.d("Firebase", "User emission data updated successfully for user: " + EcoTrackerHomeFragment.userId + " on date: " + selectedDate);
                 } else {
