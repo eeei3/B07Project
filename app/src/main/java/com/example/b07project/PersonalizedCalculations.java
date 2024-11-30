@@ -17,9 +17,14 @@ public class PersonalizedCalculations {
     double electricScore;
 
 
-    public PersonalizedCalculations(HashSet<Goal> goals, HashSet<Goal> available) {
-        this.goals = goals;
-        this.available = available;
+    public PersonalizedCalculations() {
+        transportScore = 0;
+        foodScore = 0;
+        consumptionScore = 0;
+        electricScore = 0;
+    }
+
+    public void prepare() {
         HashSet<String> temp_goals = new HashSet<>();
         for (Goal g: goals) {
             temp_goals.add(g.name);
@@ -29,10 +34,6 @@ public class PersonalizedCalculations {
                 goalsNames.add(g.name);
             }
         }
-        transportScore = 0;
-        foodScore = 0;
-        consumptionScore = 0;
-        electricScore = 0;
     }
 
     private void calculateScore() {

@@ -97,16 +97,30 @@ public class HabitPresenter {
         AsyncDBComms mp = new AsyncDBComms();
         HashSet<Goal> temp = new HashSet<>();
         HashSet<Goal> temp1 = new HashSet<>();
-        int toggle = 0;
         this.model.setModelPipe(new Model.ModelPresenterPipe() {
+            int toggle = 0;
             @Override
             public void onObjectReady(AsyncComms betweener) {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
                 if (toggle == 0) {
                     temp.addAll(plug.usergoals);
+                    toggle += 1;
                 }
                 else {
                     temp1.addAll(plug.listgoals);
+                    PersonalizedCalculations calculator = new PersonalizedCalculations();
+                    if (temp.size() > temp1.size()) {
+                        calculator.goals = temp1;
+                        calculator.available = temp;
+                    }
+                    else {
+                        calculator.goals = temp;
+                        calculator.available = temp1;
+                    }
+                    calculator.prepare();
+                    HashSet<Goal> res = new HashSet<>();
+                    res.add(calculator.calculateNew());
+                    res.add(calculator.calculateRecommendation());
                 }
 //                listener.onObjectReady(pv);
             }
