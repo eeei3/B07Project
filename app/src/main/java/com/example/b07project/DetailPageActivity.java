@@ -1,11 +1,9 @@
 package com.example.b07project;
 
 // Import required packages
-import static java.lang.Double.parseDouble;
-
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,19 +14,16 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.Calendar;
-import java.util.HashMap;
 
 public class DetailPageActivity extends AppCompatActivity {
 
-    // General UI elements
+    // date and userID
+    private long selectedDate;
+
     private TextView titleTextView, inputDate;
     private Button buttonSave, buttonEdit;
 
@@ -61,7 +56,10 @@ public class DetailPageActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-        Log.d("reach here", "try" );
+        // get the selected date
+        Intent intent = getIntent();
+        selectedDate = intent.getLongExtra("selectedDate", 0);
+
 
         setContentView(R.layout.activity_detail_page);
 
@@ -102,7 +100,7 @@ public class DetailPageActivity extends AppCompatActivity {
         // Save button logic
         buttonSave.setOnClickListener(v -> {
             //Save data to Firebase
-            //saveDataToFirebase();
+            saveDataToFirebase();
 
             // Disable editing and toggle buttons
             enableEditing(false);
@@ -112,13 +110,16 @@ public class DetailPageActivity extends AppCompatActivity {
         //once database communicator gets all the required data
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-
         DatabaseCommunicator model = new DatabaseCommunicator(database);
         model.setWaiter(new DatabaseCommunicator.Waiter() {
-
             @Override
             public void onObjectReady() {
+                // get the raw inputs from the firebase
                 // Input all of the frontend updates that have to happen here
+
+                System.out.println("hello");
+                System.out.println(model.raw.getDistanceDriven());
+
 
                 // Set spinner
                 // Input the vehicle type from database to spinner
@@ -126,7 +127,7 @@ public class DetailPageActivity extends AppCompatActivity {
                 setSpinnerSelection(spinnerVehicleType, model.raw.getVehicleType());
 
                 // Public transport
-                setSpinnerSelection(spinnerTransportType, model.raw.getTransportType());
+                //setSpinnerSelection(spinnerTransportType, model.raw.getTransportType());
                 inputTimeSpent.setText(String.valueOf(model.raw.getCyclingTime()));
 
                 // Cycling or walking
@@ -156,8 +157,7 @@ public class DetailPageActivity extends AppCompatActivity {
                 setSpinnerSelection(spinnerBillType, model.raw.getBillType());
             }
         });
-
-        //model.serverCalcEmissionReader(inputDate);
+        model.serverRawInputReader(selectedDate);
     }
 
     private void initializeUIComponents() {
@@ -381,14 +381,10 @@ public class DetailPageActivity extends AppCompatActivity {
 
         UserEmissionData userEmissionData = new UserEmissionData(rawInputs, calculatedEmissions);
 
-        // will review and fix
-        FirebaseAuth mauth = FirebaseAuth.getInstance();
-        String userId = mauth.getUid();
-        long selectedDate = System.currentTimeMillis();
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         DatabaseCommunicator presenter = new DatabaseCommunicator(database);
-        presenter.saveUserEmissionData(userId, selectedDate, userEmissionData);
+        presenter.saveUserEmissionData(selectedDate, userEmissionData);
     }
 
     private void setSpinnerSelection(Spinner spinner, String value) {

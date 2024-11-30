@@ -15,7 +15,6 @@ import com.google.firebase.database.FirebaseDatabase;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private DatabaseCommunicator databaseCommunicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +23,10 @@ public class MainActivity extends AppCompatActivity {
 
         //initialize the Firebase Auth and DatabaseReference
         mAuth = FirebaseAuth.getInstance();
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        //DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
         //instantiate a databaseCommunicator
-        databaseCommunicator = new DatabaseCommunicator(database);
+        //databaseCommunicator = new DatabaseCommunicator(database);
 
         //get the current user logged in
         FirebaseUser user = mAuth.getCurrentUser();
@@ -54,12 +53,4 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-            getSupportFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
-        }
-    }
 }
