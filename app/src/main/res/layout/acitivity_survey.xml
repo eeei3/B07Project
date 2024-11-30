@@ -1,1056 +1,1361 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/entry_page_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
+
+        <!--Planetze Logo-->
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="300dp"
+            android:layout_height="93dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/trans_planetze_logo"
+            android:layout_gravity="center"/>
+
+        <!--Let's calculate your annual carbon footprint!-->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/custom_font"
+            android:fontFamily="@font/garet"
             android:gravity="center"
-            android:text="Annual Carbon Footprint"
-            android:textColor="@color/teal_700"
-            android:textSize="14pt"
+            android:text="Let's calculate your annual carbon footprint!"
+            android:textSize="24sp"
             tools:ignore="HardcodedText" />
 
+        <!--Select a country text and dropdown menu-->
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:layout_gravity="center_horizontal"
+            android:padding="15dp">
 
             <!-- TextView aligned to the left and vertically centered -->
-
-            <!-- Spinner aligned to the right and vertically centered with TextView -->
             <TextView
                 android:id="@+id/textLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="0dp"
-                android:fontFamily="@font/custom_font"
+                android:layout_marginStart="26dp"
+                android:layout_alignBaseline="@id/locationSpinner"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/garet"
+                android:textSize="16dp"
+                android:textStyle="bold"
                 android:text="Select a Country:" />
 
+            <!-- Spinner aligned to the right and vertically centered with TextView -->
             <Spinner
                 android:id="@+id/locationSpinner"
-                style="@style/CustomSpinner"
-                android:layout_width="wrap_content"
+                android:layout_width="199dp"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/textLabel"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="112dp"
-                android:layout_marginEnd="0dp"
-                android:layout_marginBottom="-8dp"
-                android:entries="@array/location_array" />
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="26dp"
+                android:layout_toEndOf="@id/textLabel"
+                android:background="@drawable/spinner_layout"
+                android:entries="@array/location_array"
+                android:spinnerMode="dropdown" />
         </RelativeLayout>
 
-        <!-- Question: Do you own or regularly use a car? -->
-        <TextView
-            android:id="@+id/caruseQuestion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="Do you own or regularly use a car?" />
-        <RadioGroup
-            android:id="@+id/radioGroupCarOwnership"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/radioYes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Yes"
-                android:fontFamily="@font/custom_font"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
-                android:textSize="2.5mm"/>
-
-            <RadioButton
-                android:id="@+id/radioNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="No"
-                android:fontFamily="@font/custom_font"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
-                android:textSize="2.5mm"/>
-        </RadioGroup>
-
-        <!-- Additional car-related questions (initially hidden) -->
-        <LinearLayout
-            android:id="@+id/carQuestionsLayout"
+        <!--START OF SURVEY-->
+        <!--Do you own or regularly use a car? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <!-- What type of car do you drive? -->
-            <TextView
-                android:id="@+id/caruseoftenQuestion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="25dp"
-                android:fontFamily="@font/custom_font"
-                android:text="What type of car do you drive?" />
-            <RadioGroup
-                android:id="@+id/radioGroupCarUsage"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <RadioButton
-                    android:id="@+id/radioGasoline"
-                    style="@style/CustomRadioButton"
-                    android:text="Gasoline" />
+                <!-- Question: Do you own or regularly use a car? -->
+                <TextView
+                    android:id="@+id/caruseQuestion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/garet"
+                    android:padding="3dp"
+                    android:text="Do you own or regularly use a car?" />
 
-                <RadioButton
-                    android:id="@+id/radioDiesel"
-                    style="@style/CustomRadioButton"
-                    android:text="Diesel"/>
+                <RadioGroup
+                    android:id="@+id/radioGroupCarOwnership"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
 
-                <RadioButton
-                    android:id="@+id/radioHybrid"
-                    style="@style/CustomRadioButton"
-                    android:text="Hybrid" />
+                    <RadioButton
+                        android:id="@+id/radioYes"
+                        style="@style/CustomRadioButton"
+                        android:text="Yes" />
 
-                <RadioButton
-                    android:id="@+id/radioElectric"
-                    style="@style/CustomRadioButton"
-                    android:text="Electric" />
+                    <RadioButton
+                        android:id="@+id/radioNo"
+                        style="@style/CustomRadioButton"
+                        android:layout_marginStart="5dp"
+                        android:text="No" />
+                </RadioGroup>
 
-                <RadioButton
-                    android:id="@+id/radioNotSure"
-                    style="@style/CustomRadioButton"
-                    android:text="I'm not sure" />
-            </RadioGroup>
+                <!-- Additional car-related questions (initially hidden) -->
+                <LinearLayout
+                    android:id="@+id/carQuestionsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:layout_marginTop="16dp">
 
-            <!-- How many kilometers/miles do you drive per year? -->
-            <TextView
-                android:id="@+id/carmilesQuestion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="25dp"
-                android:fontFamily="@font/custom_font"
-                android:text="How many kilometers/miles do you drive per year?" />
-            <RadioGroup
-                android:id="@+id/radioGroupCarMiles"
+                    <!-- What type of car do you drive? -->
+                    <TextView
+                        android:id="@+id/caruseoftenQuestion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/garet"
+                        android:text="What type of car do you drive?" />
+
+                    <RadioGroup
+                        android:id="@+id/radioGroupCarUsage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/radioGasoline"
+                            style="@style/CustomRadioButton"
+                            android:text="Gasoline" />
+
+                        <RadioButton
+                            android:id="@+id/radioDiesel"
+                            style="@style/CustomRadioButton"
+                            android:text="Diesel" />
+
+                        <RadioButton
+                            android:id="@+id/radioHybrid"
+                            style="@style/CustomRadioButton"
+                            android:text="Hybrid" />
+
+                        <RadioButton
+                            android:id="@+id/radioElectric"
+                            style="@style/CustomRadioButton"
+                            android:text="Electric" />
+
+                        <RadioButton
+                            android:id="@+id/radioNotSure"
+                            style="@style/CustomRadioButton"
+                            android:text="I'm not sure" />
+                    </RadioGroup>
+
+                    <!-- How many kilometers/miles do you drive per year? -->
+                    <TextView
+                        android:id="@+id/carmilesQuestion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/garet"
+                        android:text="How many kilometers/miles do you drive per year?" />
+
+                    <RadioGroup
+                        android:id="@+id/radioGroupCarMiles"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/radio5000km"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/garet"
+                            android:scaleX="0.8"
+                            android:scaleY="0.8"
+                            android:text="Up to 5,000 km (3,000 miles)"
+                            android:textSize="2.5mm" />
+
+                        <RadioButton
+                            android:id="@+id/radio10000km"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/garet"
+                            android:scaleX="0.8"
+                            android:scaleY="0.8"
+                            android:text="5,000–10,000 km (3,000–6,000 miles)"
+                            android:textSize="2.5mm" />
+
+                        <RadioButton
+                            android:id="@+id/radio15000km"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/garet"
+                            android:scaleX="0.8"
+                            android:scaleY="0.8"
+                            android:text="10,000–15,000 km (6,000–9,000 miles)"
+                            android:textSize="2.5mm" />
+
+                        <RadioButton
+                            android:id="@+id/radio20000km"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/garet"
+                            android:scaleX="0.8"
+                            android:scaleY="0.8"
+                            android:text="15,000–20,000 km (9,000–12,000 miles)"
+                            android:textSize="2.5mm" />
+
+                        <RadioButton
+                            android:id="@+id/radio25000km"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/garet"
+                            android:scaleX="0.8"
+                            android:scaleY="0.8"
+                            android:text="20,000–25,000 km (12,000–15,000 miles)"
+                            android:textSize="2.5mm" />
+
+                        <RadioButton
+                            android:id="@+id/radio25000pluskm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/garet"
+                            android:scaleX="0.8"
+                            android:scaleY="0.8"
+                            android:text="More than 25,000 km (15,000 miles)"
+                            android:textSize="2.5mm" />
+                    </RadioGroup>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--How often do you use public transportation (bus, train, subway)? -->
+        <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="15dp"
+        android:backgroundTint="@android:color/white"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <RadioButton
-                    android:id="@+id/radio5000km"
-                    android:layout_width="294dp"
+                <TextView
+                    android:id="@+id/ptuseQuestion"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Up to 5,000 km (3,000 miles)"
-                    android:fontFamily="@font/custom_font"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8"
-                    android:textSize="2.5mm" />
+                    android:fontFamily="@font/garet"
+                    android:padding="3dp"
+                    android:text="How often do you use public transportation (bus, train, subway)?" />
 
-                <RadioButton
-                    android:id="@+id/radio10000km"
-                    android:layout_width="294dp"
+                <RadioGroup
+                    android:id="@+id/ptUse"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/custom_font"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8"
-                    android:text="5,000–10,000 km (3,000–6,000 miles)"
-                    android:textSize="2.5mm" />
+                    android:orientation="vertical">
 
-                <RadioButton
-                    android:id="@+id/radio15000km"
-                    android:layout_width="294dp"
-                    android:layout_height="wrap_content"
-                    android:text="10,000–15,000 km (6,000–9,000 miles)"
-                    android:fontFamily="@font/custom_font"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8"
-                    android:textSize="2.5mm" />
+                    <RadioButton
+                        android:id="@+id/radioptNever"
+                        style="@style/CustomRadioButton"
+                        android:text="Never" />
 
-                <RadioButton
-                    android:id="@+id/radio20000km"
-                    android:layout_width="294dp"
-                    android:layout_height="wrap_content"
-                    android:text="15,000–20,000 km (9,000–12,000 miles)"
-                    android:fontFamily="@font/custom_font"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8"
-                    android:textSize="2.5mm" />
+                    <RadioButton
+                        android:id="@+id/radioptOccasionally"
+                        style="@style/CustomRadioButton"
+                        android:text="Occasionally (1-2 times/week)" />
 
-                <RadioButton
-                    android:id="@+id/radio25000km"
-                    android:layout_width="294dp"
-                    android:layout_height="wrap_content"
-                    android:text="20,000–25,000 km (12,000–15,000 miles)"
-                    android:fontFamily="@font/custom_font"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8"
-                    android:textSize="2.5mm" />
+                    <RadioButton
+                        android:id="@+id/radioptFrequently"
+                        android:text="Frequently (3-4 times/week)"
+                        style="@style/CustomRadioButton"/>
 
-                <RadioButton
-                    android:id="@+id/radio25000pluskm"
-                    android:layout_width="294dp"
-                    android:layout_height="wrap_content"
-                    android:text="More than 25,000 km (15,000 miles)"
-                    android:fontFamily="@font/custom_font"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8"
-                    android:textSize="2.5mm" />
-            </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioptAlways"
+                        style="@style/CustomRadioButton"
+                        android:text="Always (5+ times/week)" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-        </LinearLayout>
-
-        <!-- Question: How often do you use public transportation (bus, train, subway)? -->
-        <TextView
-            android:id="@+id/ptuseQuestion"
+        <!--How much time do you spend on public transport per week (bus, train, subway)? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="How often do you use public transportation (bus, train, subway)?" />
-        <RadioGroup
-            android:id="@+id/ptUse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <RadioButton
-                android:id="@+id/radioptNever"
-                style="@style/CustomRadioButton"
-                android:text="Never" />
-
-            <RadioButton
-                android:id="@+id/radioptOccasionally"
-                style="@style/CustomRadioButton"
-                android:text="Occasionally (1-2 times/week)" />
-
-            <RadioButton
-                android:id="@+id/radioptFrequently"
-                android:text="Frequently (3-4 times/week)"
-                style="@style/CustomRadioButton"/>
-
-            <RadioButton
-                android:id="@+id/radioptAlways"
-                style="@style/CustomRadioButton"
-                android:text="Always (5+ times/week)" />
-        </RadioGroup>
-
-        <!-- Question: How much time do you spend on public transport per week (bus, train, subway)? -->
-        <TextView
-            android:id="@+id/pttimeQuestion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="Question: How much time do you spend on public transport per week (bus, train, subway)?" />
-        <RadioGroup
-            android:id="@+id/radioptTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/radiopt1Hour"
-                style="@style/CustomRadioButton"
-                android:text="Under 1 hour" />
-
-            <RadioButton
-                android:id="@+id/radiopt3Hour"
-                style="@style/CustomRadioButton"
-                android:text="1-3 hours" />
-
-            <RadioButton
-                android:id="@+id/radiopt5Hour"
-                android:text="3-5 hours"
-                style="@style/CustomRadioButton"/>
-
-            <RadioButton
-                android:id="@+id/radiopt10Hour"
-                style="@style/CustomRadioButton"
-                android:text="5-10 hours" />
-
-            <RadioButton
-                android:id="@+id/radiopt10plusHour"
-                style="@style/CustomRadioButton"
-                android:text="More than 10 hours" />
-        </RadioGroup>
-
-        <!-- How many short-haul flights (less than 1,500 km / 932 miles) have you taken in the past year? -->
-        <TextView
-            android:id="@+id/shortFlightQuestion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="How many short-haul flights (less than 1,500 km / 932 miles) have you taken in the past year?" />
-        <RadioGroup
-            android:id="@+id/radioShortFlights"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/radiononeShortFlights"
-                style="@style/CustomRadioButton"
-                android:text="None" />
-
-            <RadioButton
-                android:id="@+id/radio2ShortFlights"
-                style="@style/CustomRadioButton"
-                android:text="1-2 flights" />
-
-            <RadioButton
-                android:id="@+id/radio5ShortFlights"
-                android:text="3-5 flights"
-                style="@style/CustomRadioButton"/>
-
-            <RadioButton
-                android:id="@+id/radio10ShortFlights"
-                style="@style/CustomRadioButton"
-                android:text="6-10 flights" />
-
-            <RadioButton
-                android:id="@+id/radio10plusShortFlights"
-                style="@style/CustomRadioButton"
-                android:text="More than 10 flights" />
-        </RadioGroup>
-
-        <!-- How many long-haul flights (more than 1,500 km / 932 miles) have you taken in the past year? -->
-        <TextView
-            android:id="@+id/longFlightQuestion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="How many long-haul flights (more than 1,500 km / 932 miles) have you taken in the past year?" />
-        <RadioGroup
-            android:id="@+id/radioLongFlights"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/radiononeLongFlights"
-                style="@style/CustomRadioButton"
-                android:text="None" />
-
-            <RadioButton
-                android:id="@+id/radio2LongFlights"
-                style="@style/CustomRadioButton"
-                android:text="1-2 flights" />
-
-            <RadioButton
-                android:id="@+id/radio5LongFlights"
-                android:text="3-5 flights"
-                style="@style/CustomRadioButton"/>
-
-            <RadioButton
-                android:id="@+id/radio10LongFlights"
-                style="@style/CustomRadioButton"
-                android:text="6-10 flights" />
-
-            <RadioButton
-                android:id="@+id/radio10plusLongFlights"
-                style="@style/CustomRadioButton"
-                android:text="More than 10 flights" />
-        </RadioGroup>
-
-        <!-- What best describes your diet? -->
-        <TextView
-            android:id="@+id/dietQuestion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="What best describes your diet?" />
-        <RadioGroup
-            android:id="@+id/radioDiet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/radioVegan"
-                style="@style/CustomRadioButton"
-                android:text="Vegan" />
-
-            <RadioButton
-                android:id="@+id/radioPescatarian"
-                android:text="Pescatarian (fish/seafood)"
-                style="@style/CustomRadioButton"/>
-
-            <RadioButton
-                android:id="@+id/radioMeatBased"
-                style="@style/CustomRadioButton"
-                android:text="Meat-based (eat all types of animal products)" />
-        </RadioGroup>
-
-        <!-- Additional diet related questions (initially hidden) -->
-        <LinearLayout
-            android:id="@+id/dietQuestionsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-            <TextView
-                android:id="@+id/animalDietQuestion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="25dp"
-                android:fontFamily="@font/custom_font"
-                android:text="How often do you eat the following animal-based products?" />
-            <!-- Beef -->
-            <TextView
-                android:id="@+id/animalBeefDietQuestion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="50dp"
-                android:fontFamily="@font/custom_font"
-                android:text="Beef" />
-            <RadioGroup
-                android:id="@+id/radioBeefConsumption"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/pttimeQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="How much time do you spend on public transport per week (bus, train, subway)?" />
 
-                <RadioButton
-                    android:id="@+id/radioBeefDaily"
-                    style="@style/CustomRadioButton"
-                    android:text="Daily" />
+                <RadioGroup
+                    android:id="@+id/radioptTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <RadioButton
-                    android:id="@+id/radioBeefFrequently"
-                    style="@style/CustomRadioButton"
-                    android:text="Frequently (3-5 times/week)"/>
+                    <RadioButton
+                        android:id="@+id/radiopt1Hour"
+                        style="@style/CustomRadioButton"
+                        android:text="Under 1 hour" />
 
-                <RadioButton
-                    android:id="@+id/radioBeefOccasionally"
-                    style="@style/CustomRadioButton"
-                    android:text="Occasionally (1-2 times/week)" />
+                    <RadioButton
+                        android:id="@+id/radiopt3Hour"
+                        style="@style/CustomRadioButton"
+                        android:text="1-3 hours" />
 
-                <RadioButton
-                    android:id="@+id/radioBeefNever"
-                    style="@style/CustomRadioButton"
-                    android:text="Never" />
-            </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radiopt5Hour"
+                        android:text="3-5 hours"
+                        style="@style/CustomRadioButton"/>
 
-            <!-- Pork -->
-            <TextView
-                android:id="@+id/animalPorkDietQuestion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="50dp"
-                android:fontFamily="@font/custom_font"
-                android:text="Pork" />
-            <RadioGroup
-                android:id="@+id/radioPorkConsumption"
+                    <RadioButton
+                        android:id="@+id/radiopt10Hour"
+                        style="@style/CustomRadioButton"
+                        android:text="5-10 hours" />
+
+                    <RadioButton
+                        android:id="@+id/radiopt10plusHour"
+                        style="@style/CustomRadioButton"
+                        android:text="More than 10 hours" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--How many short-haul flights (less than 1,500 km / 932 miles) have you taken in the past year? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/shortFlightQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="How many short-haul flights (less than 1,500 km / 932 miles) have you taken in the past year?" />
+                <RadioGroup
+                    android:id="@+id/radioShortFlights"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <RadioButton
-                    android:id="@+id/radioPorkDaily"
-                    style="@style/CustomRadioButton"
-                    android:text="Daily" />
+                    <RadioButton
+                        android:id="@+id/radiononeShortFlights"
+                        style="@style/CustomRadioButton"
+                        android:text="None" />
 
-                <RadioButton
-                    android:id="@+id/radioPorkFrequently"
-                    style="@style/CustomRadioButton"
-                    android:text="Frequently (3-5 times/week)"/>
+                    <RadioButton
+                        android:id="@+id/radio2ShortFlights"
+                        style="@style/CustomRadioButton"
+                        android:text="1-2 flights" />
 
-                <RadioButton
-                    android:id="@+id/radioPorkOccasionally"
-                    style="@style/CustomRadioButton"
-                    android:text="Occasionally (1-2 times/week)" />
+                    <RadioButton
+                        android:id="@+id/radio5ShortFlights"
+                        android:text="3-5 flights"
+                        style="@style/CustomRadioButton"/>
 
-                <RadioButton
-                    android:id="@+id/radioPorkNever"
-                    style="@style/CustomRadioButton"
-                    android:text="Never" />
-            </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radio10ShortFlights"
+                        style="@style/CustomRadioButton"
+                        android:text="6-10 flights" />
 
-            <!-- Chicken -->
-            <TextView
-                android:id="@+id/animalChickenDietQuestion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="50dp"
-                android:fontFamily="@font/custom_font"
-                android:text="Chicken" />
-            <RadioGroup
-                android:id="@+id/radioChickenConsumption"
+                    <RadioButton
+                        android:id="@+id/radio10plusShortFlights"
+                        style="@style/CustomRadioButton"
+                        android:text="More than 10 flights" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--How many long-haul flights (more than 1,500 km / 932 miles) have you taken in the past year? -->
+        <androidx.cardview.widget.CardView
+        android:id="@+id/cardView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@android:color/white"
+        android:layout_marginBottom="15dp"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/longFlightQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="How many long-haul flights (more than 1,500 km / 932 miles) have you taken in the past year?" />
+                <RadioGroup
+                    android:id="@+id/radioLongFlights"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <RadioButton
-                    android:id="@+id/radioChickenDaily"
-                    style="@style/CustomRadioButton"
-                    android:text="Daily" />
+                    <RadioButton
+                        android:id="@+id/radiononeLongFlights"
+                        style="@style/CustomRadioButton"
+                        android:text="None" />
 
-                <RadioButton
-                    android:id="@+id/radioChickenFrequently"
-                    style="@style/CustomRadioButton"
-                    android:text="Frequently (3-5 times/week)"/>
+                    <RadioButton
+                        android:id="@+id/radio2LongFlights"
+                        style="@style/CustomRadioButton"
+                        android:text="1-2 flights" />
 
-                <RadioButton
-                    android:id="@+id/radioChickenOccasionally"
-                    style="@style/CustomRadioButton"
-                    android:text="Occasionally (1-2 times/week)" />
+                    <RadioButton
+                        android:id="@+id/radio5LongFlights"
+                        android:text="3-5 flights"
+                        style="@style/CustomRadioButton"/>
 
-                <RadioButton
-                    android:id="@+id/radioChickenNever"
-                    style="@style/CustomRadioButton"
-                    android:text="Never" />
-            </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radio10LongFlights"
+                        style="@style/CustomRadioButton"
+                        android:text="6-10 flights" />
 
-            <!-- Fish/Seafood -->
-            <TextView
-                android:id="@+id/animalFishDietQuestion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="50dp"
-                android:fontFamily="@font/custom_font"
-                android:text="Fish/Seafood" />
-            <RadioGroup
-                android:id="@+id/radioFishConsumption"
+                    <RadioButton
+                        android:id="@+id/radio10plusLongFlights"
+                        style="@style/CustomRadioButton"
+                        android:text="More than 10 flights" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--What best describes your diet? -->
+        <androidx.cardview.widget.CardView
+        android:id="@+id/cardView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@android:color/white"
+        android:layout_marginBottom="15dp"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/dietQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="What best describes your diet?" />
+                <RadioGroup
+                    android:id="@+id/radioDiet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <RadioButton
-                    android:id="@+id/radioFishDaily"
-                    style="@style/CustomRadioButton"
-                    android:text="Daily" />
+                    <RadioButton
+                        android:id="@+id/radioVegan"
+                        style="@style/CustomRadioButton"
+                        android:text="Vegan" />
 
-                <RadioButton
-                    android:id="@+id/radioFishFrequently"
-                    style="@style/CustomRadioButton"
-                    android:text="Frequently (3-5 times/week)"/>
+                    <RadioButton
+                        android:id="@+id/radioPescatarian"
+                        android:text="Pescatarian (fish/seafood)"
+                        style="@style/CustomRadioButton"/>
 
-                <RadioButton
-                    android:id="@+id/radioFishOccasionally"
-                    style="@style/CustomRadioButton"
-                    android:text="Occasionally (1-2 times/week)" />
+                    <RadioButton
+                        android:id="@+id/radioMeatBased"
+                        style="@style/CustomRadioButton"
+                        android:text="Meat-based (eat all types of animal products)" />
+                </RadioGroup>
 
-                <RadioButton
-                    android:id="@+id/radioFishNever"
-                    style="@style/CustomRadioButton"
-                    android:text="Never" />
-            </RadioGroup>
-        </LinearLayout>
+                <!-- Additional diet related questions (initially hidden) -->
+                <LinearLayout
+                    android:id="@+id/dietQuestionsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <TextView
+                        android:id="@+id/animalDietQuestion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="25dp"
+                        android:padding="3dp"
+                        android:fontFamily="@font/garet"
+                        android:text="How often do you eat the following animal-based products?" />
+                    <!-- Beef -->
+                    <TextView
+                        android:id="@+id/animalBeefDietQuestion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="50dp"
+                        android:fontFamily="@font/garet"
+                        android:text="Beef" />
+                    <RadioGroup
+                        android:id="@+id/radioBeefConsumption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="50dp"
+                        android:padding="5dp"
+                        android:visibility="gone"
+                        android:orientation="vertical">
 
-        <!-- How often do you waste food or throw away uneaten leftovers? -->
-        <TextView
-            android:id="@+id/foodWasteQuestion"
+                        <RadioButton
+                            android:id="@+id/radioBeefDaily"
+                            style="@style/CustomRadioButton"
+                            android:text="Daily" />
+
+                        <RadioButton
+                            android:id="@+id/radioBeefFrequently"
+                            style="@style/CustomRadioButton"
+                            android:text="Frequently (3-5 times/week)"/>
+
+                        <RadioButton
+                            android:id="@+id/radioBeefOccasionally"
+                            style="@style/CustomRadioButton"
+                            android:text="Occasionally (1-2 times/week)" />
+
+                        <RadioButton
+                            android:id="@+id/radioBeefNever"
+                            style="@style/CustomRadioButton"
+                            android:text="Never" />
+                    </RadioGroup>
+
+                    <!-- Pork -->
+                    <TextView
+                        android:id="@+id/animalPorkDietQuestion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="50dp"
+                        android:fontFamily="@font/garet"
+                        android:text="Pork" />
+                    <RadioGroup
+                        android:id="@+id/radioPorkConsumption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="50dp"
+                        android:visibility="gone"
+                        android:padding="5dp"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/radioPorkDaily"
+                            style="@style/CustomRadioButton"
+                            android:text="Daily" />
+
+                        <RadioButton
+                            android:id="@+id/radioPorkFrequently"
+                            style="@style/CustomRadioButton"
+                            android:text="Frequently (3-5 times/week)"/>
+
+                        <RadioButton
+                            android:id="@+id/radioPorkOccasionally"
+                            style="@style/CustomRadioButton"
+                            android:text="Occasionally (1-2 times/week)" />
+
+                        <RadioButton
+                            android:id="@+id/radioPorkNever"
+                            style="@style/CustomRadioButton"
+                            android:text="Never" />
+                    </RadioGroup>
+
+                    <!-- Chicken -->
+                    <TextView
+                        android:id="@+id/animalChickenDietQuestion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="50dp"
+                        android:fontFamily="@font/garet"
+                        android:text="Chicken" />
+                    <RadioGroup
+                        android:id="@+id/radioChickenConsumption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="50dp"
+                        android:padding="5dp"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/radioChickenDaily"
+                            style="@style/CustomRadioButton"
+                            android:text="Daily" />
+
+                        <RadioButton
+                            android:id="@+id/radioChickenFrequently"
+                            style="@style/CustomRadioButton"
+                            android:text="Frequently (3-5 times/week)"/>
+
+                        <RadioButton
+                            android:id="@+id/radioChickenOccasionally"
+                            style="@style/CustomRadioButton"
+                            android:text="Occasionally (1-2 times/week)" />
+
+                        <RadioButton
+                            android:id="@+id/radioChickenNever"
+                            style="@style/CustomRadioButton"
+                            android:text="Never" />
+                    </RadioGroup>
+
+                    <!-- Fish/Seafood -->
+                    <TextView
+                        android:id="@+id/animalFishDietQuestion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="50dp"
+                        android:fontFamily="@font/garet"
+                        android:text="Fish/Seafood" />
+                    <RadioGroup
+                        android:id="@+id/radioFishConsumption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_marginStart="50dp"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/radioFishDaily"
+                            style="@style/CustomRadioButton"
+                            android:text="Daily" />
+
+                        <RadioButton
+                            android:id="@+id/radioFishFrequently"
+                            style="@style/CustomRadioButton"
+                            android:text="Frequently (3-5 times/week)"/>
+
+                        <RadioButton
+                            android:id="@+id/radioFishOccasionally"
+                            style="@style/CustomRadioButton"
+                            android:text="Occasionally (1-2 times/week)" />
+
+                        <RadioButton
+                            android:id="@+id/radioFishNever"
+                            style="@style/CustomRadioButton"
+                            android:text="Never" />
+                    </RadioGroup>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--How often do you waste food or throw away uneaten leftovers? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="How often do you waste food or throw away uneaten leftovers?" />
-        <RadioGroup
-            android:id="@+id/radioFoodWaste"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <RadioButton
-                android:id="@+id/radioFoodWasteNever"
-                style="@style/CustomRadioButton"
-                android:text="Never" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/foodWasteQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="How often do you waste food or throw away uneaten leftovers?" />
+                <RadioGroup
+                    android:id="@+id/radioFoodWaste"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radioFoodwasteRarely"
-                style="@style/CustomRadioButton"
-                android:text="Rarely" />
+                    <RadioButton
+                        android:id="@+id/radioFoodWasteNever"
+                        style="@style/CustomRadioButton"
+                        android:text="Never" />
 
-            <RadioButton
-                android:id="@+id/radioFoodWasteOccasionally"
-                android:text="Occasionally"
-                style="@style/CustomRadioButton"/>
+                    <RadioButton
+                        android:id="@+id/radioFoodwasteRarely"
+                        style="@style/CustomRadioButton"
+                        android:text="Rarely" />
 
-            <RadioButton
-                android:id="@+id/radioFoodWasteFrequently"
-                style="@style/CustomRadioButton"
-                android:text="Frequently" />
-        </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioFoodWasteOccasionally"
+                        android:text="Occasionally"
+                        style="@style/CustomRadioButton"/>
 
-        <!-- What type of home do you live in? -->
-        <TextView
-            android:id="@+id/housingQuestion"
+                    <RadioButton
+                        android:id="@+id/radioFoodWasteFrequently"
+                        style="@style/CustomRadioButton"
+                        android:text="Frequently" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--What type of home do you live in? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="What type of home do you live in?" />
-        <RadioGroup
-            android:id="@+id/radioHousing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <RadioButton
-                android:id="@+id/radioHousingDetached"
-                style="@style/CustomRadioButton"
-                android:text="Detached house" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/housingQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="What type of home do you live in?" />
+                <RadioGroup
+                    android:id="@+id/radioHousing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radioHousingSemiDetached"
-                style="@style/CustomRadioButton"
-                android:text="Semi-detached house" />
+                    <RadioButton
+                        android:id="@+id/radioHousingDetached"
+                        style="@style/CustomRadioButton"
+                        android:text="Detached house" />
 
-            <RadioButton
-                android:id="@+id/radioHousingTownhouse"
-                android:text="Townhouse"
-                style="@style/CustomRadioButton"/>
+                    <RadioButton
+                        android:id="@+id/radioHousingSemiDetached"
+                        style="@style/CustomRadioButton"
+                        android:text="Semi-detached house" />
 
-            <RadioButton
-                android:id="@+id/radioHousingCondo"
-                style="@style/CustomRadioButton"
-                android:text="Condo/Apartment" />
+                    <RadioButton
+                        android:id="@+id/radioHousingTownhouse"
+                        android:text="Townhouse"
+                        style="@style/CustomRadioButton"/>
 
-            <RadioButton
-                android:id="@+id/radioHousingOther"
-                style="@style/CustomRadioButton"
-                android:text="Other" />
-        </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioHousingCondo"
+                        style="@style/CustomRadioButton"
+                        android:text="Condo/Apartment" />
 
-        <!-- How many people live in your household? -->
-        <TextView
-            android:id="@+id/housingPeopleQuestion"
+                    <RadioButton
+                        android:id="@+id/radioHousingOther"
+                        style="@style/CustomRadioButton"
+                        android:text="Other" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--How many people live in your household? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView9"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="How many people live in your household?" />
-        <RadioGroup
-            android:id="@+id/radioHousingPeople"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <RadioButton
-                android:id="@+id/radioHousingPeople1"
-                style="@style/CustomRadioButton"
-                android:text="1" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/housingPeopleQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="How many people live in your household?" />
+                <RadioGroup
+                    android:id="@+id/radioHousingPeople"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radioHousingPeople2"
-                style="@style/CustomRadioButton"
-                android:text="2" />
+                    <RadioButton
+                        android:id="@+id/radioHousingPeople1"
+                        style="@style/CustomRadioButton"
+                        android:text="1" />
 
-            <RadioButton
-                android:id="@+id/radioHousingPeople3"
-                android:text="3-4"
-                style="@style/CustomRadioButton"/>
+                    <RadioButton
+                        android:id="@+id/radioHousingPeople2"
+                        style="@style/CustomRadioButton"
+                        android:text="2" />
 
-            <RadioButton
-                android:id="@+id/radioHousingPeople5"
-                style="@style/CustomRadioButton"
-                android:text="5 or more" />
-        </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioHousingPeople3"
+                        android:text="3-4"
+                        style="@style/CustomRadioButton"/>
 
-        <!-- What is the size of your home? -->
-        <TextView
-            android:id="@+id/housingSizeQuestion"
+                    <RadioButton
+                        android:id="@+id/radioHousingPeople5"
+                        style="@style/CustomRadioButton"
+                        android:text="5 or more" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--What is the size of your home? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="What is the size of your home?" />
-        <RadioGroup
-            android:id="@+id/radioHousingSize"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <RadioButton
-                android:id="@+id/radioHousingSizeSmall"
-                style="@style/CustomRadioButton"
-                android:text="Under 1000 sq. ft." />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/housingSizeQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="What is the size of your home?" />
+                <RadioGroup
+                    android:id="@+id/radioHousingSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radioHousingSizeMedium"
-                style="@style/CustomRadioButton"
-                android:text="1000-2000 sq. ft." />
+                    <RadioButton
+                        android:id="@+id/radioHousingSizeSmall"
+                        style="@style/CustomRadioButton"
+                        android:text="Under 1000 sq. ft." />
 
-            <RadioButton
-                android:id="@+id/radioHousingSizeLarge"
-                android:text="Over 2000 sq. ft."
-                style="@style/CustomRadioButton"/>
-        </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioHousingSizeMedium"
+                        style="@style/CustomRadioButton"
+                        android:text="1000-2000 sq. ft." />
 
-        <!-- What type of energy do you use to heat your home? -->
-        <TextView
-            android:id="@+id/energyQuestion"
+                    <RadioButton
+                        android:id="@+id/radioHousingSizeLarge"
+                        android:text="Over 2000 sq. ft."
+                        style="@style/CustomRadioButton"/>
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--What type of energy do you use to heat your home? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="What type of energy do you use to heat your home?" />
-        <RadioGroup
-            android:id="@+id/radioEnergy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <RadioButton
-                android:id="@+id/radioEnergyNG"
-                style="@style/CustomRadioButton"
-                android:text="Natural Gas" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/energyQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="What type of energy do you use to heat your home?" />
+                <RadioGroup
+                    android:id="@+id/radioEnergy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radioEnergyElectricity"
-                style="@style/CustomRadioButton"
-                android:text="Electricity" />
+                    <RadioButton
+                        android:id="@+id/radioEnergyNG"
+                        style="@style/CustomRadioButton"
+                        android:text="Natural Gas" />
 
-            <RadioButton
-                android:id="@+id/radioEnergyOil"
-                android:text="Oil"
-                style="@style/CustomRadioButton"/>
+                    <RadioButton
+                        android:id="@+id/radioEnergyElectricity"
+                        style="@style/CustomRadioButton"
+                        android:text="Electricity" />
 
-            <RadioButton
-                android:id="@+id/radioEnergyPropane"
-                style="@style/CustomRadioButton"
-                android:text="Propane" />
+                    <RadioButton
+                        android:id="@+id/radioEnergyOil"
+                        android:text="Oil"
+                        style="@style/CustomRadioButton"/>
 
-            <RadioButton
-                android:id="@+id/radioenergyWood"
-                style="@style/CustomRadioButton"
-                android:text="Wood" />
+                    <RadioButton
+                        android:id="@+id/radioEnergyPropane"
+                        style="@style/CustomRadioButton"
+                        android:text="Propane" />
 
-            <RadioButton
-                android:id="@+id/radioEnergyOther"
-                style="@style/CustomRadioButton"
-                android:text="Other" />
-        </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioenergyWood"
+                        style="@style/CustomRadioButton"
+                        android:text="Wood" />
 
-        <!-- What is your average monthly electricity bill? -->
-        <TextView
-            android:id="@+id/billQuestion"
+                    <RadioButton
+                        android:id="@+id/radioEnergyOther"
+                        style="@style/CustomRadioButton"
+                        android:text="Other" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--What is your average monthly electricity bill? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="What is your average monthly electricity bill?" />
-        <RadioGroup
-            android:id="@+id/radioBill"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <RadioButton
-                android:id="@+id/radioBill50"
-                style="@style/CustomRadioButton"
-                android:text="Under $50" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/billQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="What is your average monthly electricity bill?" />
+                <RadioGroup
+                    android:id="@+id/radioBill"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radioBill100"
-                style="@style/CustomRadioButton"
-                android:text="$50-$100" />
+                    <RadioButton
+                        android:id="@+id/radioBill50"
+                        style="@style/CustomRadioButton"
+                        android:text="Under $50" />
 
-            <RadioButton
-                android:id="@+id/radioBill150"
-                android:text="$100-$150"
-                style="@style/CustomRadioButton"/>
+                    <RadioButton
+                        android:id="@+id/radioBill100"
+                        style="@style/CustomRadioButton"
+                        android:text="$50-$100" />
 
-            <RadioButton
-                android:id="@+id/radioBill200"
-                style="@style/CustomRadioButton"
-                android:text="$150-$200" />
+                    <RadioButton
+                        android:id="@+id/radioBill150"
+                        android:text="$100-$150"
+                        style="@style/CustomRadioButton"/>
 
-            <RadioButton
-                android:id="@+id/radioBill200plus"
-                style="@style/CustomRadioButton"
-                android:text="Over $200" />
-        </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioBill200"
+                        style="@style/CustomRadioButton"
+                        android:text="$150-$200" />
 
-        <!-- What type of energy do you use to heat water in your home? -->
-        <TextView
-            android:id="@+id/energyWaterQuestion"
+                    <RadioButton
+                        android:id="@+id/radioBill200plus"
+                        style="@style/CustomRadioButton"
+                        android:text="Over $200" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--What type of energy do you use to heat water in your home? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView13"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="What type of energy do you use to heat water in your home?" />
-        <RadioGroup
-            android:id="@+id/radioEnergyWater"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <RadioButton
-                android:id="@+id/radioWaterEnergyNG"
-                style="@style/CustomRadioButton"
-                android:text="Natural Gas" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/energyWaterQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="What type of energy do you use to heat water in your home?" />
+                <RadioGroup
+                    android:id="@+id/radioEnergyWater"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radioWaterEnergyElectricity"
-                style="@style/CustomRadioButton"
-                android:text="Electricity" />
+                    <RadioButton
+                        android:id="@+id/radioWaterEnergyNG"
+                        style="@style/CustomRadioButton"
+                        android:text="Natural Gas" />
 
-            <RadioButton
-                android:id="@+id/radioWaterEnergyOil"
-                android:text="Oil"
-                style="@style/CustomRadioButton"/>
+                    <RadioButton
+                        android:id="@+id/radioWaterEnergyElectricity"
+                        style="@style/CustomRadioButton"
+                        android:text="Electricity" />
 
-            <RadioButton
-                android:id="@+id/radioWaterEnergyPropane"
-                style="@style/CustomRadioButton"
-                android:text="Propane" />
+                    <RadioButton
+                        android:id="@+id/radioWaterEnergyOil"
+                        android:text="Oil"
+                        style="@style/CustomRadioButton"/>
 
-            <RadioButton
-                android:id="@+id/radioWaterEnergyWood"
-                style="@style/CustomRadioButton"
-                android:text="Wood" />
+                    <RadioButton
+                        android:id="@+id/radioWaterEnergyPropane"
+                        style="@style/CustomRadioButton"
+                        android:text="Propane" />
 
-            <RadioButton
-                android:id="@+id/radioWaterEnergyOther"
-                style="@style/CustomRadioButton"
-                android:text="Other" />
-        </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioWaterEnergyWood"
+                        style="@style/CustomRadioButton"
+                        android:text="Wood" />
 
-        <!-- Do you use any renewable energy sources for electricity or heating (e.g., solar, wind)? -->
-        <TextView
-            android:id="@+id/RenewableQuestion"
+                    <RadioButton
+                        android:id="@+id/radioWaterEnergyOther"
+                        style="@style/CustomRadioButton"
+                        android:text="Other" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--Do you use any renewable energy sources for electricity or heating (e.g., solar, wind)? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView14"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="Do you use any renewable energy sources for electricity or heating (e.g., solar, wind)?" />
-        <RadioGroup
-            android:id="@+id/radioRenewable"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <RadioButton
-                android:id="@+id/radioRenewablePrimarily"
-                style="@style/CustomRadioButton"
-                android:text="Yes, primarily (more than 50% of energy use)" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/RenewableQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="Do you use any renewable energy sources for electricity or heating (e.g., solar, wind)?" />
+                <RadioGroup
+                    android:id="@+id/radioRenewable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radioRenewablePartially"
-                style="@style/CustomRadioButton"
-                android:text="Yes, partially (less than 50% of energy use)" />
+                    <RadioButton
+                        android:id="@+id/radioRenewablePrimarily"
+                        style="@style/CustomRadioButton"
+                        android:text="Yes, primarily (more than 50% of energy use)" />
 
-            <RadioButton
-                android:id="@+id/radioRenewableNo"
-                android:text="No"
-                style="@style/CustomRadioButton"/>
-        </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioRenewablePartially"
+                        style="@style/CustomRadioButton"
+                        android:text="Yes, partially (less than 50% of energy use)" />
 
-        <!-- How often do you buy new clothes? -->
-        <TextView
-            android:id="@+id/clothesQuestion"
+                    <RadioButton
+                        android:id="@+id/radioRenewableNo"
+                        android:text="No"
+                        style="@style/CustomRadioButton"/>
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--How often do you buy new clothes? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView15"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="How often do you buy new clothes?" />
-        <RadioGroup
-            android:id="@+id/radioClothes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <RadioButton
-                android:id="@+id/radioClothesMonthly"
-                style="@style/CustomRadioButton"
-                android:text="Monthly" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/clothesQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="How often do you buy new clothes?" />
+                <RadioGroup
+                    android:id="@+id/radioClothes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radioClothesQuarterly"
-                style="@style/CustomRadioButton"
-                android:text="Quarterly" />
+                    <RadioButton
+                        android:id="@+id/radioClothesMonthly"
+                        style="@style/CustomRadioButton"
+                        android:text="Monthly" />
 
-            <RadioButton
-                android:id="@+id/radioClothesYearly"
-                android:text="Annually"
-                style="@style/CustomRadioButton"/>
+                    <RadioButton
+                        android:id="@+id/radioClothesQuarterly"
+                        style="@style/CustomRadioButton"
+                        android:text="Quarterly" />
 
-            <RadioButton
-                android:id="@+id/radioClothesRarely"
-                style="@style/CustomRadioButton"
-                android:text="Rarely" />
-        </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioClothesYearly"
+                        android:text="Annually"
+                        style="@style/CustomRadioButton"/>
 
-        <!-- Do you buy second-hand or eco-friendly products? -->
-        <TextView
-            android:id="@+id/thriftQuestion"
+                    <RadioButton
+                        android:id="@+id/radioClothesRarely"
+                        style="@style/CustomRadioButton"
+                        android:text="Rarely" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--Do you buy second-hand or eco-friendly products? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="Do you buy second-hand or eco-friendly products?" />
-        <RadioGroup
-            android:id="@+id/radioThrift"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <RadioButton
-                android:id="@+id/radioThriftRegularly"
-                style="@style/CustomRadioButton"
-                android:text="Yes, regularly" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/thriftQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="Do you buy second-hand or eco-friendly products?" />
+                <RadioGroup
+                    android:id="@+id/radioThrift"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radioThriftSometimes"
-                style="@style/CustomRadioButton"
-                android:text="Yes, occasionally" />
+                    <RadioButton
+                        android:id="@+id/radioThriftRegularly"
+                        style="@style/CustomRadioButton"
+                        android:text="Yes, regularly" />
 
-            <RadioButton
-                android:id="@+id/radioThriftNo"
-                android:text="No"
-                style="@style/CustomRadioButton"/>
-        </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioThriftSometimes"
+                        style="@style/CustomRadioButton"
+                        android:text="Yes, occasionally" />
 
-        <!-- How many electronic devices (phones, laptops, etc.) have you purchased in the past year? -->
-        <TextView
-            android:id="@+id/electronicQuestion"
+                    <RadioButton
+                        android:id="@+id/radioThriftNo"
+                        android:text="No"
+                        style="@style/CustomRadioButton"/>
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--How many electronic devices (phones, laptops, etc.) have you purchased in the past year? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView17"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="How many electronic devices (phones, laptops, etc.) have you purchased in the past year?" />
-        <RadioGroup
-            android:id="@+id/radioElectronic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <RadioButton
-                android:id="@+id/radioElectronicNone"
-                style="@style/CustomRadioButton"
-                android:text="None" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/electronicQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="How many electronic devices (phones, laptops, etc.) have you purchased in the past year?" />
+                <RadioGroup
+                    android:id="@+id/radioElectronic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radioElectronic1"
-                style="@style/CustomRadioButton"
-                android:text="1" />
+                    <RadioButton
+                        android:id="@+id/radioElectronicNone"
+                        style="@style/CustomRadioButton"
+                        android:text="None" />
 
-            <RadioButton
-                android:id="@+id/radioElectronic2"
-                android:text="2"
-                style="@style/CustomRadioButton"/>
+                    <RadioButton
+                        android:id="@+id/radioElectronic1"
+                        style="@style/CustomRadioButton"
+                        android:text="1" />
 
-            <RadioButton
-                android:id="@+id/radioElectronic3"
-                style="@style/CustomRadioButton"
-                android:text="3 or more" />
-        </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioElectronic2"
+                        android:text="2"
+                        style="@style/CustomRadioButton"/>
 
-        <!-- How often do you recycle? -->
-        <TextView
-            android:id="@+id/recycleQuestion"
+                    <RadioButton
+                        android:id="@+id/radioElectronic3"
+                        style="@style/CustomRadioButton"
+                        android:text="3 or more" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--How often do you recycle? -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView18"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:padding="3dp"
-            android:fontFamily="@font/custom_font"
-            android:text="How often do you recycle?" />
-        <RadioGroup
-            android:id="@+id/radioRecycle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <RadioButton
-                android:id="@+id/radioRecycleNever"
-                style="@style/CustomRadioButton"
-                android:text="Never" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/recycleQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:fontFamily="@font/garet"
+                    android:text="How often do you recycle?" />
+                <RadioGroup
+                    android:id="@+id/radioRecycle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radioRecycleRarely"
-                style="@style/CustomRadioButton"
-                android:text="Occasionally" />
+                    <RadioButton
+                        android:id="@+id/radioRecycleNever"
+                        style="@style/CustomRadioButton"
+                        android:text="Never" />
 
-            <RadioButton
-                android:id="@+id/radioRecycleOccasionally"
-                android:text="Frequently"
-                style="@style/CustomRadioButton"/>
+                    <RadioButton
+                        android:id="@+id/radioRecycleRarely"
+                        style="@style/CustomRadioButton"
+                        android:text="Occasionally" />
 
-            <RadioButton
-                android:id="@+id/radioRecycleFrequently"
-                style="@style/CustomRadioButton"
-                android:text="Always" />
-        </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioRecycleOccasionally"
+                        android:text="Frequently"
+                        style="@style/CustomRadioButton"/>
 
+                    <RadioButton
+                        android:id="@+id/radioRecycleFrequently"
+                        style="@style/CustomRadioButton"
+                        android:text="Always" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--Submit Button-->
         <Button
             android:id="@+id/submitButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Submit"
+            android:layout_width="200dp"
+            android:layout_height="43dp"
+            android:layout_marginTop="30dp"
+            android:textSize="14sp"
+            android:textColor="@color/white"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp" />
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/round_button"
+            android:text="Submit" />
 
     </LinearLayout>
 </ScrollView>

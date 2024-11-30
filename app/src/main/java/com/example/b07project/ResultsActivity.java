@@ -1,9 +1,11 @@
 package com.example.b07project;
-
+import android.graphics.Color;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,13 +18,32 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 
+
+/**
+ * ResultsActivity class containing methods relating to the results screen from the survey
+ */
 public class ResultsActivity extends AppCompatActivity {
 
     // TextViews for displaying the results
-    TextView totalEmissionsTextView, transportationTextView, foodTextView, housingTextView, consumptionTextView, comparisonTextView, globalTargetComparisonTextView;
+    TextView totalEmissionsTextView,
+            transportationTextView,
+            foodTextView,
+            housingTextView,
+            consumptionTextView;
+    TextView comparisonTextView, globalTargetComparisonTextView;
 
+    /**
+     * onCreate - Method run when ResultsActivity is created
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.
+     *                           <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
+    @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 

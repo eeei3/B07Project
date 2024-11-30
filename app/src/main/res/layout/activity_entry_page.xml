@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/entry_page_background">
+
+    <ImageView
+        android:id="@+id/planetzeLogo"
+        android:layout_width="439dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="172dp"
+        android:src="@drawable/trans_planetze_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/LogInButton"
+        android:layout_width="264dp"
+        android:layout_height="48dp"
+        android:text="Log In"
+        android:textColor="@color/white"
+        android:background="@drawable/log_in_button"
+        app:layout_constraintTop_toBottomOf="@id/planetzeLogo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="32dp" />
+
+    <Button
+        android:id="@+id/SignInButton"
+        android:layout_width="264dp"
+        android:layout_height="48dp"
+        android:background="@drawable/log_in_button"
+        android:text="Sign Up"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/LogInButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
