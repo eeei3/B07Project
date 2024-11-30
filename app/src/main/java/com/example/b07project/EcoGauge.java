@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import org.eazegraph.lib.charts.ValueLineChart;
 
 /**
@@ -20,6 +23,7 @@ public class EcoGauge extends AppCompatActivity {
     private TextView comparisonText,yourEmissionsNumber, GlobalEmissions;
     private Spinner timeSpinner;
     private ValueLineChart chart;  // Changed to ValueLineChart
+    private static FirebaseUser user;  // FirebaseUser object for current authenticated user
 
 
     @Override
@@ -58,8 +62,8 @@ public class EcoGauge extends AppCompatActivity {
         comparisonTextObj.updateComparisonText(location, totalEmissions);
 
         // Update the LineChart
-        LineChart lineChart = new LineChart(chart); // Pass the ValueLineChart to the LineChart class
-        lineChart.getDataForChart(); // Update the line chart
+        LineChartDisplay lineChart = new LineChartDisplay(chart); // Pass the ValueLineChart to the LineChart class
+        lineChart.updateLineChart(); // Update the line chart
     }
 
     /**
@@ -81,5 +85,22 @@ public class EcoGauge extends AppCompatActivity {
             String[] categories = getResources().getStringArray(R.array.timeValues);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, categories);
             timeSpinner.setAdapter(adapter);;
+    }
+
+    /**
+     * intialize firebase user
+     */
+    String initializeFirebaseUser(){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();  // Get the current authenticated user
+
+        // Check if the user is authenticated, otherwise, set userId as empty string
+        String userId;
+        if (user != null) {
+            userId = user.getUid();  // Get the UID of the authenticated user
+        } else {
+            userId = "";  // If no user is authenticated, set userId as an empty string
+        }
+        return userId;
     }
 }

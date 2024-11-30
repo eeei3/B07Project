@@ -11,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -31,9 +29,6 @@ public class PieChartUpdate extends AppCompatActivity {
     private TextView shopping;
     private PieChart pieChart;
 
-    public static final String EXTRA_TOTAL_TRANSPO = "totalTranspo";
-    public static final String EXTRA_TOTAL_FOOD = "totalFood";
-    public static final String EXTRA_TOTAL_SHOPPING = "totalShopping";
     public static final String EXTRA_TIME_PERIOD = "timePeriod";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,17 +108,9 @@ public class PieChartUpdate extends AppCompatActivity {
      * Updates the chart based for monthly
      */
     private void updateForMonthly() {
-        // Initialize the Firebase database reference
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();
-
         // Check if the user is authenticated, otherwise, set userId as empty string
-        String userId;
-        if (user != null) {
-            userId = user.getUid();  // Get the UID of the authenticated user
-        } else {
-            userId = "";  // If no user is authenticated, set userId as an empty string
-        }
+        EcoGauge temp = new EcoGauge();
+        String userId = temp.initializeFirebaseUser(); // Check if the user is authenticated, otherwise, set userId as empty string
 
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("ecotracker");
 
