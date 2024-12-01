@@ -18,7 +18,6 @@ import java.util.ArrayList;
  * HabitsFilterDialogFragment is a DialogFragment used for filtering habits based on categories
  * and impact levels.
  *
- * @see HabitsModel
  * @see HabitsMenu
  */
 public class HabitsFilterDialogFragment extends DialogFragment {

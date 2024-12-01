@@ -1,5 +1,8 @@
 package com.example.b07project;
 
+/**
+ * Model - Abstraction of models
+ */
 public abstract class Model {
     ModelPresenterPipe listener;
 

@@ -56,6 +56,16 @@ class Goal {
         this.prog = prog;
     }
 
+    /**
+     * Goal - Constructor for representing habits from the list of available habits on Firebase
+     * @param name - Habit's name
+     * @param prog - Habit's progress
+     * @param impact - Level of impact
+     * @param category - Category of impact
+     * @param habitDesc - Description of habit
+     * @param impactDesc - Description of impact
+     * @param image - Image's index in hashset
+     */
     public Goal(String name, int prog, String impact, String category, String habitDesc, String impactDesc, int image) {
         this.name = name;
         this.prog = prog;
@@ -65,6 +75,18 @@ class Goal {
         this.impactDesc = impactDesc;
         this.image = image;
     }
+
+    /**
+     * Goal - Constructor for representing habits that the program is holding in memory
+     * @param name - Habit's name
+     * @param aim - Habit's duration goal
+     * @param prog - Habit's progress
+     * @param impact - Level of impact
+     * @param category - Category of impact
+     * @param habitDesc - Description of habit
+     * @param impactDesc - Description of impact
+     * @param image - Image's index in hashset
+     */
     public Goal(String name, int prog, int aim, String impact, String category, String habitDesc, String impactDesc, int image) {
         this.name = name;
         this.prog = prog;
@@ -76,31 +98,58 @@ class Goal {
         this.image = image;
     }
 
-
+    /**
+     * getName - return the habit's name
+     * @return - return the habit's name
+     */
     public String getName() {
         return name;
     }
 
-    public long getProg() {
+    /**
+     * getName - return the habit's progress
+     * @return - return the habit's progress
+     */
+    public int getProg() {
         return prog;
     }
 
+    /**
+     * getName - return the habit's impact
+     * @return - return the habit's impact
+     */
     public String getImpact() {
         return impact;
     }
 
+    /**
+     * getName - return the habit's category
+     * @return - return the habit's category
+     */
     public String getCategory() {
         return category;
     }
 
+    /**
+     * getName - return the habit's description
+     * @return - return the habit's description
+     */
     public String getHabitDesc() {
         return habitDesc;
     }
 
+    /**
+     * getName - return the habit's impact description
+     * @return - return the habit's impact description
+     */
     public String getImpactDesc() {
         return impactDesc;
     }
 
+    /**
+     * getImage - return the habit's image index
+     * @return - return the habit's image index
+     */
     public int getImage() {
         return image;
     }
@@ -108,27 +157,8 @@ class Goal {
 
 
 /**
- * How the Database will work
- * Habitslist - (this is a list of habits the user can choose to pick up)
- *      - Transportation
- *          - Transportation habits
- *      - Food
- *      - Energy
- *      - Consumption
- * userhabits - (This will contain the users, what habits they have chosen and their progress)
- *      - User John Doe
- *          - Consumption
- *              - Use less paper
- *                  - 80%
- *          - Transportation
- *              - Don't use the jetpack
- *                  - 20%
+ * FirebaseModel - Module in charge of communications with Firebase
  */
-
-/**
- * GeneralServerCommunicator - The Model portion of the Habit Suggestion Module
- */
-
 public class FirebaseModel extends Model {
     public static int counter = 0;
     private static FirebaseModel serverCommunicator;
@@ -163,7 +193,8 @@ public class FirebaseModel extends Model {
     }
 
     /**
-     * Get the list of goals available on the Database
+     * Get the list of habits available on the Database
+     * @param watcher - Listener to notify HabitPresenter about result
      */
     void getListGoals(AsyncDBComms watcher) {
         Query listgoals = dbworker.child("habitslist");
@@ -198,7 +229,8 @@ public class FirebaseModel extends Model {
     }
 
     /**
-     * Get the list of goals the user is currently working on
+     * getGoals - Get the list of habit the user is currently working on
+     * @param watcher - Listener to notify HabitPresenter about result
      */
     void getGoals(AsyncDBComms watcher) {
         Query usergoals = dbworker.child("users").child(userid).child("habits");
@@ -252,7 +284,9 @@ public class FirebaseModel extends Model {
     }
 
     /**
-     * Set a new goal for the user
+     * setGoals - Set a new habit for the user
+     * @param goal - habit the user wants to pick up
+     * @param watcher - Listener to notify HabitPresenter about result
      */
     void setGoals(Goal goal, AsyncDBComms watcher) {
         final int[] completed = {0};
@@ -400,7 +434,9 @@ public class FirebaseModel extends Model {
     }
 
     /**
-     * Get the progress of a goal that the user is working on
+     * getProg - Get the progress of a habit that the user is working on
+     * @param goal - Habit the user wants to get progress of
+     * @param watcher - Listener to notify HabitPresenter about result
      */
     void getProg(String goal, AsyncDBComms watcher) {
         dbworker.child("users").child(userid).child("habits").child(goal)
@@ -425,7 +461,10 @@ public class FirebaseModel extends Model {
     }
 
     /**
-     * Set the progress of a goal that the user is working on
+     * setProg - Set the progress of a habit that the user is working on
+     * @param goalname - Habit name
+     * @param prog - New progress
+     * @param watcher - Listener to notify HabitPresenter about result
      */
     void setProg(String goalname, int prog, AsyncDBComms watcher) {
         dbworker.child("users").child(userid).child("habits").child(goalname).child("prog").setValue(prog)
@@ -443,6 +482,11 @@ public class FirebaseModel extends Model {
                 });
     }
 
+    /**
+     * deleteGoal - Delete an active habit from database
+     * @param goalname - Habit being deleted
+     * @param watcher - Listener to notify HabitPresenter about result
+     */
     void deleteGoal(String goalname, AsyncDBComms watcher) {
         dbworker.child("users").child(userid).child("habits").child(goalname)
                 .setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {

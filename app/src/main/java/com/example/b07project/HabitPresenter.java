@@ -22,6 +22,8 @@ public class HabitPresenter {
 
     HabitsSetGoalsDialogFragment godiagrag;
     Model.ModelPresenterPipe listener;
+    HashSet<Goal> suggested;
+
 
     // TOMMY Notes - added field HabitsMenu view and initialize the view in constructor
     /**
@@ -33,80 +35,13 @@ public class HabitPresenter {
         this.mauth = FirebaseAuth.getInstance();
 //        this.model = new FirebaseModel(
 //                String.valueOf(mauth.getCurrentUser()));
+        suggested  = new HashSet<>();
     }
 
     /**
-     * searchByName -  Lets the user search potential goals by it's name
-     * @param filter - The filter the user wishes to apply to the list
+     * personalSuggestions - Method for suggesting to the user two new habits, one is a habit from
+     * a category that the user has been doing most, and one that the user has been doing the least
      */
-    public void searchByName(String filter) {
-        // mp is the listener that we use to tell if the Model operation succeeded
-        FirebaseModel model = new FirebaseModel(
-                String.valueOf(mauth.getCurrentUser()));
-        AsyncDBComms mp = new AsyncDBComms();
-        model.setModelPipe(new Model.ModelPresenterPipe() {
-            @Override
-            public void onObjectReady(AsyncComms betweener) {
-                AsyncDBComms plug = (AsyncDBComms) betweener;
-                for (Goal g: plug.usergoals) {
-                    if (Objects.equals(g.name, filter)) {
-                        plug.listgoals.add(g);
-                    }
-                }
-//                listener.onObjectReady(pv);
-            }
-        });
-        model.getListGoals(mp);
-    }
-
-    /**
-     * searchByCategory lets the user search potential goals by it's category
-     * @param filter - The filter the user wishes to apply to the list
-     */
-    public void searchByCategory(String filter) {
-        // mp is the listener that we use to tell if the Model operation succeeded
-        FirebaseModel model = new FirebaseModel(
-                String.valueOf(mauth.getCurrentUser()));
-        AsyncDBComms mp = new AsyncDBComms();
-        model.setModelPipe(new Model.ModelPresenterPipe() {
-            @Override
-            public void onObjectReady(AsyncComms betweener) {
-                AsyncDBComms plug = (AsyncDBComms) betweener;
-                for (Goal g: plug.usergoals) {
-                    if (g.category.contains(filter)) {
-                        plug.listgoals.add(g);
-                    }
-                }
-//                listener.onObjectReady(pv);
-            }
-        });
-        model.getListGoals(mp);
-    }
-
-    /**
-     * searchByImpact lets the user search potential goals by it's impact
-     * @param filter - The filter the user wishes to apply to the list
-     */
-    public void searchByImpact(String filter) {
-        // mp is the listener that we use to tell if the Model operation succeeded
-        FirebaseModel model = new FirebaseModel(
-                String.valueOf(mauth.getCurrentUser()));
-        AsyncDBComms mp = new AsyncDBComms();
-        model.setModelPipe(new Model.ModelPresenterPipe() {
-            @Override
-            public void onObjectReady(AsyncComms betweener) {
-                AsyncDBComms plug = (AsyncDBComms) betweener;
-                for (Goal g: plug.usergoals) {
-                    if (g.impact.equals(filter)) {
-                        plug.listgoals.add(g);
-                    }
-                }
-//                listener.onObjectReady(pv);
-            }
-        });
-        model.getListGoals(mp);
-    }
-
     public void personalSuggestions() {
         AsyncDBComms mp = new AsyncDBComms();
         LinkedHashSet<Goal> temp = new LinkedHashSet<>();
@@ -134,9 +69,9 @@ public class HabitPresenter {
                         calculator.available = temp1;
                     }
                     calculator.prepare();
-                    HashSet<Goal> res = new HashSet<>();
-                    res.add(calculator.calculateNew());
-                    res.add(calculator.calculateRecommendation());
+
+                    suggested.add(calculator.calculateNew());
+                    suggested.add(calculator.calculateRecommendation());
                 }
 //                listener.onObjectReady(pv);
             }
@@ -160,7 +95,6 @@ public class HabitPresenter {
             public void onObjectReady(AsyncComms betweener) {
                 AsyncDBComms plug = (AsyncDBComms) betweener;
                 FirebaseModel.counter = 1;
-//                model.setModelPipe(null);
             }
         });
         goal.aim = Integer.parseInt(aim);
@@ -246,6 +180,14 @@ public class HabitPresenter {
         model.getProg(goal, mp);
     }
 
+    /**
+     * userDeleteGoal - Method for the user to delete a goal from the database
+     * @param goal - The habit the user wishes to delete
+     * @param con - The Context for the method to make its Toast
+     * @param toggle - The context in which the method is called, either being
+     *               a. A habit has been completed
+     *               b. The user wants to drop a habit
+     */
     public void userDeleteGoal(String goal, Context con, int toggle) {
         AsyncDBComms mp = new AsyncDBComms();
         FirebaseModel model = new FirebaseModel(
@@ -258,12 +200,10 @@ public class HabitPresenter {
                     if (toggle == 0) {
                         Toast.makeText(con, "Goal Finished!",
                                 Toast.LENGTH_SHORT).show();
-//                    model.setModelPipe(null);
                     }
                     else if (toggle == 1) {
                         HabitsMenu.userGoals.remove(goal);
                         HabitsMenu.setUserArrayForAdapter();
-                        //HabitsMenu.adapter.notifyItemRemoved(habitsModels.indexOf(habit););
                         Toast.makeText(con, "Habit Removed", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -275,6 +215,9 @@ public class HabitPresenter {
         model.deleteGoal(goal, mp);
     }
 
+    /**
+     * getAllHabits - Get all habits available (not just the ones the user has active)
+     */
     public void getAllHabits() {
         AsyncDBComms mp = new AsyncDBComms();
         FirebaseModel model = new FirebaseModel( (String.valueOf(mauth.getUid())));
