@@ -31,6 +31,11 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
     // needs to get this user's info from outside the class. (note this is for a single specific habit)
     // same for field "goal"
 
+    /**
+     * UserHabitsProgressDialogFragment - Creates a new instance of UserHabitsProgressDialogFragment
+     * @param habitName - the name of the habit who's dialog box is being instantiated
+     * @return - the dialog box's fragment
+     */
     public static UserHabitsProgressDialogFragment newInstance(String habitName) {
         UserHabitsProgressDialogFragment fragment = new UserHabitsProgressDialogFragment();
         Bundle args = new Bundle();
@@ -162,7 +167,6 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
 
     /**
      * Updates the progress bar to reflect the current value of the progress field.
-     *
      */
     public void setProgressBar(int prog) {
         userHabitProgressBar.setProgress(prog);
@@ -170,7 +174,6 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
 
     /**
      * Updates the text field to display the current progress value in days.
-     *
      */
     public void setTextNumDays(int prog) {
         userHabitNumDaysInt.setText(String.valueOf(prog));

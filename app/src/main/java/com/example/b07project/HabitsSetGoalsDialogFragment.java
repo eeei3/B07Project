@@ -24,7 +24,6 @@ import com.google.android.material.materialswitch.MaterialSwitch;
  * habit. This fragment is used to gather user input related to goal setting for a habit and update
  * the corresponding data.
  *
- * @see HabitsModel
  * @see HabitsMenu
  * @see OnHabitUpdatedListener
  */
@@ -217,12 +216,18 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
         return view;
     }
 
+    /**
+     * success - Notify the user they successfully added a new goal
+     */
     public void success() {
         Toast.makeText(requireContext(), "New Goal Added!",
                 Toast.LENGTH_SHORT).show();
         dismiss();
     }
 
+    /**
+     * failure - Notify the user adding a new goal was unsuccessful
+     */
     public void failure() {
         Toast.makeText(requireContext(), "Failed to Add New Goal",
                 Toast.LENGTH_SHORT).show();

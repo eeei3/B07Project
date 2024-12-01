@@ -20,7 +20,6 @@ import java.util.ArrayList;
 /**
  * HabitsAdapter class is responsible for the creation and behaviour of the adapter for HabitsModel.
  *
- * @see HabitsModel
  * @see HabitsMenu
  * @see HabitsDetailsDialogFragment
  * @see UserHabitsProgressDialogFragment

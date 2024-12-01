@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
 
+/**
+ * PersonalizedCalculations - Recommends the user new habits based on their previous activity.
+ */
 public class PersonalizedCalculations {
     LinkedHashSet<Goal> goals;
     LinkedHashSet<Goal> available;
@@ -16,6 +19,9 @@ public class PersonalizedCalculations {
     double electricScore;
 
 
+    /**
+     * PersonalizedCalculations - Default constructor for PersonalizedCalculations
+     */
     public PersonalizedCalculations() {
         transportScore = 0;
         foodScore = 0;
@@ -23,6 +29,9 @@ public class PersonalizedCalculations {
         electricScore = 0;
     }
 
+    /**
+     * prepare - A method that is run to setup the goalsNames field
+     */
     public void prepare() {
         LinkedHashSet<String> temp_goals = new LinkedHashSet<>();
         for (Goal g: goals) {
@@ -35,6 +44,10 @@ public class PersonalizedCalculations {
         }
     }
 
+    /**
+     * calculateScore - Calculates the user's score in each category, higher score means the user
+     * has been more active in that category.
+     */
     private void calculateScore() {
         float res = 0.0F;
         for (Goal g: goals) {
@@ -85,6 +98,11 @@ public class PersonalizedCalculations {
         }
     }
 
+    /**
+     * calculateRecommendation - Recommends the user a habit from a category they have been doing
+     * most
+     * @return - The goal recommended to the user
+     */
     public Goal calculateRecommendation() {
         HashMap<Double, String> keys = new HashMap<>();
         ArrayList<Double> scores = new ArrayList<>();
@@ -107,6 +125,11 @@ public class PersonalizedCalculations {
         return null;
     }
 
+    /**
+     * calculateNew - Recommends the user a habit from a category that the user has done the least
+     * in
+     * @return - The goal recommended to the user
+     */
     public Goal calculateNew() {
         HashMap<Double, String> keys = new HashMap<>();
         ArrayList<Double> scores = new ArrayList<>();

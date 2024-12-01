@@ -17,7 +17,6 @@ import androidx.fragment.app.DialogFragment;
  * HabitsDetailsDialogFragment class is a DialogFragment that displays detailed information
  * about a specific habit.
  *
- * @see HabitsModel
  * @see HabitsMenu
  * @see HabitsSetGoalsDialogFragment
  * @see OnHabitUpdatedListener
