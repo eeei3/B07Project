@@ -3,6 +3,7 @@ plugins {
     id("com.google.gms.google-services")
 }
 
+
 android {
     namespace = "com.example.b07project"
     compileSdk = 34
@@ -44,6 +45,7 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.firebase.auth)
     testImplementation("junit:junit:4.+")
+    testImplementation(libs.ext.junit)
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     implementation(libs.firebase.database)
     testImplementation("junit:junit:4.+")
