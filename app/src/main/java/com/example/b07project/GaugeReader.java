@@ -1,10 +1,17 @@
 package com.example.b07project;
 
+import static java.security.AccessController.getContext;
+
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,7 +24,6 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.database.ValueEventListener;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -93,11 +99,6 @@ public class GaugeReader extends EcoGauge {
                                 Log.d("DailyUpdate", "Total Shopping: " + totalShopping);
                                 Log.d("DailyUpdate", "Total Emission: " + totalEmission);
 
-                                // Update UI
-                                transportation.setText(Integer.toString((int) totalTranspo));
-                                foodConsumption.setText(Integer.toString((int) totalFood));
-                                shopping.setText(Integer.toString((int) totalShopping));
-
                                 totalEmissionsText.setText(String.format("Daily Carbon Footprint: %.2f tons of CO₂e", totalEmission));
 
                                 // Update pie chart with MPAndroidChart
@@ -120,16 +121,38 @@ public class GaugeReader extends EcoGauge {
      * @param totalShopping The total shopping emissions.
      */
     public void updatePieChart(double totalTranspo, double totalFood, double totalShopping) {
+
         // Create a list of PieEntry objects
+        String transportationColorHex = "#AD80C4"; //Purple
+        String foodColorHex = "#81BAC5"; //Darker Blue
+        String shoppingColorHex = "#A1C6CA"; //Lighter Blue
+
+        int[] colors = new int[]{Color.parseColor(transportationColorHex), Color.parseColor(foodColorHex), Color.parseColor(shoppingColorHex),};
         ArrayList<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry((float) totalTranspo, "Transportation"));
-        entries.add(new PieEntry((float) totalFood, "Food Consumption"));
-        entries.add(new PieEntry((float) totalShopping, "Shopping"));
+        entries.add(new PieEntry((float) totalTranspo, ""));
+        entries.add(new PieEntry((float) totalFood, ""));
+        entries.add(new PieEntry((float) totalShopping, ""));
 
         // Set data for the pie chart
-        PieDataSet dataSet = new PieDataSet(entries, "Emissions");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS); // Set pie slice colors
+        PieDataSet dataSet = new PieDataSet(entries, "");
+        dataSet.setColors(colors); // Set pie slice colors
         PieData data = new PieData(dataSet);
+        pieChart.setDrawHoleEnabled(false);
+        dataSet.setValueTextSize(12f);
+
+        // Customizing the Legend
+        Legend legend = pieChart.getLegend();
+        legend.setEnabled(true); // Enable legend
+        legend.setTextSize(12f); // Customize the text size of the legend
+        legend.setFormSize(12f); // Customize the size of the square icon in the legend
+
+        // Set custom entries for the legend
+        ArrayList<LegendEntry> customLegendEntries = new ArrayList<>();
+        customLegendEntries.add(new LegendEntry("Transportation", Legend.LegendForm.CIRCLE, 14f, 14f, null, Color.parseColor(transportationColorHex)));
+        customLegendEntries.add(new LegendEntry("Food", Legend.LegendForm.CIRCLE, 14f, 14f, null, Color.parseColor(foodColorHex)));
+        customLegendEntries.add(new LegendEntry("Shopping", Legend.LegendForm.CIRCLE, 14f, 14f, null, Color.parseColor(shoppingColorHex)));
+
+        legend.setCustom(customLegendEntries); // Set the custom legend entries
 
         // Set data and other properties
         pieChart.setData(data);
@@ -203,12 +226,7 @@ public class GaugeReader extends EcoGauge {
                             Log.d("30DayUpdate", "Shopping: " + shoppingEmissions);
                             Log.d("30DayUpdate", "Total Emission: " + totalEmission);
 
-                            // Update the UI
-                            transportation.setText(Integer.toString((int) transportationEmissions));
-                            foodConsumption.setText(Integer.toString((int) foodEmissions));
-                            shopping.setText(Integer.toString((int) shoppingEmissions));
-
-                            totalEmissionsText.setText(String.format("Total Carbon Footprint (Last 30 Days): %.2f tons of CO₂e", totalEmission));
+                            totalEmissionsText.setText(String.format("Monthly Carbon Footprint: %.2f tons of CO₂e", totalEmission));
 
                             // Update Pie Chart
                             updatePieChart(transportationEmissions, foodEmissions, shoppingEmissions);
@@ -271,12 +289,8 @@ public class GaugeReader extends EcoGauge {
                             Log.d("365DayUpdate", "Shopping: " + shoppingEmissions);
                             Log.d("365DayUpdate", "Total Emission: " + totalEmission);
 
-                            // Update the UI
-                            transportation.setText(Integer.toString((int) transportationEmissions));
-                            foodConsumption.setText(Integer.toString((int) foodEmissions));
-                            shopping.setText(Integer.toString((int) shoppingEmissions));
 
-                            totalEmissionsText.setText(String.format("Total Carbon Footprint (Last 365 Days): %.2f tons of CO₂e", totalEmission));
+                            totalEmissionsText.setText(String.format("Yearly Carbon Footprint: %.2f tons of CO₂e", totalEmission));
 
                             // Update Pie Chart
                             updatePieChart(transportationEmissions, foodEmissions, shoppingEmissions);

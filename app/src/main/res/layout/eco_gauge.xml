@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:background="@color/entry_page_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,43 +14,70 @@
         android:orientation="vertical"
         android:padding="16dp"
         tools:ignore="ExtraText">
+        <!--Planetze Logo-->
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="300dp"
+            android:layout_height="93dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/trans_planetze_logo"
+            android:layout_gravity="center"/>
+
+        <!--Let's calculate your annual carbon footprint!-->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/custom_font"
+            android:fontFamily="@font/garet"
             android:gravity="center"
-            android:text="Emissions"
-            android:textColor="@color/teal_700"
-            android:textSize="14pt"
+            android:text="Let's review your footprint!"
+            android:textSize="24sp"
             tools:ignore="HardcodedText" />
 
         <!-- Spinner aligned to the right and vertically centered with TextView -->
 
-        <Spinner
-            android:id="@+id/timeSpinner"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="0dp"
-            android:fontFamily="@font/custom_font"
-            android:entries="@array/timeValues" />
+            android:layout_gravity="center_horizontal"
+            android:padding="15dp">
+
+            <!-- TextView aligned to the left and vertically centered -->
+            <TextView
+                android:id="@+id/textLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignBaseline="@id/timeSpinner"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/garet"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:text="Time Interval:" />
+
+            <!-- Spinner aligned to the right and vertically centered with TextView -->
+            <Spinner
+                android:id="@+id/timeSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="26dp"
+                android:layout_toEndOf="@id/textLabel"
+                android:background="@drawable/spinner_layout"
+                android:entries="@array/timeValues"
+                android:spinnerMode="dropdown" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/totalEmissionsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:fontFamily="@font/custom_font"
-            android:text="Total Emissions: 72 kg CO2e"
-            android:textSize="20sp"
+            android:fontFamily="@font/garet"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="410dp"
-            android:background="@color/white"
-            tools:context=".MainActivity">
 
 
             <!-- Card view for displaying the -->
@@ -58,9 +86,6 @@
                 android:id="@+id/cardViewGraph"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="20dp"
                 android:elevation="10dp"
                 app:cardCornerRadius="10dp">
 
@@ -83,7 +108,7 @@
 
                     <com.github.mikephil.charting.charts.PieChart xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/piechart"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="15dp"
@@ -91,167 +116,7 @@
                         android:layout_weight="1"
                         android:padding="6dp"
                         />
-
-
-
-
-                    <!--Creating another linear layout -->
-                    <!-- to display pie chart details -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="20dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical">
-
-
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="18dp"
-                            android:layout_gravity="center_vertical">
-
-
-
-
-                            <!--View to display the yellow color icon-->
-                            <View
-                                android:layout_width="15dp"
-                                android:layout_height="match_parent"
-                                android:background="@color/purple_700" />
-
-
-
-
-                            <!--Text view to display R -->
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/shopping"
-                                android:fontFamily="@font/custom_font"
-                                android:paddingLeft="10dp"
-                                android:text="Shopping" />
-
-
-
-
-                        </LinearLayout>
-
-
-
-
-                        <!--Linear layout to display Green-->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="18dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginTop="5dp">
-
-
-
-
-                            <!--View to display the green color icon-->
-                            <View
-                                android:layout_width="15dp"
-                                android:layout_height="match_parent"
-                                android:background="@color/purple_200" />
-
-
-
-
-                            <!--Text view to display green text -->
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/custom_font"
-                                android:id="@+id/transportation"
-                                android:paddingLeft="10dp"
-                                android:text="Transportation" />
-
-
-
-
-                        </LinearLayout>
-                        <!--Linear layout to display Food consumption-->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="18dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginTop="5dp">
-
-
-
-
-                            <!--View to display the red color icon-->
-                            <View
-                                android:layout_width="15dp"
-                                android:layout_height="match_parent"
-                                android:background="@color/planetze_colour_3" />
-
-
-
-
-                            <!--Text view to display CFood consumption text -->
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/custom_font"
-                                android:id="@+id/foodConsumption"
-                                android:paddingLeft="10dp"
-                                android:text="Food Consumption" />
-                        </LinearLayout>
-
-
-
-
-                        <!--Linear layout to display Energy use-->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="18dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginTop="5dp">
-
-
-
-
-                            <!--View to display the blue color icon-->
-                            <View
-                                android:layout_width="15dp"
-                                android:layout_height="match_parent"
-                                android:background="@color/teal_200" />
-
-
-
-
-                            <!--Text view to display Java text -->
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/custom_font"
-                                android:id="@+id/energyUse"
-                                android:paddingLeft="10dp"
-                                android:text="Energy Use" />
-
-
-
-
-                        </LinearLayout>
-
-
-
-
-                    </LinearLayout>
-
-
-
-
                 </LinearLayout>
-
-
-
-
             </androidx.cardview.widget.CardView>
 
 
@@ -426,9 +291,6 @@
 
 
             </androidx.cardview.widget.CardView>
-
-
-        </RelativeLayout>
 
 
         <!-- Choose country to compare your global average -->
