@@ -17,6 +17,8 @@ public class PersonalizedCalculations {
     double foodScore;
     double consumptionScore;
     double electricScore;
+    HashMap<Double, String> keys;
+    ArrayList<Double> scores;
 
 
     /**
@@ -27,6 +29,8 @@ public class PersonalizedCalculations {
         foodScore = 0;
         consumptionScore = 0;
         electricScore = 0;
+        keys = new HashMap<>();
+        scores = new ArrayList<>();
     }
 
     /**
@@ -49,7 +53,6 @@ public class PersonalizedCalculations {
      * has been more active in that category.
      */
     public void calculateScore() {
-        float res = 0.0F;
         for (Goal g: goals) {
             if (g.category.equals("Transport")) {
                 switch (g.impact) {
@@ -104,6 +107,17 @@ public class PersonalizedCalculations {
                 }
             }
         }
+        this.keys = new HashMap<>();
+        this.scores = new ArrayList<>();
+        keys.put(foodScore, "Food");
+        scores.add(foodScore);
+        keys.put(electricScore, "Energy");
+        scores.add(electricScore);
+        keys.put(consumptionScore, "Consumption");
+        scores.add(consumptionScore);
+        keys.put(transportScore, "Transportation");
+        scores.add(transportScore);
+        Collections.sort(scores);
     }
 
     /**
@@ -112,17 +126,6 @@ public class PersonalizedCalculations {
      * @return - The goal recommended to the user
      */
     public Goal calculateRecommendation() {
-        HashMap<Double, String> keys = new HashMap<>();
-        ArrayList<Double> scores = new ArrayList<>();
-        keys.put(foodScore, "Food");
-        scores.add(foodScore);
-        keys.put(electricScore, "Electric");
-        scores.add(electricScore);
-        keys.put(consumptionScore, "Consumption");
-        scores.add(consumptionScore);
-        keys.put(transportScore, "Transport");
-        scores.add(transportScore);
-        Collections.sort(scores);
         for (int i = 3; i >= 0; i--) {
             for (Goal g : available) {
                 if (g.category.equals(keys.get(scores.get(i)))) {
@@ -139,17 +142,6 @@ public class PersonalizedCalculations {
      * @return - The goal recommended to the user
      */
     public Goal calculateNew() {
-        HashMap<Double, String> keys = new HashMap<>();
-        ArrayList<Double> scores = new ArrayList<>();
-        keys.put(foodScore, "Food");
-        scores.add(foodScore);
-        keys.put(electricScore, "Electric");
-        scores.add(electricScore);
-        keys.put(consumptionScore, "Consumption");
-        scores.add(consumptionScore);
-        keys.put(transportScore, "Transport");
-        scores.add(transportScore);
-        Collections.sort(scores);
         for (int i = 0; i <= 3; i++) {
             for (Goal g : available) {
                 if (g.category.equals(keys.get(scores.get(i)))) {
