@@ -5,6 +5,7 @@ import org.eazegraph.lib.models.ValueLineSeries;
 
 public class LineChartDisplay {
     private ValueLineChart chart;
+
     //constructor
     public LineChartDisplay(ValueLineChart chart) {
         this.chart = chart;
@@ -14,7 +15,8 @@ public class LineChartDisplay {
      * Updates the line chart by adding the series for daily, monthly, and annual emissions.
      * This method is called when all calls for data are done
      */
-    void updateLineChart() {
+    void updateLineChart(String timePeriod) {
+
         LineChartData data = new LineChartData();
         // Clear existing data to refresh the chart
         chart.clearChart();
@@ -23,19 +25,20 @@ public class LineChartDisplay {
         ValueLineSeries annualSeries = data.getYearlyDataForChart();
 
         // Add each series to the chart
-        if (!dailySeries.getSeries().isEmpty()) {
-            chart.addSeries(dailySeries); // Add daily emissions line
-        }
-
-        if (!monthlySeries.getSeries().isEmpty()) {
-            chart.addSeries(monthlySeries); // Add monthly emissions line
-        }
-
-        if (!annualSeries.getSeries().isEmpty()) {
-            chart.addSeries(annualSeries); // Add yearly emissions line
-        }
-
-        // Refresh the chart to display the new data
+        switch (timePeriod) {
+            case ("Daily"):
+                chart.addSeries(dailySeries); // Add daily emissions line
+                break;
+            case ("Monthly"):
+                chart.addSeries(monthlySeries); // Add monthly emissions line
+                break;
+            case ("Yearly"):
+                chart.addSeries(annualSeries); // Add yearly emissions line
+                break;
+            default:
+                chart.addSeries(dailySeries); // Add daily emissions line
+                break;
+    }
         chart.startAnimation();
     }
 }
