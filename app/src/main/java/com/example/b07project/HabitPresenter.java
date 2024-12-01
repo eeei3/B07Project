@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 
 
@@ -108,8 +109,8 @@ public class HabitPresenter {
 
     public void personalSuggestions() {
         AsyncDBComms mp = new AsyncDBComms();
-        HashSet<Goal> temp = new HashSet<>();
-        HashSet<Goal> temp1 = new HashSet<>();
+        LinkedHashSet<Goal> temp = new LinkedHashSet<>();
+        LinkedHashSet<Goal> temp1 = new LinkedHashSet<>();
         FirebaseModel model = new FirebaseModel(
                 String.valueOf(mauth.getCurrentUser()));
         model.setModelPipe(new Model.ModelPresenterPipe() {
