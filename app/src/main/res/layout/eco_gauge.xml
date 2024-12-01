@@ -81,7 +81,7 @@
                     <!--Pie chart to display the data-->
 
 
-                    <org.eazegraph.lib.charts.PieChart xmlns:app="http://schemas.android.com/apk/res-auto"
+                    <com.github.mikephil.charting.charts.PieChart xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/piechart"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -464,7 +464,7 @@
             android:text="Emissions Trend"
             android:textSize="20sp" />
 
-        <org.eazegraph.lib.charts.ValueLineChart
+        <com.github.mikephil.charting.charts.LineChart
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/chart"
             android:layout_width="match_parent"

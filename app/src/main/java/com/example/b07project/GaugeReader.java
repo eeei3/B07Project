@@ -1,180 +1,291 @@
 package com.example.b07project;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import android.graphics.Color;
+import android.util.Log;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
-public class GaugeReader {
+public class GaugeReader extends EcoGauge {
 
-    private DatabaseReference databaseReference;
-    private static final int DAILY_LIMIT = 1;
-    private static final int MONTHLY_LIMIT = 30;
-    private static final int YEARLY_LIMIT = 365;
+    public PieChart pieChart; // Declare the PieChart view
 
-    public GaugeReader(String userId) {
-        // Initialize Firebase Database reference for a specific user
-        this.databaseReference = FirebaseDatabase.getInstance()
-                .getReference("users") // The parent node where user data is stored
-                .child(userId); // Add the userId to the path
+    /**
+     * Updates the chart based on the selected time period.
+     *
+     * @param timePeriod The selected time period.
+     */
+    public void updateChartForTimePeriod(String timePeriod) {
+        if (timePeriod == null) return;
+        switch (timePeriod) {
+            case "Daily":
+                updateForDaily();
+                break;
+            case "Monthly":
+                updateForMonthly();
+                break;
+            case "Yearly":
+                updateForYearly();
+                break;
+            default:
+                updateForDaily();
+                break;
+        }
     }
-    public void getMonthlyEmissionsPie(FirebaseCallback callback) {
-        final float[] monthlyEmissionsArray = {0, 0, 0};  // Default array with 3 sections: consumption, transportation, food
 
-        // Query Firebase to get the latest 30 records
-        databaseReference.limitToLast(30)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+    /**
+     * Updates the chart for daily
+     */
+    public void updateForDaily() {
+        EcoGauge temp = new EcoGauge();
+        String userId = temp.initializeFirebaseUser();
+
+        // Firebase reference for daily emissions
+        DatabaseReference dailyRef = FirebaseDatabase.getInstance()
+                .getReference("users").child(userId)
+                .child("ecotracker");
+
+        // Get current date in the required format (e.g., "yyyy-MM-dd")
+        long currentTimeMillis = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String today = sdf.format(new Date(currentTimeMillis));
+        Log.d("Date", "Today's Date: " + today);
+
+        dailyRef.child(today).child("calculatedEmissions").get()
+                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // If data exists for the last 30 entries
-                        if (dataSnapshot.exists()) {
-                            float totalConsumption = 0, totalTransportation = 0, totalFood = 0;
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DataSnapshot snapshot = task.getResult();
+                            if (snapshot.exists()) {
+                                // Retrieve emissions values
+                                double totalTranspo = snapshot.child("totalTranspo").getValue(Double.class) != null
+                                        ? snapshot.child("totalTranspo").getValue(Double.class) : 0;
+                                double totalFood = snapshot.child("totalFood").getValue(Double.class) != null
+                                        ? snapshot.child("totalFood").getValue(Double.class) : 0;
+                                double totalShopping = snapshot.child("totalShopping").getValue(Double.class) != null
+                                        ? snapshot.child("totalShopping").getValue(Double.class) : 0;
+                                double totalEmission = snapshot.child("totalEmission").getValue(Double.class) != null
+                                        ? snapshot.child("totalEmission").getValue(Double.class) : 0;
 
-                            // Loop through all the records from the past 30 days
-                            for (DataSnapshot record : dataSnapshot.getChildren()) {
-                                // Get the emissions data for each category
-                                Float consumption = ((Number) record.child("consumption").getValue()).floatValue();
-                                Float transportation = ((Number) record.child("transportation").getValue()).floatValue();
-                                Float food = ((Number) record.child("food").getValue()).floatValue();
+                                // Log values for debugging
+                                Log.d("DailyUpdate", "Total Transportation: " + totalTranspo);
+                                Log.d("DailyUpdate", "Total Food: " + totalFood);
+                                Log.d("DailyUpdate", "Total Shopping: " + totalShopping);
+                                Log.d("DailyUpdate", "Total Emission: " + totalEmission);
 
-                                // Sum up the emissions for each category over the last 30 entries
-                                if (consumption != null) totalConsumption += consumption;
-                                if (transportation != null) totalTransportation += transportation;
-                                if (food != null) totalFood += food;
+                                // Update UI
+                                transportation.setText(Integer.toString((int) totalTranspo));
+                                foodConsumption.setText(Integer.toString((int) totalFood));
+                                shopping.setText(Integer.toString((int) totalShopping));
+
+                                totalEmissionsText.setText(String.format("Daily Carbon Footprint: %.2f tons of CO₂e", totalEmission));
+
+                                // Update pie chart with MPAndroidChart
+                                updatePieChart(totalTranspo, totalFood, totalShopping);
+                            } else {
+                                System.out.print("No data for today");
                             }
-
-                            // Assign the summed values to the return array
-                            monthlyEmissionsArray[0] = totalConsumption;
-                            monthlyEmissionsArray[1] = totalTransportation;
-                            monthlyEmissionsArray[2] = totalFood;
-
-                            // Return the data via callback
-                            callback.onSuccess(monthlyEmissionsArray);
                         } else {
-                            // No data found for the last 30 entries
-                            callback.onFailure("No data available for the past 30 days.");
+                            Toast.makeText(GaugeReader.this, "Failed to fetch daily data.", Toast.LENGTH_SHORT).show();
                         }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Handle the error (e.g., network issues, Firebase issues)
-                        callback.onFailure("Failed to retrieve data: " + databaseError.getMessage());
                     }
                 });
     }
 
-    public void getDailyEmissionsPie(FirebaseCallback callback) {
-        final float[] dailyEmissionsArray = {0, 0, 0};  // Default array with 3 sections: consumption, transportation, food
-        long todayStart = getStartOfDay(System.currentTimeMillis());
+    /**
+     * Updates the pie chart
+     *
+     * @param totalTranspo The total transportation emissions.
+     * @param totalFood The total food consumption emissions.
+     * @param totalShopping The total shopping emissions.
+     */
+    public void updatePieChart(double totalTranspo, double totalFood, double totalShopping) {
+        // Create a list of PieEntry objects
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        entries.add(new PieEntry((float) totalTranspo, "Transportation"));
+        entries.add(new PieEntry((float) totalFood, "Food Consumption"));
+        entries.add(new PieEntry((float) totalShopping, "Shopping"));
 
-        // Query Firebase to get the emissions data for today
-        databaseReference.orderByChild("createdAt").startAt(todayStart)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        // Set data for the pie chart
+        PieDataSet dataSet = new PieDataSet(entries, "Emissions");
+        dataSet.setColors(ColorTemplate.MATERIAL_COLORS); // Set pie slice colors
+        PieData data = new PieData(dataSet);
+
+        // Set data and other properties
+        pieChart.setData(data);
+        pieChart.invalidate(); // Refresh the chart
+    }
+
+    /**
+     * Updates the chart for monthly
+     */
+
+    public void updateForMonthly() {
+        EcoGauge temp = new EcoGauge();
+        String userId = temp.initializeFirebaseUser();
+
+        // Firebase reference for emissions over the last 30 days
+        DatabaseReference emissionsRef = FirebaseDatabase.getInstance()
+                .getReference("users").child(userId)
+                .child("ecotracker");
+
+        emissionsRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // If data exists for today
-                        if (dataSnapshot.exists()) {
-                            float consumption = 0, transportation = 0, food = 0;
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DataSnapshot snapshot = task.getResult();
+                            double transportationEmissions = 0;
+                            double foodEmissions = 0;
+                            double shoppingEmissions = 0;
 
-                            // Loop through all records for today
-                            for (DataSnapshot record : dataSnapshot.getChildren()) {
-                                // Get each section's emissions data
-                                Float recordConsumption = ((Number) record.child("consumption").getValue()).floatValue();
-                                Float recordTransportation = ((Number) record.child("transportation").getValue()).floatValue();
-                                Float recordFood = ((Number) record.child("food").getValue()).floatValue();
+                            if (snapshot.exists()) {
+                                // Get current date and calculate the date 30 days ago
+                                long currentTime = System.currentTimeMillis();
+                                long thirtyDaysAgo = currentTime - TimeUnit.DAYS.toMillis(30);
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Use the same format as your stored dates
 
-                                // Add up the emissions for each category
-                                if (recordConsumption != null) consumption += recordConsumption;
-                                if (recordTransportation != null) transportation += recordTransportation;
-                                if (recordFood != null) food += recordFood;
+                                // Loop through the snapshot for the past data entries
+                                for (DataSnapshot dateSnapshot : snapshot.getChildren()) {
+                                    String date = dateSnapshot.getKey();
+                                    if (date != null) {
+                                        try {
+                                            // Parse the stored date
+                                            Date entryDate = dateFormat.parse(date);
+                                            if (entryDate != null && entryDate.getTime() >= thirtyDaysAgo) {
+                                                // Add emissions data only if the entry is within the last 30 days
+                                                DataSnapshot calculatedEmissions = dateSnapshot.child("calculatedEmissions");
+                                                transportationEmissions += calculatedEmissions.child("totalTranspo").getValue(Double.class) != null
+                                                        ? calculatedEmissions.child("totalTranspo").getValue(Double.class) : 0;
+                                                foodEmissions += calculatedEmissions.child("totalFood").getValue(Double.class) != null
+                                                        ? calculatedEmissions.child("totalFood").getValue(Double.class) : 0;
+                                                shoppingEmissions += calculatedEmissions.child("totalShopping").getValue(Double.class) != null
+                                                        ? calculatedEmissions.child("totalShopping").getValue(Double.class) : 0;
+                                            }
+                                        } catch (Exception e) {
+                                            Log.e("DateParsing", "Failed to parse date: " + date, e);
+                                        }
+                                    }
+                                }
                             }
 
-                            // Assign to the return array
-                            dailyEmissionsArray[0] = consumption;
-                            dailyEmissionsArray[1] = transportation;
-                            dailyEmissionsArray[2] = food;
-                            callback.onSuccess(dailyEmissionsArray);
-                        } else {
-                            // No data found for today
-                            callback.onFailure("No survey completed for today. Please complete your survey.");
-                        }
-                    }
+                            // If no data exists for the last 30 days, assume zero emissions
+                            if (transportationEmissions == 0 && foodEmissions == 0 && shoppingEmissions == 0) {
+                                Log.d("30DayUpdate", "No data available for the last 30 days. Assuming zero emissions.");
+                            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Handle the error (e.g., network issues, Firebase issues)
-                        callback.onFailure("Failed to retrieve data: " + databaseError.getMessage());
+                            // Total emissions calculation
+                            double totalEmission = transportationEmissions + foodEmissions + shoppingEmissions;
+
+                            // Log values for debugging
+                            Log.d("30DayUpdate", "Transportation: " + transportationEmissions);
+                            Log.d("30DayUpdate", "Food: " + foodEmissions);
+                            Log.d("30DayUpdate", "Shopping: " + shoppingEmissions);
+                            Log.d("30DayUpdate", "Total Emission: " + totalEmission);
+
+                            // Update the UI
+                            transportation.setText(Integer.toString((int) transportationEmissions));
+                            foodConsumption.setText(Integer.toString((int) foodEmissions));
+                            shopping.setText(Integer.toString((int) shoppingEmissions));
+
+                            totalEmissionsText.setText(String.format("Total Carbon Footprint (Last 30 Days): %.2f tons of CO₂e", totalEmission));
+
+                            // Update Pie Chart
+                            updatePieChart(transportationEmissions, foodEmissions, shoppingEmissions);
+                        } else {
+                            Toast.makeText(GaugeReader.this, "Failed to fetch data for the last 30 days.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
     }
 
-    public void getYearlyEmissionsPie(FirebaseCallback callback) {
-        // Get the current timestamp and calculate the start of the year (365 days ago)
-        long oneYearAgo = System.currentTimeMillis() - (365L * 24 * 60 * 60 * 1000); // 365 days in milliseconds
+    /**
+     * Updates the chart for yearly
+     */
+    public void updateForYearly() {
+        EcoGauge temp = new EcoGauge();
+        String userId = temp.initializeFirebaseUser();
 
-        // Query Firebase for records created in the last 365 days
-        databaseReference.orderByChild("createdAt").startAt(oneYearAgo)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        // Firebase reference for emissions over the last 365 days
+        DatabaseReference emissionsRef = FirebaseDatabase.getInstance()
+                .getReference("users").child(userId)
+                .child("ecotracker");
+
+        emissionsRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Initialize an array to hold the total emissions for each category: Consumption, Transportation, Food
-                        float[] yearlyEmissions = {0f, 0f, 0f}; // {Consumption, Transportation, Food}
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DataSnapshot snapshot = task.getResult();
+                            double transportationEmissions = 0;
+                            double foodEmissions = 0;
+                            double shoppingEmissions = 0;
 
-                        // Check if there is any data returned from Firebase
-                        if (dataSnapshot.exists()) {
-                            // Loop through each record returned from Firebase
-                            for (DataSnapshot record : dataSnapshot.getChildren()) {
-                                // Fetch emissions data for each category (assuming data structure has "consumption", "transportation", "food")
-                                float consumption = ((Number) record.child("consumption").getValue()).floatValue();
-                                float transportation = ((Number) record.child("transportation").getValue()).floatValue();
-                                float food = ((Number) record.child("food").getValue()).floatValue();
-
-                                // Add the values to the corresponding categories in the emissions array
-                                yearlyEmissions[0] += consumption;
-                                yearlyEmissions[1] += transportation;
-                                yearlyEmissions[2] += food;
+                            if (snapshot.exists()) {
+                                // Loop through the snapshot for the past 365 days
+                                for (DataSnapshot dateSnapshot : snapshot.getChildren()) {
+                                    String date = dateSnapshot.getKey();
+                                    if (date != null) {
+                                        DataSnapshot calculatedEmissions = dateSnapshot.child("calculatedEmissions");
+                                        transportationEmissions += calculatedEmissions.child("totalTranspo").getValue(Double.class) != null
+                                                ? calculatedEmissions.child("totalTranspo").getValue(Double.class) : 0;
+                                        foodEmissions += calculatedEmissions.child("totalFood").getValue(Double.class) != null
+                                                ? calculatedEmissions.child("totalFood").getValue(Double.class) : 0;
+                                        shoppingEmissions += calculatedEmissions.child("totalShopping").getValue(Double.class) != null
+                                                ? calculatedEmissions.child("totalShopping").getValue(Double.class) : 0;
+                                    }
+                                }
                             }
 
-                            // After processing all records, return the emissions array via the callback
-                            callback.onSuccess(yearlyEmissions);
-                        } else {
-                            // No data for the past year
-                            callback.onFailure("No data available for the past year.");
-                        }
-                    }
+                            // If no data exists at all, assume zero emissions
+                            if (transportationEmissions == 0 && foodEmissions == 0 && shoppingEmissions == 0) {
+                                Log.d("365DayUpdate", "No data available for the last 365 days. Assuming zero emissions.");
+                            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Handle Firebase database error
-                        callback.onFailure("Failed to retrieve data: " + databaseError.getMessage());
+                            // Total emissions calculation
+                            double totalEmission = transportationEmissions + foodEmissions + shoppingEmissions;
+
+                            // Log values for debugging
+                            Log.d("365DayUpdate", "Transportation: " + transportationEmissions);
+                            Log.d("365DayUpdate", "Food: " + foodEmissions);
+                            Log.d("365DayUpdate", "Shopping: " + shoppingEmissions);
+                            Log.d("365DayUpdate", "Total Emission: " + totalEmission);
+
+                            // Update the UI
+                            transportation.setText(Integer.toString((int) transportationEmissions));
+                            foodConsumption.setText(Integer.toString((int) foodEmissions));
+                            shopping.setText(Integer.toString((int) shoppingEmissions));
+
+                            totalEmissionsText.setText(String.format("Total Carbon Footprint (Last 365 Days): %.2f tons of CO₂e", totalEmission));
+
+                            // Update Pie Chart
+                            updatePieChart(transportationEmissions, foodEmissions, shoppingEmissions);
+                        } else {
+                            Toast.makeText(GaugeReader.this, "Failed to fetch data for the last 365 days.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
     }
 
-    // Helper method to get the start of the current day (midnight in UTC)
-    private long getStartOfDay(long timestamp) {
-        java.util.Calendar calendar = java.util.Calendar.getInstance();
-        calendar.setTimeInMillis(timestamp);
-        calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
-        calendar.set(java.util.Calendar.MINUTE, 0);
-        calendar.set(java.util.Calendar.SECOND, 0);
-        calendar.set(java.util.Calendar.MILLISECOND, 0);
-        return calendar.getTimeInMillis();
-    }
 
-    // Helper method to notify the user
-    private void notifyUser(String message) {
-        System.out.println(message); // Replace with actual notification logic, such as a Toast
-    }
-
-    public interface FirebaseCallback {
-        void onSuccess(float[] EmissionsArray);
-        void onFailure(String errorMessage);
-    }
 }
