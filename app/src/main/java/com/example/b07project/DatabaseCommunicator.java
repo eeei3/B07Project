@@ -251,7 +251,12 @@ public class DatabaseCommunicator {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
-                    raw.setNumFlights(Integer.parseInt(String.valueOf(task.getResult().getValue())));
+                    try {
+                        raw.setNumFlights(Integer.parseInt(String.valueOf(task.getResult().getValue())));
+                    }
+                    catch (NumberFormatException e) {
+                        raw.setNumFlights(0);
+                    }
                     if (rawiter >= 14) {
                         waiter.onObjectReady();
                     }
