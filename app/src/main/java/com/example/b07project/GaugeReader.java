@@ -1,6 +1,5 @@
 package com.example.b07project;
 
-import android.graphics.Color;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -14,32 +13,52 @@ import java.util.concurrent.TimeUnit;
 public class GaugeReader extends EcoGauge {
 
     /**
-     * Main Method to update charts based on given data
-     * @param timePeriod is the selected time
+     * Main method to update charts based on the selected time period
+     * @param timePeriod is the time (daily, monthly, yearly)
      */
     public void updateChartForTimePeriod(String timePeriod) {
         if (timePeriod == null) return;
+
+        long startTimestamp = 0;
         switch (timePeriod) {
             case "Daily":
-                updateForDaily();
+                startTimestamp = System.currentTimeMillis();
                 break;
             case "Monthly":
-                updateForMonthly();
+                startTimestamp = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(30);
                 break;
             case "Yearly":
-                updateForYearly();
+                startTimestamp = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(365);
                 break;
             default:
-                updateForDaily();
+                startTimestamp = System.currentTimeMillis();
                 break;
         }
+
+        updateChart(startTimestamp);
     }
 
     /**
-     * Method to get data from firebase
-     * @param userId is the userId that user logged in with
-     * @param startTimestamp is starting time we want to fetch data from
-     * @param endTimestamp is the ending time till we want the data
+     * Generic method to fetch emissions data
+     * @param startTimestamp the time we want the function to start fetching the data
+     */
+    private void updateChart(long startTimestamp) {
+        String userId = initializeFirebaseUser();
+        fetchEmissionsData(userId, startTimestamp, System.currentTimeMillis(), new EmissionsCallback() {
+            @Override
+            public void onEmissionsDataFetched(double totalTranspo, double totalFood, double totalShopping, double totalEmission) {
+                UpdatePieChart chart = new UpdatePieChart();
+                chart.updateUI(totalTranspo, totalFood, totalShopping, totalEmission);
+                chart.updatePieChart(totalTranspo, totalFood, totalShopping);
+            }
+        });
+    }
+
+    /**
+     * Fetch emissions data from Firebase
+     * @param userId is the Id user logged in with
+     * @param startTimestamp the start time
+     * @param endTimestamp the end time
      * @param callback
      */
     private void fetchEmissionsData(String userId, long startTimestamp, long endTimestamp, final EmissionsCallback callback) {
@@ -47,7 +66,6 @@ public class GaugeReader extends EcoGauge {
                 .getReference("users").child(userId)
                 .child("ecotracker");
 
-        // Querying for the records between the provided start and end timestamps
         emissionsRef.orderByKey()
                 .startAt(DatesForDataBase.getFormattedDate(startTimestamp))
                 .endAt(DatesForDataBase.getFormattedDate(endTimestamp))
@@ -59,86 +77,29 @@ public class GaugeReader extends EcoGauge {
                             DataSnapshot snapshot = task.getResult();
                             double totalTranspo = 0, totalFood = 0, totalShopping = 0, totalEmission = 0;
 
-                            // Iterating over the snapshot data for each day
                             for (DataSnapshot dateSnapshot : snapshot.getChildren()) {
-                                // Access the "calculatedEmissions" node within each date node
                                 DataSnapshot emissionsSnapshot = dateSnapshot.child("calculatedEmissions");
 
-                                // Access individual emission fields within "calculatedEmissions"
                                 Double transpo = emissionsSnapshot.child("totalTranspo").getValue(Double.class);
                                 Double food = emissionsSnapshot.child("totalFood").getValue(Double.class);
                                 Double shopping = emissionsSnapshot.child("totalShopping").getValue(Double.class);
                                 Double emission = emissionsSnapshot.child("totalEmission").getValue(Double.class);
 
-                                // Summing the emission data, ensuring null values are handled
                                 totalTranspo += transpo != null ? transpo : 0;
                                 totalFood += food != null ? food : 0;
                                 totalShopping += shopping != null ? shopping : 0;
                                 totalEmission += emission != null ? emission : 0;
                             }
 
-                            // Returning the result through the callback
                             callback.onEmissionsDataFetched(totalTranspo, totalFood, totalShopping, totalEmission);
                         } else {
-                            Log.e("Emissions", "Error fetching data");
+                            Log.e("Emissions", "Error fetching data: " + task.getException());
                             Toast.makeText(GaugeReader.this, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-
-    /**
-     * Method to update the chart for daily emissions
-     */
-    public void updateForDaily() {
-        String userId = initializeFirebaseUser();
-
-        fetchEmissionsData(userId, System.currentTimeMillis(), System.currentTimeMillis(), new EmissionsCallback() {
-            @Override
-            public void onEmissionsDataFetched(double totalTranspo, double totalFood, double totalShopping, double totalEmission) {
-                UpdatePieChart chart = new UpdatePieChart();
-                chart.updateUI(totalTranspo, totalFood, totalShopping, totalEmission);
-                chart.updatePieChart(totalTranspo, totalFood, totalShopping);
-            }
-        });
-    }
-
-    /**
-     * Method to update the chart for monthly emissions
-     */
-    public void updateForMonthly() {
-        String userId = initializeFirebaseUser();
-        long thirtyDaysAgo = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(30);
-
-        fetchEmissionsData(userId, thirtyDaysAgo, System.currentTimeMillis(), new EmissionsCallback() {
-            @Override
-            public void onEmissionsDataFetched(double totalTranspo, double totalFood, double totalShopping, double totalEmission) {
-                UpdatePieChart chart = new UpdatePieChart();
-                chart.updateUI(totalTranspo, totalFood, totalShopping, totalEmission);
-                chart.updatePieChart(totalTranspo, totalFood, totalShopping);
-            }
-        });
-    }
-
-    /**
-     * Method to update the chart for yearly emissions
-     */
-    public void updateForYearly() {
-        String userId = initializeFirebaseUser();
-        long oneYearAgo = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(365);
-
-        fetchEmissionsData(userId, oneYearAgo, System.currentTimeMillis(), new EmissionsCallback() {
-            @Override
-            public void onEmissionsDataFetched(double totalTranspo, double totalFood, double totalShopping, double totalEmission) {
-                UpdatePieChart chart = new UpdatePieChart();
-                chart.updateUI(totalTranspo, totalFood, totalShopping, totalEmission);
-                chart.updatePieChart(totalTranspo, totalFood, totalShopping);
-            }
-        });
-    }
-
-    // Callback interface for emissions data
     public interface EmissionsCallback {
         void onEmissionsDataFetched(double totalTranspo, double totalFood, double totalShopping, double totalEmission);
     }
