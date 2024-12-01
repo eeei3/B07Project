@@ -32,7 +32,6 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
     private EditText timesEditText;
     private SeekBar timesSeekBar;
     private View reminderOptionsContainer;
-    public HabitPresenter presenter;
 
     /**
      * Creates a new instance of HabitsSetGoalsDialogFragment with the specified habit description.
@@ -197,13 +196,15 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
                 if (habit.getHabitDesc().equals(getArguments().getString(argHabitDesc))) {
                     HabitsMenu.userGoals.add(habit);
 
-                    // tommy: add goal/habit to the firebase
-                    HabitsMenu.presenter.userAddGoal(habit, goal);
-
                     // Notify the adapter that the habit has been updated
                     if (getActivity() instanceof OnHabitUpdatedListener) {
                         ((OnHabitUpdatedListener) getActivity()).onHabitUpdated(habit);
                     }
+
+                    // tommy: add goal/habit to the firebase
+                    HabitsMenu.presenter.userAddGoal(habit, goal);
+
+
 
                     // close the dialog
                     success();

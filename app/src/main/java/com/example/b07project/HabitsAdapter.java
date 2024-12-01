@@ -3,6 +3,7 @@ package com.example.b07project;
 import static android.view.View.GONE;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +82,9 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull HabitsAdapter.MyViewHolder holder, int position) {
         // set the components for the current habit
+        Log.d("HabitsMenu", "recommendedGoals size: " + HabitsMenu.recommendedGoals.size());
+
+
         Goal habit = habitsModels.get(position);
         holder.habitName.setText(habit.getName());
         holder.habitImage.setImageResource(habit.getImage());
@@ -92,7 +96,7 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
         holder.cancelButton.setVisibility(GONE);
 
         // define behaviour/look of components other than the cancel button (if visible)
-        if (!HabitsMenu.currentMenu[0]) {
+        if (HabitsMenu.currentMenu[0] != 1) {
             // if on All Habits menu, correctly display adopted habits, if any
             if (HabitsMenu.userGoals.contains(habit)) {
                 int planetzeColour2 = ContextCompat.getColor(context, R.color.planetze_colour_2);
@@ -127,7 +131,12 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
 
         // define behaviour if the habit item is clicked
         holder.itemView.setOnClickListener(v -> {
-            if (!HabitsMenu.currentMenu[0]) {
+            if (HabitsMenu.currentMenu[0] == 1) {
+                // if on User's Habits menu, launch a dialog to display and log the habit's activities
+                UserHabitsProgressDialogFragment habitDialog = UserHabitsProgressDialogFragment.newInstance(habit.getName());
+                habitDialog.show(((AppCompatActivity) context).getSupportFragmentManager(),
+                        "user_progress" );
+            } else {
                 // if on All Habits menu, launch a dialog to elaborate on the habit's details
                 HabitsDetailsDialogFragment habitDialog = HabitsDetailsDialogFragment.newInstance(
                         habit.getHabitDesc(),
@@ -136,11 +145,6 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
                 );
                 habitDialog.show(((AppCompatActivity) context).getSupportFragmentManager(),
                         "habit_details_dialog");
-            } else {
-                // if on User's Habits menu, launch a dialog to display and log the habit's activities
-                UserHabitsProgressDialogFragment habitDialog = UserHabitsProgressDialogFragment.newInstance(habit.getName());
-                habitDialog.show(((AppCompatActivity) context).getSupportFragmentManager(),
-                        "user_progress" );
             }
         });
 

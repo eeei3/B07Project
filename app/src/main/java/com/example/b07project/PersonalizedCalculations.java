@@ -48,51 +48,59 @@ public class PersonalizedCalculations {
      * calculateScore - Calculates the user's score in each category, higher score means the user
      * has been more active in that category.
      */
-    private void calculateScore() {
+    public void calculateScore() {
         float res = 0.0F;
         for (Goal g: goals) {
             if (g.category.equals("Transport")) {
-                if (g.impact.equals("High")) {
-                    transportScore += 2.5;
-                }
-                else if (g.impact.equals("Medium")) {
-                    transportScore += 1;
-                }
-                else if (g.impact.equals("Low")) {
-                    transportScore += 0.6;
+                switch (g.impact) {
+                    case "High":
+                        transportScore += 2.5;
+                        break;
+                    case "Medium":
+                        transportScore += 1;
+                        break;
+                    case "Low":
+                        transportScore += 0.6;
+                        break;
                 }
             }
             if (g.category.equals("Consumption")) {
-                if (g.impact.equals("High")) {
-                    consumptionScore += 2.5;
-                }
-                else if (g.impact.equals("Medium")) {
-                    consumptionScore += 1;
-                }
-                else if (g.impact.equals("Low")) {
-                    consumptionScore += 0.6;
+                switch (g.impact) {
+                    case "High":
+                        consumptionScore += 2.5;
+                        break;
+                    case "Medium":
+                        consumptionScore += 1;
+                        break;
+                    case "Low":
+                        consumptionScore += 0.6;
+                        break;
                 }
             }
             if (g.category.equals("Energy")) {
-                if (g.impact.equals("High")) {
-                    electricScore += 2.5;
-                }
-                else if (g.impact.equals("Medium")) {
-                    electricScore += 1;
-                }
-                else if (g.impact.equals("Low")) {
-                    electricScore += 0.6;
+                switch (g.impact) {
+                    case "High":
+                        electricScore += 2.5;
+                        break;
+                    case "Medium":
+                        electricScore += 1;
+                        break;
+                    case "Low":
+                        electricScore += 0.6;
+                        break;
                 }
             }
             if (g.category.equals("Food")) {
-                if (g.impact.equals("High")) {
-                    foodScore += 2.5;
-                }
-                else if (g.impact.equals("Medium")) {
-                    foodScore += 1;
-                }
-                else if (g.impact.equals("Low")) {
-                    foodScore += 0.6;
+                switch (g.impact) {
+                    case "High":
+                        foodScore += 2.5;
+                        break;
+                    case "Medium":
+                        foodScore += 1;
+                        break;
+                    case "Low":
+                        foodScore += 0.6;
+                        break;
                 }
             }
         }

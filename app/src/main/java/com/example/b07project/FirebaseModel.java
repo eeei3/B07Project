@@ -1,13 +1,9 @@
 package com.example.b07project;
 
 import android.util.Log;
-
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -96,6 +92,20 @@ class Goal {
         this.habitDesc = habitDesc;
         this.impactDesc = impactDesc;
         this.image = image;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;  // Check if both objects are the same
+        if (obj == null || getClass() != obj.getClass()) return false;  // Ensure it's the same class
+        Goal goal = (Goal) obj;  // Cast the object to a Goal instance
+        return name.equals(goal.name) && category.equals(goal.category);  // Compare name and category
+    }
+
+    // Override hashCode() to generate a consistent hash code based on name and category
+    @Override
+    public int hashCode() {
+        return name.hashCode() + category.hashCode();  // Generate hash based on name and category
     }
 
     /**

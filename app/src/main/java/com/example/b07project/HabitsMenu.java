@@ -2,11 +2,11 @@ package com.example.b07project;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,8 +30,10 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
     public static ArrayList<Goal> allGoals = new ArrayList<>();
     public static ArrayList<Goal> filteredGoals = new ArrayList<>();
     public static ArrayList<Goal> userGoals = new ArrayList<>();
+
+    public static ArrayList<Goal> recommendedGoals = new ArrayList<>();
     // !!! NOTE: userHabitsModels needs to be replaced with the user's habits pulled from the firebase
-    public static final boolean[] currentMenu = {false}; // false for all habits, true for user's habits, final bcs android studio complains
+    public static final int[] currentMenu = {0}; // 0 for all habits, 1 for user's habits, 2 for recommended habits
 
     // tommy - static in order to be reached from various other dialog fragments classes
     public static HabitPresenter presenter;
@@ -60,6 +62,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         // initialize the presenter
         presenter = new HabitPresenter(this);
 
+
         // get all interactive components from habits_main_page.xml
         Button allHabits = findViewById(R.id.allHabitsButton);
         Button usersHabits = findViewById(R.id.userHabitsButton);
@@ -67,6 +70,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         ChipGroup filterChips = findViewById(R.id.filter_chip_group);
         ImageView filterTool = findViewById(R.id.filter_icon);
         SearchView searchTool = findViewById(R.id.search_tool);
+        CardView recommendHabitsCard = findViewById(R.id.card_recomd);
 
         // set default look for some interactive components
         searchTool.clearFocus();
@@ -85,18 +89,17 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         // tommy - get the user's goals which initializes the field userHabitsModels
         presenter.userGetGoal();
 
-
-
         // define behaviour for when the "Your Habits" button is clicked
         usersHabits.setOnClickListener(v -> {
             // switch to the User's Habits page if not already on it
-            if (!currentMenu[0]) {
+            if (currentMenu[0] != 1) {
                 HabitsMenu.presenter.userGetGoal();
 //                Log.e("fuck9999", String.valueOf(userGoals.size()));
                 filterChips.clearCheck();
                 usersHabits.setBackgroundColor(planetzeColour3);
                 allHabits.setBackgroundColor(planetzeColour4);
-                currentMenu[0] = true;
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
+                currentMenu[0] = 1;
                 setUserArrayForAdapter();
             }
         });
@@ -104,18 +107,38 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         // define behaviour for when the "All Habits" button is clicked
         allHabits.setOnClickListener(v -> {
             // switch to the All Habits page if not already in it
-            if (currentMenu[0]) {
+            if (currentMenu[0] != 0) {
 //                userGoals = new ArrayList<>();
                 filterChips.clearCheck();
                 allHabits.setBackgroundColor(planetzeColour3);
                 usersHabits.setBackgroundColor(planetzeColour4);
-                currentMenu[0] = false;
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
+                currentMenu[0] = 0;
                 setOriginalArrayForAdapter();
+            }
+        });
+
+        recommendHabitsCard.setOnClickListener(v -> {
+            if (currentMenu [0] != 2) {
+                filterChips.clearCheck();
+                recommendedGoals.clear();
+                presenter.personalSuggestions();
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour3);
+                allHabits.setBackgroundColor(planetzeColour4);
+                usersHabits.setBackgroundColor(planetzeColour4);
+                currentMenu[0] = 2;
+                setRecommendedArrayForAdapter();
             }
         });
 
         // define behaviour for when one or more categorical buttons is/are clicked
         filterChips.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            if (currentMenu[0] == 2) {
+                currentMenu[0] = 0;
+                allHabits.setBackgroundColor(planetzeColour3);
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
+            }
+
             ArrayList<String> checkedCategories = new ArrayList<>();
             // get the categories chose
             for (Integer chipId : checkedIds) {
@@ -131,11 +154,15 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
 
         // define behaviour for when the filter icon is clicked
         filterTool.setOnClickListener(v -> {
+            // exit recommend habits if on it
             // reset the RecyclerView (i.e. removing any Chips selected)
-            if (currentMenu[0]) {
-                setUserArrayForAdapter();
-            } else {
+            if (currentMenu[0] == 2) {
+                currentMenu[0] = 0;
+                allHabits.setBackgroundColor(planetzeColour3);
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
                 setOriginalArrayForAdapter();
+            } else {
+                setUserArrayForAdapter();
             }
             filterChips.clearCheck();
             // load dialog to display filter options
@@ -172,11 +199,19 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
             @Override
             public boolean onQueryTextChange(String newText) {
                 // Note: uncheck all Chips and previous filters (no idea how to implement otherwise)
+                if (currentMenu[0] == 2) {
+                    currentMenu[0] = 0;
+                    allHabits.setBackgroundColor(planetzeColour3);
+                    recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
+                }
                 filterChips.clearCheck();
                 filterBySearch(newText);
                 return true;
             }
         });
+
+
+
     }
 
     /**
@@ -222,6 +257,10 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         adapter.setHabitsModels(allGoals);
     }
 
+    static void setRecommendedArrayForAdapter() {
+        adapter.setHabitsModels(recommendedGoals);
+    }
+
     /**
      * Method to filter the dataset for the RecyclerView adapter via categories and/or
      * levels of impacts selected.
@@ -232,11 +271,16 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
     public static void filterHabits(ArrayList<String> checkedCategories,
                                             ArrayList<String> checkedImpacts) {
         filteredGoals.clear();
-        ArrayList<Goal> toBeFilteredHabitsModels = currentMenu[0] ? userGoals : allGoals;
+        ArrayList<Goal> toBeFilteredHabitsModels;
+        if (currentMenu[0] == 0) {
+            toBeFilteredHabitsModels = allGoals;
+        } else {
+            toBeFilteredHabitsModels = userGoals;
+        }
 
         if (checkedCategories.isEmpty() && checkedImpacts.isEmpty()) {
             // if no filters are selected, simply restore the original dataset
-            if (currentMenu[0]) {
+            if (currentMenu[0] == 1) {
                 setUserArrayForAdapter();
             } else {
                 setOriginalArrayForAdapter();
@@ -276,7 +320,12 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
      */
     public void filterBySearch(String newText) {
         filteredGoals.clear();
-        ArrayList<Goal> toBeFilteredHabitsModels = currentMenu[0] ? userGoals : allGoals;
+        ArrayList<Goal> toBeFilteredHabitsModels;
+        if (currentMenu[0] == 0) {
+            toBeFilteredHabitsModels = allGoals;
+        } else {
+            toBeFilteredHabitsModels = userGoals;
+        }
 
         // keep the habit if either the its name, desc, or impact desc contains the queried text newText
         for (Goal habit : toBeFilteredHabitsModels) {
@@ -297,10 +346,15 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
      */
     @Override
     public void onHabitUpdated(Goal habit) {
-        int position = allGoals.indexOf(habit);
-        if (position != -1) {
+        int position1 = allGoals.indexOf(habit);
+        int position2 = recommendedGoals.indexOf(habit);
+        if (position1 != -1) {
             // Update the background colour for the corresponding habit
-            adapter.notifyItemChanged(position);
+            adapter.notifyItemChanged(position1);
+            //adapter.notifyDataSetChanged();
+        }
+        if (position2 != -1) {
+            adapter.notifyItemChanged(position2);
         }
     }
 }

@@ -5,10 +5,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Objects;
 
 
 /**
@@ -19,8 +17,6 @@ public class HabitPresenter {
     HabitsMenu view;
     UserHabitsProgressDialogFragment progdiafrag;
     FirebaseAuth mauth;
-
-    HabitsSetGoalsDialogFragment godiagrag;
     Model.ModelPresenterPipe listener;
     HashSet<Goal> suggested;
 
@@ -43,41 +39,104 @@ public class HabitPresenter {
      * a category that the user has been doing most, and one that the user has been doing the least
      */
     public void personalSuggestions() {
-        AsyncDBComms mp = new AsyncDBComms();
-        LinkedHashSet<Goal> temp = new LinkedHashSet<>();
-        LinkedHashSet<Goal> temp1 = new LinkedHashSet<>();
-        FirebaseModel model = new FirebaseModel(
-                String.valueOf(mauth.getCurrentUser()));
-        model.setModelPipe(new Model.ModelPresenterPipe() {
-            int toggle = 0;
-            @Override
-            public void onObjectReady(AsyncComms betweener) {
-                AsyncDBComms plug = (AsyncDBComms) betweener;
-                if (toggle == 0) {
-                    temp.addAll(plug.usergoals);
-                    toggle += 1;
-                }
-                else {
-                    temp1.addAll(plug.listgoals);
-                    PersonalizedCalculations calculator = new PersonalizedCalculations();
-                    if (temp.size() > temp1.size()) {
-                        calculator.goals = temp1;
-                        calculator.available = temp;
-                    }
-                    else {
-                        calculator.goals = temp;
-                        calculator.available = temp1;
-                    }
-                    calculator.prepare();
+        if (HabitsMenu.userGoals == null || HabitsMenu.userGoals.isEmpty()) {
+            System.out.println("userGoals is null");
+        }
+        if (HabitsMenu.allGoals == null || HabitsMenu.allGoals.isEmpty()) {
+            System.out.println("allGoals is null");
+        }
 
-                    suggested.add(calculator.calculateNew());
-                    suggested.add(calculator.calculateRecommendation());
-                }
-//                listener.onObjectReady(pv);
+        LinkedHashSet<Goal> temp = new LinkedHashSet<>(HabitsMenu.userGoals);
+        LinkedHashSet<Goal> temp1 = new LinkedHashSet<>();
+        PersonalizedCalculations calculator = new PersonalizedCalculations();
+
+        if (HabitsMenu.userGoals.contains(null)) {
+            System.out.println("userGoals contains null");
+        }
+        if (HabitsMenu.allGoals.contains(null)) {
+            System.out.println("allGoals contains null");
+        }
+
+        calculator.goals = temp;
+        for (int i = 0; i < HabitsMenu.allGoals.size(); i++) {
+            if (!HabitsMenu.userGoals.contains(HabitsMenu.allGoals.get(i))) {
+                temp1.add(HabitsMenu.allGoals.get(i));
             }
-        });
-        model.getListGoals(mp);
-        model.getGoals(mp);
+        }
+        calculator.available = temp1;
+        System.out.println(temp1.size());
+        System.out.println(temp.size());
+        calculator.prepare();
+        calculator.calculateScore();
+
+        System.out.println("HELLO");
+        Goal recomd = calculator.calculateRecommendation();
+        Goal newToTry = calculator.calculateNew();
+
+        if (recomd == null && newToTry == null) {
+            return;
+        } else if (recomd != null && newToTry != null) {
+            if (recomd.equals(newToTry)) {
+                HabitsMenu.recommendedGoals.add(recomd);
+            } else {
+                HabitsMenu.recommendedGoals.add(recomd);
+                HabitsMenu.recommendedGoals.add(newToTry);
+            }
+        } else if (recomd == null) {
+            HabitsMenu.recommendedGoals.add(newToTry);
+        } else {
+            HabitsMenu.recommendedGoals.add(recomd);
+        }
+
+        System.out.println(HabitsMenu.recommendedGoals.size());
+
+        if (calculator.calculateRecommendation() == null) {
+            System.out.println("Recommended NULL 1");
+        }
+        if (calculator.calculateNew() == null) {
+            System.out.println("Recommended NULL 2");
+        }
+
+
+
+
+//        AsyncDBComms mp = new AsyncDBComms();
+//        LinkedHashSet<Goal> temp = new LinkedHashSet<>();
+//        LinkedHashSet<Goal> temp1 = new LinkedHashSet<>();
+//        FirebaseModel model = new FirebaseModel(
+//                String.valueOf(mauth.getCurrentUser()));
+//        model.setModelPipe(new Model.ModelPresenterPipe() {
+//            int toggle = 0;
+//            @Override
+//            public void onObjectReady(AsyncComms betweener) {
+//                AsyncDBComms plug = (AsyncDBComms) betweener;
+//                if (toggle == 0) {
+//                    temp.addAll(plug.usergoals);
+//                    toggle += 1;
+//                }
+//                else {
+//                    temp1.addAll(plug.listgoals);
+//                    PersonalizedCalculations calculator = new PersonalizedCalculations();
+//                    if (temp.size() > temp1.size()) {
+//                        calculator.goals = temp1;
+//                        calculator.available = temp;
+//                    }
+//                    else {
+//                        calculator.goals = temp;
+//                        calculator.available = temp1;
+//                    }
+//                    calculator.prepare();
+//
+////                    suggested.add(calculator.calculateNew());
+////                    suggested.add(calculator.calculateRecommendation());
+//                    HabitsMenu.recommendedGoals.add(calculator.calculateRecommendation());
+//                    HabitsMenu.recommendedGoals.add(calculator.calculateNew());
+//                }
+////                listener.onObjectReady(pv);
+//            }
+//        });
+//        model.getListGoals(mp);
+//        model.getGoals(mp);
 
     }
 
@@ -115,7 +174,7 @@ public class HabitPresenter {
             @Override
             public void onObjectReady(AsyncComms betweener) {
                 if (mp.res) {
-                    view.userGoals.addAll(mp.usergoals);
+                    HabitsMenu.userGoals.addAll(mp.usergoals);
                 }
 //                model.setModelPipe(null);
             }
@@ -134,19 +193,20 @@ public class HabitPresenter {
             @Override
             public void onObjectReady(AsyncComms betweener) {
                 Log.e("fuck3", String.valueOf(habit.prog));
-                habit.prog = habit.prog + 1;
+//                habit.prog = habit.prog + 1;
+                HabitsMenu.progress++;
                 Log.e("fuck4", String.valueOf(habit.prog));
                 AsyncDBComms plug = (AsyncDBComms) betweener;
 //                view.progress = prog;
 //                UserHabitsProgressDialogFragment.logActivity.setEnabled(true);
 //                userGetProg(goal);
-                progdiafrag.setTextNumDays(habit.prog);
-                progdiafrag.setProgressBar(habit.prog);
+                progdiafrag.setTextNumDays(HabitsMenu.progress);
+                progdiafrag.setProgressBar(HabitsMenu.progress);
 //                model.setModelPipe(null);
             }
         });
         Log.e("fuck1", String.valueOf(habit.prog));
-        model.setProg(habit.name, habit.prog + 1, mp);
+        model.setProg(habit.name, HabitsMenu.progress + 1, mp);
         Log.e("fuck2", String.valueOf(habit.prog));
     }
 
@@ -166,11 +226,11 @@ public class HabitPresenter {
                 if (plug.res) {
 //                    Log.e("fuck", String.valueOf(plug.res));
                     // update the progress and aim in the view for the specified goal
-                    view.progress = (int) plug.values.get(0);
-                    view.aim = (int) plug.values.get(1);
+                    HabitsMenu.progress = (int) plug.values.get(0);
+                    HabitsMenu.aim = (int) plug.values.get(1);
 //                    progdiafrag.setProgressBar();
-//                    progdiafrag.setProgressBar();
-                    progdiafrag.setTextNumDays((int)plug.values.get(0));
+                    progdiafrag.setProgressBar(HabitsMenu.progress);
+                    progdiafrag.setTextNumDays(HabitsMenu.progress);
 //                    model.setModelPipe(null);
                 }
                 else {

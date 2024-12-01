@@ -2,6 +2,7 @@ package com.example.b07project;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
     private final static String argHabitName = "habit_name";
 
     private ProgressBar userHabitProgressBar;
-    public static Button logActivity;
+    public Button logActivity;
     private EditText userHabitNumDaysInt;
     // Note for Back-End
     // this information, "progress", is deleted after dialog is closed.
@@ -97,17 +98,19 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
         }
         final Goal habit = currHabitModel;
 
-        userHabitProgressBar.setMax(HabitsMenu.aim);
 
-        HabitsMenu.presenter.progdiafrag = this;
 
-        // this should update both the fields progress and aim of HabitsMenu
-        HabitsMenu.presenter.userGetProg(habit.getName());
+
 
         // set the max length and current progress for the ProgressBar and the EditText
 //        setProgressBar();
 //        setTextNumDays();
+        HabitsMenu.presenter.progdiafrag = this;
 
+        // this should update both the fields progress and aim of HabitsMenu
+        if (habit != null) {
+            HabitsMenu.presenter.userGetProg(habit.getName());
+        }
         // NOTE FOR BACK-END:
         // this is for logging activities, when finished, i.e. progress = goal
         // if user decides to not renew, i.e. the "No" option, then u can remove it from the firebase
@@ -146,7 +149,6 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
                         .setNegativeButton("Yes", (dialog, id) -> {
                             // Handle the "Yes" action
                             dismiss();
-                            assert habit != null;
                             // have the user set a new goal for the same habit
                             HabitsSetGoalsDialogFragment fragment = HabitsSetGoalsDialogFragment.newInstance(habit.getHabitDesc());
                             fragment.show(getParentFragmentManager(), "SetGoalsDialog");
@@ -169,6 +171,11 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
      * Updates the progress bar to reflect the current value of the progress field.
      */
     public void setProgressBar(int prog) {
+        userHabitProgressBar.setMax(HabitsMenu.aim);
+        Log.d("Progress", "Setting progress: " + prog + " and aim is " + HabitsMenu.aim);
+        if (userHabitProgressBar == null) {
+            Log.d("Progress", "progress bar is null");
+        }
         userHabitProgressBar.setProgress(prog);
     }
 
