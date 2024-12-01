@@ -118,7 +118,7 @@
         android:layout_marginTop="52dp"
         android:background="@drawable/edit_text_layout"
         android:gravity="center_vertical"
-        android:hint="Password"
+        android:hint="Password (Must be over 6 digits)"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.615"

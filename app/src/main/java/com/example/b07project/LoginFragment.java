@@ -90,6 +90,7 @@ public class LoginFragment extends Fragment {
         // Log in user
         presenter.beginAuthenticate(watcher);
 
+
         /*
         UserLogin user = new UserLogin(email, password, DatabaseUrl);
 
@@ -104,6 +105,8 @@ public class LoginFragment extends Fragment {
     public void success() {
         Toast.makeText(getContext(), "Login Success", Toast.LENGTH_SHORT).show();
         // Send back to whatever screen is appropriate
+        loadFragment(new EcoTrackerHomeFragment());
+
     }
 
     public void failure() {
