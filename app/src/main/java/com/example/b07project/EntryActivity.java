@@ -29,7 +29,7 @@ public class EntryActivity extends AppCompatActivity {
 
         logInButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                loadFragment(new LoginFragment());
+                //loadFragment(new LoginFragment());
             }
         });
 

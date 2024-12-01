@@ -16,8 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Registration"
         tools:targetApi="31">
+
+        <!--app's launcher activity -->
+
         <activity
-            android:name=".EntryActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Registration">
@@ -26,14 +29,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SurveyActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".ResultsActivity"
-            android:exported="true">
-        </activity>
+
+
+        <!--app's LogActivitiesActivity -->
+        <activity android:name=".LogActivitiesActivity" />
+
+        <!--app's DetailPageActivity -->
+        <activity android:name=".DetailPageActivity" />
+
+
     </application>
 
 </manifest>
