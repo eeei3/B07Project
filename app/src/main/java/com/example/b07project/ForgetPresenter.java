@@ -4,68 +4,55 @@ public class ForgetPresenter {
     private String email;
     LoginPresenter.PresenterViewPipe listener;
     ForgotPasswordFragment fView;
-    ServerCommunicator model;
+    FirebaseAuthHandler model;
 
-
+    /**
+     * ForgetPresenter - default constructor that set's the fView field so that the presenter
+     * may interact with the View.
+     * @param fView - the reference to the View
+     */
     public ForgetPresenter(ForgotPasswordFragment fView) {
+        super();
         this.fView = fView;
-        this.model = new ServerCommunicator();
+        this.model = new FirebaseAuthHandler();
     }
 
     /**
-     * PresenterViewPipe - Interface representing the communication pipe (listener) between
-     * Presenter and View
+     * ForgetPresenter - default constructor that set's the fView field so that the presenter
+     * may interact with the View.
+     * @param fView - the reference to the View
      */
-    public interface PresenterViewPipe {
-        // This is the event that we fire when operation has been completed
-        void onObjectReady(SuccessListener betweener);
+    public ForgetPresenter(ForgotPasswordFragment fView, FirebaseAuthHandler model) {
+        super();
+        this.fView = fView;
+        this.model = model;
     }
 
     /**
-     * LoginPresenter - Constructor for when the user attempts to login, thus an email
-     * and password are required
+     * setEmail - sets the email the user wishes to login to
+     * @param email - the user's account email
      */
-    public ForgetPresenter() {
-    }
-
-
     public void setEmail(String email) {
         this.email = email;
     }
 
-
-    /**
-     * setViewPipe - Set's PresenterViewPipe to permit the Presenter to communicate with View
-     * @param listener - The listener that connects the Presenter with the View
-     */
-    public void setViewPipe(LoginPresenter.PresenterViewPipe listener) {
-        this.listener = listener;
-    }
-
-
     /**
      * beginReset - Initiates the Password Reset process, communicates with Model
-     * @param pv - The SuccessListener that allows the Presenter to pass its results to the View
      */
-    public void beginReset(SuccessListener pv) {
-        // Create a ServerCommunicator (Model) object
-//        ServerCommunicator socket = new ServerCommunicator();
+    public void beginReset() {
         // An object between the Model and Presenter to track outcome of operation
-        SuccessListener mp = new SuccessListener();
+        AsyncAuthComms mp = new AsyncAuthComms();
         // Create a Listener for the Model's operation
-        model.setModelPipe(new ServerCommunicator.ModelPresenterPipe() {
+        model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
             @Override
-            public void onObjectReady(SuccessListener mp) {
-                if (mp.success) {
+            public void onObjectReady(AsyncComms mp) {
+                AsyncAuthComms plug = (AsyncAuthComms) mp;
+                if (plug.res) {
                     fView.success();
                 }
                 else {
                     fView.failure();
                 }
-//                // Notify object that track's Presenter's outcome about Presenter's outcome
-//                pv.setSuccess(mp.success);
-//                // Fire event to notify View that Presenter has passed it's info and is done
-//                listener.onObjectReady(pv);
             }
         });
         // Tell Model to send reset email
