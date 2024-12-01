@@ -93,7 +93,7 @@ public class DatesForDataBase {
         return calendar.getTimeInMillis();
     }
 
-    public static String formatDate(long timeInMillis) {
+    public static String getFormattedDate(long timeInMillis) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(new Date(timeInMillis));
     }

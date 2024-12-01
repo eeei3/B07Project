@@ -28,14 +28,14 @@ public class EcoGauge extends AppCompatActivity {
         totalEmissionsText = findViewById(R.id.totalEmissionsText);
 
         // Initialize GaugeReader and pass UI elements
-        GaugeReader gaugeReader = new GaugeReader(pieChart);
+        GaugeReader gaugeReader = new GaugeReader();
         gaugeReader.transportation = transportation;
         gaugeReader.foodConsumption = foodConsumption;
         gaugeReader.shopping = shopping;
         gaugeReader.totalEmissionsText = totalEmissionsText;
 
         // Example: Update chart for daily data
-        gaugeReader.updateChartForTimePeriod("Yearl ");
+        gaugeReader.updateChartForTimePeriod("Yearly");
     }
 
     public static String initializeFirebaseUser() {
