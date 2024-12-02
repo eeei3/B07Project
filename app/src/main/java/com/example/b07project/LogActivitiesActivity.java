@@ -24,7 +24,7 @@ import java.util.TimeZone;
 
 public class LogActivitiesActivity extends AppCompatActivity {
 
-    private long selectedDate;
+    private String selectedDay;
 
     //ui elements
     private TextView titleTextView, inputDate;
@@ -65,18 +65,13 @@ public class LogActivitiesActivity extends AppCompatActivity {
 
         // get the selected date
         Intent intent = getIntent();
-        selectedDate = intent.getLongExtra("selectedDate", 0);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        //set the time zone
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String today = sdf.format(new Date(selectedDate));
+        selectedDay = intent.getStringExtra("selectedDate");
 
         setContentView(R.layout.log_activities_page);
 
         initializeUIComponents();
 
-        inputDate.setText(today);
+        inputDate.setText(selectedDay);
 
         setupSpinner(spinnerVehicleType, R.array.vehicle_types);
         setupSpinner(spinnerTransportType, R.array.transport_types);
@@ -443,8 +438,12 @@ public class LogActivitiesActivity extends AppCompatActivity {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         DatabaseCommunicator databaseCommunicator = new DatabaseCommunicator(database);
 
+        // get the selected date
+        Intent intentDate = getIntent();
+        selectedDay = intentDate.getStringExtra("selectedDate");
+
         //then save the emission data to Firebase
-        databaseCommunicator.saveUserEmissionData(selectedDate, userEmissionData);
+        databaseCommunicator.saveUserEmissionData(selectedDay, userEmissionData);
 
         //show the success message
         Toast.makeText(getApplicationContext(), "Data saved successfully!", Toast.LENGTH_SHORT).show();

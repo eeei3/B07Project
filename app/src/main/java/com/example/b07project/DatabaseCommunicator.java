@@ -11,6 +11,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
+import kotlin.text.UStringsKt;
+
 public class DatabaseCommunicator {
 
     final DatabaseReference database;
@@ -39,12 +41,12 @@ public class DatabaseCommunicator {
         this.waiter = waiter;
     }
 
-    public void serverCalcEmissionReader(Long selectedDate) {
+    public void serverCalcEmissionReader(String selectedDay) {
         this.calc = new UserEmissionData.CalculatedEmissions();
         DatabaseReference userRef = database.child("users")
                                             .child(EcoTrackerHomeFragment.userId)
                                             .child("ecotracker")
-                                            .child(String.valueOf(selectedDate))
+                                            .child(String.valueOf(selectedDay))
                                             .child("calculatedEmissions")
                                             .child("totalTranspo");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -68,7 +70,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("calculatedEmissions")
                 .child("totalFood");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -90,7 +92,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("calculatedEmissions")
                 .child("totalShopping");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -112,7 +114,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("calculatedEmissions")
                 .child("totalEmission");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -133,12 +135,12 @@ public class DatabaseCommunicator {
         });
     }
 
-    public void serverRawInputReader(Long selectedDate) {
+    public void serverRawInputReader(String selectedDay) {
         this.raw = new UserEmissionData.RawInputs();
         DatabaseReference userRef = database.child("users")
                                             .child(EcoTrackerHomeFragment.userId)
                                             .child("ecotracker")
-                                            .child(String.valueOf(selectedDate))
+                                            .child(String.valueOf(selectedDay))
                                             .child("rawInputs")
                                             .child("distanceDriven");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -169,7 +171,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("rawInputs")
                 .child("vehicleType");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -196,7 +198,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("rawInputs")
                 .child("transportType");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -218,7 +220,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("rawInputs")
                 .child("cyclingTime");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -244,7 +246,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("rawInputs")
                 .child("numFlights");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -271,7 +273,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("rawInputs")
                 .child("flightType");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -293,7 +295,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("rawInputs")
                 .child("mealType");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -315,7 +317,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("rawInputs")
                 .child("numServings");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -341,7 +343,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("rawInputs")
                 .child("numClothes");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -367,7 +369,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("rawInputs")
                 .child("deviceType");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -389,7 +391,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("rawInputs")
                 .child("numDevices");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -415,7 +417,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("rawInputs")
                 .child("purchaseType");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -437,7 +439,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("rawInputs")
                 .child("numOtherPurchases");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -463,7 +465,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("rawInputs")
                 .child("billAmount");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -489,7 +491,7 @@ public class DatabaseCommunicator {
         userRef = database.child("users")
                 .child(EcoTrackerHomeFragment.userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate))
+                .child(String.valueOf(selectedDay))
                 .child("rawInputs")
                 .child("billType");
         userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -514,14 +516,14 @@ public class DatabaseCommunicator {
     /**
      * Method to save user emission data (raw inputs & calculated emissions)
      * Data is stored under the user ID and date
-     * @param selectedDate the selected date
+     * @param selectedDay the selected date
      * @param data the emission data (raw inputs & calculated emissions)
      */
-    public void saveUserEmissionData(long selectedDate, UserEmissionData data) {
+    public void saveUserEmissionData(String selectedDay, UserEmissionData data) {
 
         DatabaseReference userRef = database.child("users").child(EcoTrackerHomeFragment.userId);
 
-        DatabaseReference dateRef = userRef.child("ecotracker").child(String.valueOf(selectedDate));
+        DatabaseReference dateRef = userRef.child("ecotracker").child(String.valueOf(selectedDay));
 
         //rawInputs map
         DatabaseReference rawInputsRef = dateRef.child("rawInputs");
@@ -554,25 +556,25 @@ public class DatabaseCommunicator {
         dateRef.child("createdAt").setValue(System.currentTimeMillis())
                 .addOnSuccessListener(aVoid -> {
                     Log.d("Firebase", "User emission data saved successfully!");
-                    Toast.makeText(context, "Data saved successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), "Data saved successfully!", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firebase", "Error saving data: " + e.getMessage());
-                    Toast.makeText(context, "Error saving data.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), "Error saving data.", Toast.LENGTH_SHORT).show();
                 });
     }
 
     /**
      * Method to update the emission data (both raw inputs and recalculated emissions) - used later in editing
      * for a specific user and selected date.
-     * @param selectedDate The date for which the data is to be updated
+     * @param selectedDay The date for which the data is to be updated
      * @param data The updated emission data
      */
-    public void updateEmissionData(long selectedDate, UserEmissionData data) {
+    public void updateEmissionData(String selectedDay, UserEmissionData data) {
 
         DatabaseReference userRef = database.child("users").child(EcoTrackerHomeFragment.userId);
 
-        DatabaseReference dateRef = userRef.child("emissions").child(String.valueOf(selectedDate));
+        DatabaseReference dateRef = userRef.child("emissions").child(String.valueOf(selectedDay));
 
         UserEmissionData.CalculatedEmissions newCalculatedEmissions = recalculateEmissions(data.getRawInputs());
 
@@ -604,7 +606,7 @@ public class DatabaseCommunicator {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.d("Firebase", "User emission data updated successfully for user: " + EcoTrackerHomeFragment.userId + " on date: " + selectedDate);
+                    Log.d("Firebase", "User emission data updated successfully for user: " + EcoTrackerHomeFragment.userId + " on date: " + selectedDay);
                 } else {
                     Log.e("Firebase", "Failed to update data", task.getException());
                 }

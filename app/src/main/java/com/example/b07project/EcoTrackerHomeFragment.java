@@ -22,7 +22,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 
@@ -30,6 +32,7 @@ public class EcoTrackerHomeFragment extends Fragment {
     public static String userId;
     private DatabaseReference databaseReference;
     private long selectedDate;
+    private String selectedDay;
 
     @Nullable
     @Override
@@ -56,10 +59,16 @@ public class EcoTrackerHomeFragment extends Fragment {
                 calendar.set(Calendar.SECOND, 0);
                 calendar.set(Calendar.MILLISECOND, 0);
                 selectedDate = calendar.getTimeInMillis();
+
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                //set the time zone
+                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                selectedDay = sdf.format(new Date(selectedDate));
+
             }
 
         });
-
 
         //buttons
         Button buttonLog = view.findViewById(R.id.log_activity_button);
@@ -78,15 +87,15 @@ public class EcoTrackerHomeFragment extends Fragment {
         buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectedDate > 0) {
+                if (!selectedDay.isEmpty()) {
                     // Check if activities have already been logged for this date
-                    checkActivitiesForDate(selectedDate, new OnActivitiesCheckListener() {
+                    checkActivitiesForDate(selectedDay, new OnActivitiesCheckListener() {
                         @Override
                         public void onActivitiesChecked(boolean hasActivities) {
                             if (!hasActivities) {
                                 // No activities logged for this date, proceed to log
                                 Intent intent = new Intent(getActivity(), LogActivitiesActivity.class);
-                                intent.putExtra("selectedDate", selectedDate);
+                                intent.putExtra("selectedDate", selectedDay);
                                 intent.putExtra("user_id", userId);
                                 startActivity(intent);
                             } else {
@@ -107,16 +116,16 @@ public class EcoTrackerHomeFragment extends Fragment {
         buttonDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectedDate > 0) {
+                if (!selectedDay.isEmpty()) {
                     // Check if activities exist for this date before viewing details
-                    checkActivitiesForDate(selectedDate, new OnActivitiesCheckListener() {
+                    checkActivitiesForDate(selectedDay, new OnActivitiesCheckListener() {
                         @Override
                         public void onActivitiesChecked(boolean hasActivities) {
                             //if there are activities logged before, inflate the detail page
                             if (hasActivities) {
                                 // Activities exist, proceed to view details
                                 Intent intent = new Intent(getActivity(), DetailPageActivity.class);
-                                intent.putExtra("selectedDate", selectedDate);
+                                intent.putExtra("selectedDate", selectedDay);
                                 intent.putExtra("user_id", userId);
                                 startActivity(intent);
                             } else {
@@ -151,13 +160,13 @@ public class EcoTrackerHomeFragment extends Fragment {
     }
 
     //To check if there are activities exist in the selected date
-    private void checkActivitiesForDate(long selectedDate, OnActivitiesCheckListener listener) {
+    private void checkActivitiesForDate(String selectedDay, OnActivitiesCheckListener listener) {
         // Reference to the user's activities for the specific date
         DatabaseReference userActivitiesRef = databaseReference
                 .child("users")
                 .child(userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate));
+                .child(String.valueOf(selectedDay));
 
         userActivitiesRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -180,21 +189,29 @@ public class EcoTrackerHomeFragment extends Fragment {
         });
     }
 
+
     private void retrieveAndDisplayTotalsTraditional() {
 
-        //long systemDate = System.currentTimeMillis();
+        long systemDate = System.currentTimeMillis();
 
-        if (userId == null || selectedDate <= 0) {
-            Toast.makeText(requireContext(), "Please log in and select a date", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        //set the time zone
+        String dateToday = sdf.format(new Date(systemDate));
+
+
+
+//        if (userId == null || selectedDate <= 0) {
+//            Toast.makeText(requireContext(), "Please log in and select a date", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         // Reference to the "rawInputs" node
         DatabaseReference ref = databaseReference
                 .child("users")
                 .child(userId)
                 .child("ecotracker")
-                .child(String.valueOf(selectedDate));
+                .child(String.valueOf(dateToday));
 
         // Retrieve totalTranspo
         ref.child("calculatedEmissions").child("totalTranspo").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -203,52 +220,52 @@ public class EcoTrackerHomeFragment extends Fragment {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     long totalTranspo = task.getResult().getValue(Long.class);
                     TextView transpoTextView = requireView().findViewById(R.id.transport_emissions);
-                    transpoTextView.setText("Transportation: " + totalTranspo);
+                    transpoTextView.setText("Total Transportation Emissions: " + totalTranspo + "kg");
                 } else {
                     TextView transpoTextView = requireView().findViewById(R.id.transport_emissions);
-                    transpoTextView.setText("Transportation: Not logged yet");
+                    transpoTextView.setText("Total Transportation Emissions: Not logged yet");
                 }
             }
         });
 
         // Retrieve totalFood
-        ref.child("totalFood").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        ref.child("calculatedEmissions").child("totalFood").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     long totalFood = task.getResult().getValue(Long.class);
                     TextView foodTextView = requireView().findViewById(R.id.food_emissions);
-                    foodTextView.setText("Total Food: " + totalFood);
+                    foodTextView.setText("Total Food Emissions: " + totalFood + "kg" );
                 } else {
                     TextView foodTextView = requireView().findViewById(R.id.food_emissions);
-                    foodTextView.setText("Total Food: Not logged yet");
+                    foodTextView.setText("Total Food Emissions: Not logged yet");
                 }
             }
         });
 
         // Retrieve totalShopping
-        ref.child("totalShopping").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        ref.child("calculatedEmissions").child("totalShopping").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     long totalShopping = task.getResult().getValue(Long.class);
                     TextView shoppingTextView = requireView().findViewById(R.id.shopping_emissions);
-                    shoppingTextView.setText("Total Shopping: " + totalShopping);
+                    shoppingTextView.setText("Total Shopping Emissions: " + totalShopping + "kg");
                 } else {
                     TextView shoppingTextView = requireView().findViewById(R.id.shopping_emissions);
-                    shoppingTextView.setText("Total Shopping: Not logged yet");
+                    shoppingTextView.setText("Total Shopping Emissions: Not logged yet");
                 }
             }
         });
 
         // Retrieve totalBills
-        ref.child("totalBills").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        ref.child("rawInputs").child("billAmount").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     long totalBills = task.getResult().getValue(Long.class);
                     TextView billsTextView = requireView().findViewById(R.id.energy_bills);
-                    billsTextView.setText("Total Bills: " + totalBills);
+                    billsTextView.setText("Total Bills: " + totalBills + "$");
                 } else {
                     TextView billsTextView = requireView().findViewById(R.id.energy_bills);
                     billsTextView.setText("Total Bills: Not logged yet");

@@ -29,7 +29,7 @@ import java.util.TimeZone;
 public class DetailPageActivity extends AppCompatActivity {
 
     // date and userID
-    private long selectedDate;
+    private String selectedDay;
 
     private TextView titleTextView, inputDate;
     private Button buttonSave, buttonEdit;
@@ -65,13 +65,7 @@ public class DetailPageActivity extends AppCompatActivity {
 
         // get the selected date
         Intent intent = getIntent();
-        selectedDate = intent.getLongExtra("selectedDate", 0);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        //set the time zone
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String today = sdf.format(new Date(selectedDate));
-
+        selectedDay = intent.getStringExtra("selectedDate");
 
         setContentView(R.layout.activity_detail_page);
 
@@ -79,7 +73,7 @@ public class DetailPageActivity extends AppCompatActivity {
         initializeUIComponents();
 
 
-        inputDate.setText(today);
+        inputDate.setText(selectedDay);
 
         // Set up spinners
         setupSpinner(spinnerVehicleType, R.array.vehicle_types);
@@ -172,7 +166,7 @@ public class DetailPageActivity extends AppCompatActivity {
                 setSpinnerSelection(spinnerBillType, model.raw.getBillType());
             }
         });
-        model.serverRawInputReader(selectedDate);
+        model.serverRawInputReader(selectedDay);
     }
 
     private void initializeUIComponents() {
@@ -399,7 +393,12 @@ public class DetailPageActivity extends AppCompatActivity {
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         DatabaseCommunicator presenter = new DatabaseCommunicator(database);
-        presenter.saveUserEmissionData(selectedDate, userEmissionData);
+
+        // get the selected date
+        Intent intent = getIntent();
+        selectedDay = intent.getStringExtra("selectedDate");
+
+        presenter.saveUserEmissionData(selectedDay, userEmissionData);
     }
 
     private void setSpinnerSelection(Spinner spinner, String value) {
