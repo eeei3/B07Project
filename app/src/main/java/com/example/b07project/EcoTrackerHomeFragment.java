@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,22 +26,33 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.w3c.dom.Text;
 
 public class EcoTrackerHomeFragment extends AppCompatActivity {
 
     private long selectedDate;
+    public TextView transport;
+    public TextView food;
+    public TextView consumption;
+    public TextView energy;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ecotrackerhome_fragment);
 
+        transport = findViewById(R.id.transport_emissions);
+        food = findViewById(R.id.food_emissions);
+        energy = findViewById(R.id.energy_bills);
+        consumption = findViewById(R.id.shopping_emissions);
+//        consumption.setText("hello");
         CalendarView calendarView = findViewById(R.id.calendar_view);
-        BottomNavigationView navi = findViewById(R.id.bottomview);
-        navi.setSelectedItemId(R.id.ecotracker);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 
         // Set a listener to get the selected date
@@ -59,6 +71,9 @@ public class EcoTrackerHomeFragment extends AppCompatActivity {
                 calendar.set(Calendar.SECOND, 0);
                 calendar.set(Calendar.MILLISECOND, 0);
                 selectedDate = calendar.getTimeInMillis();
+                FirebaseAuth mauth = FirebaseAuth.getInstance();
+                DatabaseCommunicator dbcom = new DatabaseCommunicator(FirebaseDatabase.getInstance().getReference(), EcoTrackerHomeFragment.this);
+                dbcom.checkSubmittedDate(mauth.getUid(), sdf.format(new Date(selectedDate)), EcoTrackerHomeFragment.this);
             }
         });
 
@@ -82,7 +97,7 @@ public class EcoTrackerHomeFragment extends AppCompatActivity {
 //                    long currentTimeMillis = System.currentTimeMillis();
 //                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 //                    String today = sdf.format(new Date(currentTimeMillis));
-                    intent.putExtra("selectedDate", new SimpleDateFormat("yyyy-MM-dd").format(new Date(EcoTrackerHomeFragment.this.selectedDate)));
+                    intent.putExtra("selectedDate", sdf.format(new Date(EcoTrackerHomeFragment.this.selectedDate)));
                     intent.putExtra("user_id", userId);
                     startActivity(intent);
 

@@ -146,25 +146,59 @@ public class DatabaseCommunicator {
         return new UserEmissionData.CalculatedEmissions(totalTranspo, totalFood, totalShopping);
     }
 
-    public boolean checkSubmittedDate(String userid, String selectedDate) {
-        DatabaseReference dbref = database.child("users").child(userid).child("emissions");
-        Query emissions = dbref;
-        emissions.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dates: snapshot.getChildren()) {
-                    if (dates.getKey().equals(selectedDate)) {
-                        // Do funny business here
+    public void checkSubmittedDate(String userid, String selectedDate, EcoTrackerHomeFragment view) {
+        DatabaseReference dbref = database.child("users").child(userid).child("ecotracker").child(selectedDate).child("calculatedEmissions");
+//        Query emissions = dbref;
+//        emissions.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for (DataSnapshot dates: snapshot.getChildren()) {
+//                    if (dates.getKey().equals(selectedDate)) {
+//                        // Do funny business here
+//                        if (Integer.parseInt(String.valueOf(dates.child("totalFood").getValue())) != 0) {
+//                            view.food.setText(String.format("Food:", String.valueOf(dates.child("totalFood").getValue())));
+//                        }
+//                        if (Integer.parseInt(String.valueOf(dates.child("totalShopping").getValue())) != 0) {
+//                            view.food.setText(String.format("Shopping:", String.valueOf(dates.child("totalShopping").getValue())));
+//                        }
+//                        if (Integer.parseInt(String.valueOf(dates.child("totalTranspo").getValue())) != 0) {
+//                            view.food.setText(String.format("Transportation:", String.valueOf(dates.child("totalTranspo").getValue())));
+//                        }
+////                        if (Integer.parseInt(String.valueOf(dates.child("totalEnergy").getValue())) != 0) {
+////                            view.food.setText(String.format("Food:", String.valueOf(dates.child("foodEmissions").getValue())));
+////                        }
+//                    }
+//                }
+                dbref.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        Log.e("fuckyou", selectedDate);
+                        if (task.isSuccessful()) {
+                            try {
+                                Log.e("fuckyou", String.valueOf(task.getResult().child("totalFood").getValue()));
+                                if (Double.parseDouble(String.valueOf(task.getResult().child("totalFood").getValue())) != 0) {
+                                    view.food.setText(String.format("Food: %s", String.valueOf(task.getResult().child("totalFood").getValue())));
+                                }
+                                if (Double.parseDouble(String.valueOf(task.getResult().child("totalShopping").getValue())) != 0) {
+                                    view.consumption.setText(String.format("Shopping: %s", String.valueOf(task.getResult().child("totalShopping").getValue())));
+                                }
+                                if (Double.parseDouble(String.valueOf(task.getResult().child("totalTranspo").getValue())) != 0) {
+                                    view.transport.setText(String.format("Transportation: %s", String.valueOf(task.getResult().child("totalTranspo").getValue())));
+                                }
+                            } catch (NumberFormatException e) {
+                                Log.e("fuckyou", "your ship is sunk punk");
+                                view.food.setText("Food: Not logged yet");
+                                view.consumption.setText("Shopping: Not logged yet");
+                                view.transport.setText("Transportation: Not logged yet");
+                            }
+//                        if (Integer.parseInt(String.valueOf(task.getResult().child("totalFood").getValue()))!= 0) {
+//
+//                        }
+                        }
+                        else {
+                            Log.e("fuckyou", "failed");
+                        }
                     }
-                }
+                });
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Fix funny business
-            }
-        });
-
-        return false;
-    }
 }
