@@ -16,8 +16,8 @@ public class AsyncDBComms extends AsyncComms {
      */
     public AsyncDBComms() {
         super();
-        this.usergoals = new HashSet<Goal>();
-        this.listgoals = new HashSet<Goal>();
+        this.usergoals = new HashSet<>();
+        this.listgoals = new HashSet<>();
         this.values = new ArrayList<>();
     }
 
