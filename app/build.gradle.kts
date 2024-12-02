@@ -59,5 +59,6 @@ dependencies {
     implementation ("com.github.blackfizz:eazegraph:1.2.2")
     implementation ("com.nineoldandroids:library:2.4.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation ("androidx.profileinstaller:profileinstaller:1.3.0")
 
 }

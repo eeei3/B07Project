@@ -11,8 +11,8 @@ import java.util.Date;
  */
 public class DatesForDataBase {
     /*
-    * getStartOfDay returns the timestamp for the start of the day (00:00:00.000) for that date
-    * @TimeMillis takes a time in milliseconds
+     * getStartOfDay returns the timestamp for the start of the day (00:00:00.000) for that date
+     * @TimeMillis takes a time in milliseconds
      */
     public static long getStartOfDay(long TimeMillis) {
         Calendar calendar = Calendar.getInstance();
@@ -93,7 +93,7 @@ public class DatesForDataBase {
         return calendar.getTimeInMillis();
     }
 
-    public static String formatDate(long timeInMillis) {
+    public static String getFormattedDate(long timeInMillis) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(new Date(timeInMillis));
     }

@@ -1,6 +1,7 @@
 package com.example.b07project;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -9,127 +10,137 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.eazegraph.lib.models.ValueLinePoint;
 import org.eazegraph.lib.models.ValueLineSeries;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
-/*
- * LineChart class works with Firebase to retrieve emissions data for the day, month, and year
- * and updates a ValueLineChart accordingly to visualize emissions data.
- */
 public class LineChartData {
     private DatabaseReference userRef;
 
-    /*
-     * Constructor initializes the chart and sets up Firebase references based on the current user.
-     */
+    // Constructor initializes the chart and sets up Firebase references based on the current user.
     public LineChartData() {
         EcoGauge temp = new EcoGauge();
         String userId = temp.initializeFirebaseUser();
         userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
     }
 
+    // Method to get daily data for the last 7 days
     public ValueLineSeries getDailyDataForChart() {
         ValueLineSeries dailySeries = new ValueLineSeries();
         dailySeries.setColor(Color.RED);
 
         long currentTime = System.currentTimeMillis();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        // Daily Emissions: Last 7 Days
+        // Fetch emissions data for the last 7 days
         for (int i = 0; i < 7; i++) {
-            long startOfDay = DatesForDataBase.getStartOfDay(currentTime - i * 24 * 60 * 60 * 1000); // Go back one day each iteration
-            long endOfDay = DatesForDataBase.getEndOfDay(currentTime - i * 24 * 60 * 60 * 1000);
+            long startOfDay = currentTime - (i * TimeUnit.DAYS.toMillis(1));
+            String formattedDate = dateFormat.format(new Date(startOfDay));
 
-            userRef.child("ecotracker")
-                    .orderByKey()
-                    .startAt(String.valueOf(startOfDay))
-                    .endAt(String.valueOf(endOfDay))
+            userRef.child("ecotracker").child(formattedDate).child("calculatedEmissions")
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             double dailyEmissions = 0;
-                            for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                                Double emission = snapshot.child("calculated emissions/totalEmission").getValue(Double.class);
-                                if (emission != null) dailyEmissions += emission;
+                            DataSnapshot snapshot = task.getResult();
+
+                            // Loop through the child data and sum emissions values
+                            for (DataSnapshot emissionSnapshot : snapshot.getChildren()) {
+                                Double emission = emissionSnapshot.getValue(Double.class);
+                                if (emission != null) {
+                                    dailyEmissions += emission;
+                                }
                             }
-                            dailySeries.addPoint(new ValueLinePoint(DatesForDataBase.formatDate(startOfDay), (float) dailyEmissions));
+                            // Add the data point to the chart
+                            dailySeries.addPoint(new ValueLinePoint(formattedDate, (float) dailyEmissions));
+                        } else {
+                            Log.e("DailyData", "Failed to fetch data for date: " + formattedDate);
                         }
                     });
         }
+
         return dailySeries;
     }
 
+    // Method to get monthly data for the current month
     public ValueLineSeries getMonthlyDataForChart() {
         ValueLineSeries monthlySeries = new ValueLineSeries();
         monthlySeries.setColor(Color.GREEN);
-        long currentTime = System.currentTimeMillis();
 
-        // Monthly Emissions: From Login Date to End of Month
+        long currentTime = System.currentTimeMillis();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        // Get the first day of the current month
         long startOfMonth = DatesForDataBase.getStartOfMonth(currentTime);
         long endOfMonth = DatesForDataBase.getEndOfMonth(currentTime);
 
-        for (long day = startOfMonth; day <= endOfMonth; day += 24 * 60 * 60 * 1000) {
-            long startOfDay = DatesForDataBase.getStartOfDay(day);
-            long endOfDay = DatesForDataBase.getEndOfDay(day);
+        // Loop through the days of the current month and fetch emissions data
+        for (long day = startOfMonth; day <= endOfMonth; day += TimeUnit.DAYS.toMillis(1)) {
+            String formattedDate = dateFormat.format(new Date(day));
 
-            userRef.child("ecotracker")
-                    .orderByKey()
-                    .startAt(String.valueOf(startOfDay))
-                    .endAt(String.valueOf(endOfDay))
+            userRef.child("ecotracker").child(formattedDate).child("calculatedEmissions")
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             double dailyEmissions = 0;
-                            for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                                Double emission = snapshot.child("calculated emissions/totalEmission").getValue(Double.class);
-                                if (emission != null) dailyEmissions += emission;
+                            DataSnapshot snapshot = task.getResult();
+
+                            // Loop through the emissions data for each date
+                            for (DataSnapshot emissionSnapshot : snapshot.getChildren()) {
+                                Double emission = emissionSnapshot.getValue(Double.class);
+                                if (emission != null) {
+                                    dailyEmissions += emission;
+                                }
                             }
-                            monthlySeries.addPoint(new ValueLinePoint(DatesForDataBase.formatDate(startOfDay), (float) dailyEmissions));
+                            // Add the data point to the chart
+                            monthlySeries.addPoint(new ValueLinePoint(formattedDate, (float) dailyEmissions));
+                        } else {
+                            Log.e("MonthlyData", "Failed to fetch data for date: " + formattedDate);
                         }
                     });
         }
+
         return monthlySeries;
     }
 
+    // Method to get yearly data for the current year
     public ValueLineSeries getYearlyDataForChart() {
         ValueLineSeries annualSeries = new ValueLineSeries();
         annualSeries.setColor(Color.BLUE);
 
         long currentTime = System.currentTimeMillis();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        // Get the start of the year and today's date
+        // Get the start of the year
         long startOfYear = DatesForDataBase.getStartOfYear(currentTime);
-        long currentDay = currentTime; // Use the current time for today's date
+        long endOfYear = DatesForDataBase.getEndOfYear(currentTime);
 
-        // Iterate from January 1st of this year to the current day
-        for (long day = startOfYear; day <= currentDay; day += 24 * 60 * 60 * 1000) {
-            long startOfDay = DatesForDataBase.getStartOfDay(day);
-            long endOfDay = DatesForDataBase.getEndOfDay(day);
+        // Loop through the days of the current year and fetch emissions data
+        for (long day = startOfYear; day <= endOfYear; day += TimeUnit.DAYS.toMillis(1)) {
+            String formattedDate = dateFormat.format(new Date(day));
 
-            userRef.child("ecotracker")
-                    .orderByKey()
-                    .startAt(String.valueOf(startOfDay))
-                    .endAt(String.valueOf(endOfDay))
+            userRef.child("ecotracker").child(formattedDate).child("calculatedEmissions")
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             double dailyEmissions = 0;
+                            DataSnapshot snapshot = task.getResult();
 
-                            // Sum the emissions for the current day, if available
-                            for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                                Double emission = snapshot.child("calculated emissions/totalEmission").getValue(Double.class);
+                            // Loop through the emissions data for each date
+                            for (DataSnapshot emissionSnapshot : snapshot.getChildren()) {
+                                Double emission = emissionSnapshot.getValue(Double.class);
                                 if (emission != null) {
                                     dailyEmissions += emission;
                                 }
                             }
-                            // Get the formatted date for the x-axis label
-                            String dayLabel = DatesForDataBase.formatDate(startOfDay);
-
-                            // Add the daily emissions value to the series
-                            annualSeries.addPoint(new ValueLinePoint(dayLabel, (float) dailyEmissions));
+                            // Add the data point to the chart
+                            annualSeries.addPoint(new ValueLinePoint(formattedDate, (float) dailyEmissions));
+                        } else {
+                            Log.e("YearlyData", "Failed to fetch data for date: " + formattedDate);
                         }
                     });
         }
 
         return annualSeries;
     }
-
 }
-

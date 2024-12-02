@@ -1,5 +1,7 @@
 package com.example.b07project;
 
+import android.util.Log;
+
 import org.eazegraph.lib.charts.ValueLineChart;
 import org.eazegraph.lib.models.ValueLineSeries;
 
@@ -17,6 +19,8 @@ public class LineChartDisplay {
      */
     void updateLineChart(String timePeriod) {
 
+        Log.e("DailyData", "Getting Data");
+
         LineChartData data = new LineChartData();
         // Clear existing data to refresh the chart
         chart.clearChart();
@@ -28,17 +32,20 @@ public class LineChartDisplay {
         switch (timePeriod) {
             case ("Daily"):
                 chart.addSeries(dailySeries); // Add daily emissions line
+                Log.e("DailyData", "Getting Daily");
                 break;
             case ("Monthly"):
+                Log.e("DailyData", "Getting Monthly");
                 chart.addSeries(monthlySeries); // Add monthly emissions line
                 break;
             case ("Yearly"):
+                Log.e("DailyData", "Getting Yearly");
                 chart.addSeries(annualSeries); // Add yearly emissions line
                 break;
             default:
                 chart.addSeries(dailySeries); // Add daily emissions line
                 break;
-    }
+        }
         chart.startAnimation();
     }
 }

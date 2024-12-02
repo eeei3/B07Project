@@ -2,16 +2,21 @@ package com.example.b07project;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.eazegraph.lib.charts.ValueLineChart;
+import org.eazegraph.lib.models.ValueLineSeries;
 
 /**
  * Activity to display EcoGauge metrics, including emissions data via PieChart and LineChart.
@@ -19,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class EcoGauge extends AppCompatActivity {
 
     public PieChart pieChart;
+    public LineChart lineChart;
     public TextView transportation, foodConsumption, shopping, totalEmissionsText;
 
     @Override
@@ -28,6 +34,7 @@ public class EcoGauge extends AppCompatActivity {
 
         // Initialize UI components
         pieChart = findViewById(R.id.piechart);
+        lineChart = findViewById(R.id.chart);
         totalEmissionsText = findViewById(R.id.totalEmissionsText);
 
         String[] categories = getResources().getStringArray(R.array.timeValues);
@@ -38,6 +45,7 @@ public class EcoGauge extends AppCompatActivity {
         // Initialize GaugeReader and pass UI elements
         GaugeReader gaugeReader = new GaugeReader();
         gaugeReader.pieChart = pieChart;
+        gaugeReader.lineChart = lineChart;
         gaugeReader.transportation = transportation;
         gaugeReader.foodConsumption = foodConsumption;
         gaugeReader.shopping = shopping;
@@ -45,6 +53,7 @@ public class EcoGauge extends AppCompatActivity {
 
         // Example: Update chart for daily data
         gaugeReader.updateChartForTimePeriod("Monthly");
+        gaugeReader.updateLastThirtyDaysChart();
 
         customizeLegendFont(pieChart);
     }
