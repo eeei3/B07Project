@@ -4,9 +4,15 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class DatabaseCommunicator {
 
@@ -138,5 +144,27 @@ public class DatabaseCommunicator {
 
         double totalEmission = totalTranspo + totalFood + totalShopping;
         return new UserEmissionData.CalculatedEmissions(totalTranspo, totalFood, totalShopping);
+    }
+
+    public boolean checkSubmittedDate(String userid, String selectedDate) {
+        DatabaseReference dbref = database.child("users").child(userid).child("emissions");
+        Query emissions = dbref;
+        emissions.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dates: snapshot.getChildren()) {
+                    if (dates.getKey().equals(selectedDate)) {
+                        // Do funny business here
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Fix funny business
+            }
+        });
+
+        return false;
     }
 }

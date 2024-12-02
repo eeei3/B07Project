@@ -49,28 +49,6 @@ public class EntryActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.option_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.ecogauge) {
-            // Handle ecogauge action
-            return true;
-        } else if (id == R.id.ecotracker) {
-            // Handle ecotracker action
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-
     /**
      * loadFragment - Method for handling the loading of a fragment
      * @param fragment - fragment to load

@@ -1,8 +1,12 @@
 package com.example.b07project;
+import static java.security.AccessController.getContext;
+
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -14,12 +18,18 @@ import android.widget.RadioGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.concurrent.ThreadFactory;
 
 /**
  * SurveyActivity class containing methods and fields related to the Emissions survey activity
  */
 public class SurveyActivity extends AppCompatActivity {
 
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference emissionsRef = database.getReference("emissions");
     private RadioGroup CarOwnership, CarUsage, CarMiles, PublicTransport, PublicTransportUse,
             ShortFlights, LongFlights, Diet, BeefConsumption, PorkConsumption,
             ChickenConsumption, FishConsumption, FoodWaste, Housing, HousingPeople,
@@ -38,8 +48,10 @@ public class SurveyActivity extends AppCompatActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitivity_survey);
+        SurveyActivity view = this;
 
         CarOwnership = findViewById(R.id.radioGroupCarOwnership);
         CarUsage = findViewById(R.id.radioGroupCarUsage);
@@ -71,8 +83,8 @@ public class SurveyActivity extends AppCompatActivity {
 
         String[] categories = getResources().getStringArray(R.array.location_array);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                                                            R.layout.spinner_item,
-                                                            categories);
+                R.layout.spinner_item,
+                categories);
         Spinner locationSpinner = findViewById(R.id.locationSpinner);
         locationSpinner.setAdapter(adapter);
 
@@ -130,58 +142,57 @@ public class SurveyActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                 } else {
                     if (!locationSpinner.getSelectedItem().toString().equals(("Select a Country"))){
-                    // Create an instance of EmissionsCalculator
-                    // Now, call the emissions calculation method
-                    EmissionsCalculator emissionsCalculator = new EmissionsCalculator();
+                        // Create an instance of EmissionsCalculator
+                        // Now, call the emissions calculation method
+                        EmissionsCalculator emissionsCalculator = new EmissionsCalculator();
+                        String selectedLocation = locationSpinner.getSelectedItem().toString();
 
-                    // Calculate the transportation emissions (you can adjust method signature if necessary)
-                    transportationEmissions = emissionsCalculator
-                            .getTransportationEmissions(SelectedOption(CarOwnership),
-                                                        SelectedOption(CarUsage),
-                                                        SelectedOption(CarMiles),
-                                                        SelectedOption(PublicTransport),
-                                                        SelectedOption(PublicTransportUse),
-                                                        SelectedOption(ShortFlights),
-                                                        SelectedOption(LongFlights));
-                    foodEmissions = emissionsCalculator
-                            .getFoodEmissions(SelectedOption(Diet),
-                                                SelectedOption(BeefConsumption),
-                                                SelectedOption(PorkConsumption),
-                                                SelectedOption(ChickenConsumption),
-                                                SelectedOption(FishConsumption),
-                                                SelectedOption(FoodWaste));
-                    housingEmissions = emissionsCalculator
-                            .getHousingEmissions(SelectedOption(Housing),
-                                                    SelectedOption(HousingSize),
-                                                    SelectedOption(HousingPeople),
-                                                    SelectedOption(Energy),
-                                                    SelectedOption(EnergyWater),
-                                                    SelectedOption(Bill),
-                                                    SelectedOption(Renewable));
-                    consumptionEmissions = emissionsCalculator
-                            .getConsumptionEmissions(SelectedOption(Clothes),
-                                                        SelectedOption(Thrift),
-                                                        SelectedOption(Electronic),
-                                                        SelectedOption(Recycle));
-                    totalEmissions = transportationEmissions
-                                        + foodEmissions
-                                        + housingEmissions
-                                        + consumptionEmissions;
-                    user.totalEmissions = totalEmissions;
+                        // Calculate the transportation emissions (you can adjust method signature if necessary)
+                        transportationEmissions = emissionsCalculator
+                                .getTransportationEmissions(SelectedOption(CarOwnership),
+                                        SelectedOption(CarUsage),
+                                        SelectedOption(CarMiles),
+                                        SelectedOption(PublicTransport),
+                                        SelectedOption(PublicTransportUse),
+                                        SelectedOption(ShortFlights),
+                                        SelectedOption(LongFlights));
+                        foodEmissions = emissionsCalculator
+                                .getFoodEmissions(SelectedOption(Diet),
+                                        SelectedOption(BeefConsumption),
+                                        SelectedOption(PorkConsumption),
+                                        SelectedOption(ChickenConsumption),
+                                        SelectedOption(FishConsumption),
+                                        SelectedOption(FoodWaste));
+                        housingEmissions = emissionsCalculator
+                                .getHousingEmissions(SelectedOption(Housing),
+                                        SelectedOption(HousingSize),
+                                        SelectedOption(HousingPeople),
+                                        SelectedOption(Energy),
+                                        SelectedOption(EnergyWater),
+                                        SelectedOption(Bill),
+                                        SelectedOption(Renewable));
+                        consumptionEmissions = emissionsCalculator
+                                .getConsumptionEmissions(SelectedOption(Clothes),
+                                        SelectedOption(Thrift),
+                                        SelectedOption(Electronic),
+                                        SelectedOption(Recycle));
+                        totalEmissions = transportationEmissions
+                                + foodEmissions
+                                + housingEmissions
+                                + consumptionEmissions;
+                        user.totalEmissions = totalEmissions;
+                        FirebaseSurvey model = new FirebaseSurvey(view);
+                        model.writeResult(transportationEmissions, foodEmissions, housingEmissions, consumptionEmissions, totalEmissions, selectedLocation);
+                        //carbon.footprint = CalculateCarOwnership(SelectedOption(CarOwnership)) + CalculatePublicTransportation(SelectedOption(PublicTransport), SelectedOption(PublicTransportUse)) + CalculateShortFlight(SelectedOption(ShortFlights)) + CalculateLongFlight(SelectedOption(LongFlights));
+                        //Toast.makeText(SurveyActivity.this, "Carbon Footprint: " + totalEmissions, Toast.LENGTH_SHORT).show();
+
+
                     }
                 }
 
                 // Pass the emissions data via Intent
                 Intent intent = new Intent(SurveyActivity.this, ResultsActivity.class);
-                intent.putExtra("totalEmissions", totalEmissions);
-                intent.putExtra("transportationEmissions", transportationEmissions);
-                intent.putExtra("foodEmissions", foodEmissions);
-                intent.putExtra("housingEmissions", housingEmissions);
-                intent.putExtra("consumptionEmissions", consumptionEmissions);
-
-                // Optionally, pass other details
-                String location = SelectedOption(locationSpinner);
-                intent.putExtra("location", location);
+                intent.putExtra("userID", auth.getCurrentUser().getUid());
                 startActivity(intent);
             }
         });
@@ -224,7 +235,7 @@ public class SurveyActivity extends AppCompatActivity {
 
     /**
      * areAllQuestionsAnswered - Check if all questions in the survey are answered
-     * @param radioGroups - Arraey of all RadioGroups
+     * @param radioGroups - Array of all RadioGroups
      * @return - True or false if the survey is completed or not respectively
      */
     private static boolean areAllQuestionsAnswered(RadioGroup[] radioGroups) {
@@ -268,5 +279,18 @@ public class SurveyActivity extends AppCompatActivity {
             child.setVisibility(View.GONE);
         }
     }
+
+    public void success() {
+        Toast.makeText(getApplicationContext(),
+                "Survey successfully completed!",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    public void failure() {
+        Toast.makeText(getApplicationContext(),
+                "Server Communication Error, please try again",
+                Toast.LENGTH_SHORT).show();
+    }
+
 
 }
