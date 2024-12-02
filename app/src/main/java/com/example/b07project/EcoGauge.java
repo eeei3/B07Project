@@ -1,5 +1,6 @@
 package com.example.b07project;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -140,15 +143,29 @@ public class EcoGauge extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.ecogauge) {
-            // Handle ecogauge action
+        if (id == R.id.ecotracker) {
+            Intent intent = new Intent(EcoGauge.this, EcoTrackerHomeFragment.class);
+            startActivity(intent);
             return true;
-        } else if (id == R.id.ecotracker) {
-            // Handle ecotracker action
+        } else if (id == R.id.habit) {
+            // Handle ecotracker action'
+            Intent intent = new Intent(EcoGauge.this, HabitsMenu.class);
+            startActivity(intent);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
 
+    private void loadFragment(Fragment fragment) {
+        // Use the correct FragmentManager for activities
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        // Optional transition
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        // R.id.fragment_container is your container's ID
+        transaction.replace(R.id.fragment_container, fragment);
+        // Optional: allows fragment to be popped back
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 }

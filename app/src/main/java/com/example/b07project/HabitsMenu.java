@@ -1,7 +1,11 @@
 package com.example.b07project;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -355,6 +359,30 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         }
         if (position2 != -1) {
             adapter.notifyItemChanged(position2);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.ecogauge) {
+            Intent intent = new Intent(HabitsMenu.this, EcoGauge.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.ecotracker) {
+            // Handle ecotracker action
+            Intent intent = new Intent(HabitsMenu.this, EcoTrackerHomeFragment.class);
+            startActivity(intent);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 }

@@ -123,10 +123,13 @@ public class EcoTrackerHomeFragment extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.ecogauge) {
-            // Handle ecogauge action
+            Intent intent = new Intent(EcoTrackerHomeFragment.this, EcoGauge.class);
+            startActivity(intent);
             return true;
-        } else if (id == R.id.ecotracker) {
+        } else if (id == R.id.habit) {
             // Handle ecotracker action
+            Intent intent = new Intent(EcoTrackerHomeFragment.this, HabitsMenu.class);
+            startActivity(intent);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
