@@ -29,6 +29,8 @@ public class ComparisonText {
         fetchUserData(new UserDataCallback() {
             @Override
             public void onUserDataFetched(String userLocation, Double dailyEmissions) {
+                Log.e("Firebase", "" + userLocation);
+                Log.e("Firebase", "" + dailyEmissions);
                 if (userLocation == null || dailyEmissions == null) {
                     Log.e("ComparisonText", "Error fetching user data.");
                     totalEmissions.setText("Error retrieving data");

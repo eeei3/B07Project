@@ -145,7 +145,7 @@ public class UpdatePieChart extends EcoGauge{
 
         // Set custom entries for the legend
         ArrayList<LegendEntry> customLegendEntries = new ArrayList<>();
-        customLegendEntries.add(new LegendEntry("Transportation: " + totalTranspo + "  ", Legend.LegendForm.CIRCLE, 14f, 14f, null, Color.parseColor(transportationColorHex)));
+        customLegendEntries.add(new LegendEntry("Transport: " + totalTranspo + "  ", Legend.LegendForm.CIRCLE, 14f, 14f, null, Color.parseColor(transportationColorHex)));
         customLegendEntries.add(new LegendEntry("Food: " + totalFood + "  ", Legend.LegendForm.CIRCLE, 14f, 14f, null, Color.parseColor(foodColorHex)));
         customLegendEntries.add(new LegendEntry("Shopping: " + totalShopping + "  ", Legend.LegendForm.CIRCLE, 14f, 14f, null, Color.parseColor(shoppingColorHex)));
 
