@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -197,7 +198,7 @@ public class FirebaseModel extends Model {
      */
     public FirebaseModel(String userid) {
 //        this.userid = userid;  //This is the production line
-        this.userid = "1111111"; // This is for testing
+        this.userid = FirebaseAuth.getInstance().getUid(); // This is for testing
         db = FirebaseDatabase.getInstance("https://b07project-b43b0-default-rtdb.firebaseio.com/");
         dbworker = db.getInstance().getReference();
     }
