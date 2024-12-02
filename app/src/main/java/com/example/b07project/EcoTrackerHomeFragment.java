@@ -1,7 +1,10 @@
 package com.example.b07project;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +21,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,14 +39,23 @@ public class EcoTrackerHomeFragment extends AppCompatActivity {
 
         CalendarView calendarView = findViewById(R.id.calendar_view);
 
+
         // Set a listener to get the selected date
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 // Month is 0-based, so add 1 to the month
-                selectedDate = view.getDate();
-                String selectedDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date(EcoTrackerHomeFragment.this.selectedDate));
-                Toast.makeText(EcoTrackerHomeFragment.this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
+                month++;
+                Toast.makeText(EcoTrackerHomeFragment.this, dayOfMonth + "/" + month + "/" + year, Toast.LENGTH_SHORT).show();
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month - 1); // Subtract 1 to convert back to 0-based month
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                selectedDate = calendar.getTimeInMillis();
             }
         });
 
@@ -62,7 +76,10 @@ public class EcoTrackerHomeFragment extends AppCompatActivity {
                 if (selectedDate > 0) {
 
                     Intent intent = new Intent(EcoTrackerHomeFragment.this, LogActivitiesActivity.class);
-                    intent.putExtra("selectedDate", selectedDate);
+//                    long currentTimeMillis = System.currentTimeMillis();
+//                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//                    String today = sdf.format(new Date(currentTimeMillis));
+                    intent.putExtra("selectedDate", new SimpleDateFormat("yyyy-MM-dd").format(new Date(EcoTrackerHomeFragment.this.selectedDate)));
                     intent.putExtra("user_id", userId);
                     startActivity(intent);
 

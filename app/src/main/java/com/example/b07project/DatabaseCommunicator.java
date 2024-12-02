@@ -13,8 +13,9 @@ public class DatabaseCommunicator {
     private DatabaseReference database;
     private Context context;
 
-    public DatabaseCommunicator(DatabaseReference databaseReference) {
+    public DatabaseCommunicator(DatabaseReference databaseReference, Context context) {
         this.database = databaseReference;
+        this.context = context;
     }
 
     /**
@@ -24,7 +25,7 @@ public class DatabaseCommunicator {
      * @param selectedDate the selected date
      * @param data the emission data (raw inputs & calculated emissions)
      */
-    public void saveUserEmissionData(String userId, long selectedDate, UserEmissionData data) {
+    public void saveUserEmissionData(String userId, String selectedDate, UserEmissionData data) {
 
         DatabaseReference userRef = database.child("users").child(userId);
 

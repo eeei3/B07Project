@@ -70,7 +70,7 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
         // find all interactive/core components of this view
         timesEditText = view.findViewById(R.id.times_edit_text);
         timesSeekBar = view.findViewById(R.id.times_seek_bar);
-        MaterialSwitch reminderSwitch = view.findViewById(R.id.reminder_switch);
+//        MaterialSwitch reminderSwitch = view.findViewById(R.id.reminder_switch);
         TimePicker timePicker = view.findViewById(R.id.time_habit_reminder);
         Spinner frequencySpinner = view.findViewById(R.id.habit_frequency);
         Button saveButton = view.findViewById(R.id.save_button);
@@ -85,8 +85,8 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
         reminderOptionsContainer.setVisibility(View.GONE);
 
         // toggle visibility of reminder options if switch is flipped
-        reminderSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
-                reminderOptionsContainer.setVisibility(isChecked ? View.VISIBLE : View.GONE));
+//        reminderSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+//                reminderOptionsContainer.setVisibility(isChecked ? View.VISIBLE : View.GONE));
 
         // define behaviour for when the SeekBar is updated
         timesSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -180,12 +180,12 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
             String reminderTime = null;
             String frequency = null;
 
-            if (reminderSwitch.isChecked()) {
-                int hour = timePicker.getHour();
-                int minute = timePicker.getMinute();
-                reminderTime = String.format("%d:%d", hour, minute);
-                frequency = frequencySpinner.getSelectedItem().toString();
-            }
+//            if (reminderSwitch.isChecked()) {
+//                int hour = timePicker.getHour();
+//                int minute = timePicker.getMinute();
+//                reminderTime = String.format("%d:%d", hour, minute);
+//                frequency = frequencySpinner.getSelectedItem().toString();
+//            }
 
 
             // find the corresponding HabitsModel that the dialog is currently setting goals for

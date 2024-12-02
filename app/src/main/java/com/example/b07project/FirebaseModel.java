@@ -198,8 +198,8 @@ public class FirebaseModel extends Model {
      */
     public FirebaseModel(String userid) {
 //        this.userid = userid;  //This is the production line
-//        this.userid = FirebaseAuth.getInstance().getUid(); // This is for testing
-        this.userid = "1111111";
+        this.userid = FirebaseAuth.getInstance().getUid(); // This is for testing
+//        this.userid = "1111111";
         db = FirebaseDatabase.getInstance("https://b07project-b43b0-default-rtdb.firebaseio.com/");
         dbworker = db.getInstance().getReference();
     }

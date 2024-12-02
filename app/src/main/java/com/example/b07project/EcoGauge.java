@@ -99,12 +99,13 @@ public class EcoGauge extends AppCompatActivity {
 
     public static String initializeFirebaseUser() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();
-        if (user != null) {
-            return "USER_ID";  // Return the actual user ID from Firebase
-        } else {
-            return "USER_ID";  // Fallback if no user is logged in
-        }
+        String user = auth.getUid();
+//        if (user != null) {
+//            return "USER_ID";  // Return the actual user ID from Firebase
+//        } else {
+//            return "USER_ID";  // Fallback if no user is logged in
+//        }
+        return user;
     }
 
     private void customizeLegendFont(PieChart pieChart) {

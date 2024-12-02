@@ -397,7 +397,7 @@ public class DetailPageActivity extends AppCompatActivity {
         long selectedDate = System.currentTimeMillis();
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        DatabaseCommunicator databaseCommunicator = new DatabaseCommunicator(database);
+        DatabaseCommunicator databaseCommunicator = new DatabaseCommunicator(database, DetailPageActivity.this);
         //databaseCommunicator.saveUserEmissionData(userId, selectedDate, user);
 
     }

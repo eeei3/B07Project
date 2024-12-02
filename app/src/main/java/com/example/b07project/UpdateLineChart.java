@@ -129,7 +129,7 @@ public class UpdateLineChart extends EcoGauge {
                                 DataSnapshot emissionsSnapshot = dateSnapshot.child("calculatedEmissions");
 
 
-                                Double emission = emissionsSnapshot.child("totalEmissions").getValue(Double.class);
+                                Double emission = emissionsSnapshot.child("totalEmission").getValue(Double.class);
                                 if (emission == null) {
                                     Log.w("Emissions", "Emission data is null for date: " + dateSnapshot.getKey());
                                     emissionsArray[index] = 0; // Default value

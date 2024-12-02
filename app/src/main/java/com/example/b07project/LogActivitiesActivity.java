@@ -407,12 +407,12 @@ public class LogActivitiesActivity extends AppCompatActivity {
 
         //pass the database reference
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        DatabaseCommunicator databaseCommunicator = new DatabaseCommunicator(database);
+        DatabaseCommunicator databaseCommunicator = new DatabaseCommunicator(database, LogActivitiesActivity.this);
 
         //take user id and date
         FirebaseAuth mauth = FirebaseAuth.getInstance();
         String userId = String.valueOf(mauth.getUid());
-        long selectedDate = System.currentTimeMillis();
+        String selectedDate = getIntent().getStringExtra("selectedDate");
 
         //then save the emission data to Firebase
         databaseCommunicator.saveUserEmissionData(userId, selectedDate, userEmissionData);
