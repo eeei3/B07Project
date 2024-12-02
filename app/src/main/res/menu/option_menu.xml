@@ -10,4 +10,9 @@
             android:id="@+id/ecotracker"
             android:title="Eco Tracker"
             android:icon="@drawable/checklist"/>
+
+        <item
+            android:id="@+id/habit"
+            android:title="Eco Habits"
+            android:icon="@drawable/checklist"/>
 </menu>

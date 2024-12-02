@@ -4,6 +4,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -106,7 +109,7 @@ public class EcoGauge extends AppCompatActivity {
         Legend legend = pieChart.getLegend();
 
         // Load the custom font from res/font
-        Typeface customTypeface = ResourcesCompat.getFont(this, R.font.garet);
+        Typeface customTypeface = ResourcesCompat.getFont(EcoGauge.this, R.font.garet);
 
         // Set the custom font to the legend
         if (customTypeface != null) {
@@ -126,6 +129,26 @@ public class EcoGauge extends AppCompatActivity {
         // Optional: Customize label text size and color
         pieChart.setEntryLabelTextSize(8f); // Adjust text size
         pieChart.setEntryLabelColor(Color.WHITE); // Adjust text color
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.ecogauge) {
+            // Handle ecogauge action
+            return true;
+        } else if (id == R.id.ecotracker) {
+            // Handle ecotracker action
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
 }

@@ -1,4 +1,5 @@
 package com.example.b07project;
+import android.content.Intent;
 import android.graphics.Color;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -88,7 +89,8 @@ public class ResultsActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new EcoTrackerHomeFragment());
+                Intent intent = new Intent(ResultsActivity.this, EcoTrackerHomeFragment.class);
+                startActivity(intent);
             }
         });
     }
