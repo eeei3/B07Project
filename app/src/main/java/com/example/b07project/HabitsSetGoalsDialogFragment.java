@@ -64,15 +64,12 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.e("fuck", "bruh3");
         View view = inflater.inflate(R.layout.setting_goals_user, container, false);
 
         // find all interactive/core components of this view
         timesEditText = view.findViewById(R.id.times_edit_text);
         timesSeekBar = view.findViewById(R.id.times_seek_bar);
-//        MaterialSwitch reminderSwitch = view.findViewById(R.id.reminder_switch);
         TimePicker timePicker = view.findViewById(R.id.time_habit_reminder);
-        Spinner frequencySpinner = view.findViewById(R.id.habit_frequency);
         Button saveButton = view.findViewById(R.id.save_button);
         reminderOptionsContainer = view.findViewById(R.id.reminder_options_container);
 
@@ -83,10 +80,6 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
         timePicker.setMinute(0);
         timePicker.setHour(7);
         reminderOptionsContainer.setVisibility(View.GONE);
-
-        // toggle visibility of reminder options if switch is flipped
-//        reminderSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
-//                reminderOptionsContainer.setVisibility(isChecked ? View.VISIBLE : View.GONE));
 
         // define behaviour for when the SeekBar is updated
         timesSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -107,7 +100,6 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
                 // sync timesSeekbar with timesEditText
                 if (!timesEditText.getText().toString().isEmpty()) {
                     timesEditText.setText(String.valueOf(progress));
-                    //timesEditText.setSelection(timesEditText.getText().length());
                 }
             }
 
@@ -168,25 +160,12 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
             public void afterTextChanged(Editable s) {}
         });
 
-        // NOTE FOR BACK-END
-        // save all this info (esp goal)
         // define behaviour for when the "Save" button is clicked
         saveButton.setOnClickListener(v -> {
 
 
             // extracted data to store information in databases and such...
-//            int goal = Integer.parseInt(timesEditText.getText().toString().trim());
             String goal = timesEditText.getText().toString().trim();
-            String reminderTime = null;
-            String frequency = null;
-
-//            if (reminderSwitch.isChecked()) {
-//                int hour = timePicker.getHour();
-//                int minute = timePicker.getMinute();
-//                reminderTime = String.format("%d:%d", hour, minute);
-//                frequency = frequencySpinner.getSelectedItem().toString();
-//            }
-
 
             // find the corresponding HabitsModel that the dialog is currently setting goals for
             // and add the habit to the set of the user's habits
@@ -203,10 +182,7 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
                         ((OnHabitUpdatedListener) getActivity()).onHabitUpdated(habit);
                     }
 
-                    // tommy: add goal/habit to the firebase
                     HabitsMenu.presenter.userAddGoal(habit, goal);
-
-
 
                     // close the dialog
                     success();

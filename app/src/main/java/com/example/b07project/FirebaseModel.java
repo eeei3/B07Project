@@ -32,18 +32,6 @@ class Goal {
     int image;
 
     /**
-     * Goal - Constructor that takes the goal's name, intended for creating new user goal
-     *
-     * @param name  - Name of the goal the user is starting
-     * @param category - Categories the goal belongs to
-     */
-    public Goal(String name, String category) {
-        this.name = name;
-        this.prog = 0;
-        this.category = category;
-    }
-
-    /**
      * Goal - Constructor that takes the goal's name and progress, intended for reading user goals
      * @param name - Name of the goal the program is fetching
      * @param prog - Progress of the goal
@@ -172,7 +160,6 @@ class Goal {
  */
 public class FirebaseModel extends Model {
     public static int counter = 0;
-    private static FirebaseModel serverCommunicator;
     final private FirebaseDatabase db;
     final private DatabaseReference dbworker;
     private String userid;
@@ -197,9 +184,7 @@ public class FirebaseModel extends Model {
      * @param userid - the id of the user
      */
     public FirebaseModel(String userid) {
-//        this.userid = userid;  //This is the production line
-        this.userid = FirebaseAuth.getInstance().getUid(); // This is for testing
-//        this.userid = "1111111";
+        this.userid = FirebaseAuth.getInstance().getUid();
         db = FirebaseDatabase.getInstance("https://b07project-b43b0-default-rtdb.firebaseio.com/");
         dbworker = db.getInstance().getReference();
     }
@@ -303,7 +288,6 @@ public class FirebaseModel extends Model {
     void setGoals(Goal goal, AsyncDBComms watcher) {
         final int[] completed = {0};
         int image_index = 0;
-//        Goal goalobj = new Goal(goal, 0);
         for (int i = 0 ; i < habitsImages.length; i++) {
             if (goal.image == habitsImages[i]) {
                 image_index = i;
@@ -318,7 +302,6 @@ public class FirebaseModel extends Model {
                             if (completed[0] >= 7) {
                                 watcher.setResult(true);
                                 listener.onObjectReady(watcher);
-//                                counter = 1;
                             }
                             else {
                                 completed[0] = completed[0] + 1;
@@ -337,7 +320,6 @@ public class FirebaseModel extends Model {
                             if (completed[0] >= 7) {
                                 watcher.setResult(true);
                                 listener.onObjectReady(watcher);
-//                                counter = 1;
                             }
                             else {
                                 completed[0] = completed[0] + 1;
@@ -356,7 +338,6 @@ public class FirebaseModel extends Model {
                             if (completed[0] >= 7) {
                                 watcher.setResult(true);
                                 listener.onObjectReady(watcher);
-//                                counter = 1;
                             }
                             else {
                                 completed[0] = completed[0] + 1;
@@ -375,7 +356,6 @@ public class FirebaseModel extends Model {
                             if (completed[0] >= 7) {
                                 watcher.setResult(true);
                                 listener.onObjectReady(watcher);
-//                                counter = 1;
                             }
                             else {
                                 completed[0] = completed[0] + 1;
@@ -394,7 +374,6 @@ public class FirebaseModel extends Model {
                             if (completed[0] >= 7) {
                                 watcher.setResult(true);
                                 listener.onObjectReady(watcher);
-//                                counter = 1;
                             }
                             else {
                                 completed[0] = completed[0] + 1;
@@ -413,7 +392,6 @@ public class FirebaseModel extends Model {
                             if (completed[0] >= 7) {
                                 watcher.setResult(true);
                                 listener.onObjectReady(watcher);
-//                                counter = 1;
                             }
                             else {
                                 completed[0] = completed[0] + 1;
@@ -432,7 +410,6 @@ public class FirebaseModel extends Model {
                             if (completed[0] >= 7) {
                                 watcher.setResult(true);
                                 listener.onObjectReady(watcher);
-//                                counter = 1;
                             }
                             else {
                                 completed[0] = completed[0] + 1;
@@ -459,7 +436,6 @@ public class FirebaseModel extends Model {
                             // Fetch the values we want
                             watcher.values.add(Integer.parseInt(String.valueOf(task.getResult().child("prog").getValue())));
                             watcher.values.add(Integer.parseInt(String.valueOf(task.getResult().child("aim").getValue())));
-//                            watcher.value = (long) task.getResult().getValue();
                             watcher.setResult(true);
                             listener.onObjectReady(watcher);
                         }
@@ -514,6 +490,4 @@ public class FirebaseModel extends Model {
             }
         });
     }
-
-
 }
