@@ -23,14 +23,6 @@ public class AsyncDBComms extends AsyncComms {
     }
 
     /**
-     * setValue - Modify the value field
-     * @param value - The new value of value
-     */
-    public void setValue(long value) {
-        this.value = value;
-    }
-
-    /**
      * setUsergoals - sets the usergoals field to contain the appropriate user's goal
      * @param value - the goals
      */
