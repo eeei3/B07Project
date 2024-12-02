@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 <ScrollView
     android:id="@+id/scrollgauge"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/entry_page_background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:layout_constraintBottom_toTopOf="@id/bottomview">
+    app:layout_constraintTop_toTopOf="parent"
+    android:paddingBottom="90dp">
 
 
     <LinearLayout
@@ -20,15 +21,18 @@
         android:padding="16dp"
         tools:ignore="ExtraText">
         <!--Planetze Logo-->
+
+        <!--Let's calculate your annual carbon footprint!-->
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="300dp"
             android:layout_height="93dp"
+            android:layout_gravity="center"
             android:layout_marginTop="16dp"
             android:src="@drawable/trans_planetze_logo"
-            android:layout_gravity="center"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <!--Let's calculate your annual carbon footprint!-->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -316,14 +320,12 @@
         android:id="@+id/bottomview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:background="@color/menu_color"
         android:visibility="visible"
         app:itemIconTint="@color/menu_text_color"
         app:itemTextColor="@color/menu_text_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/scrollgauge"
         app:menu="@menu/option_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

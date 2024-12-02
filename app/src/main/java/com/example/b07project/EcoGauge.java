@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -56,6 +57,8 @@ public class EcoGauge extends AppCompatActivity {
         globalEmissions = findViewById(R.id.GlobalEmissions);
         comparisonGlobalText = findViewById(R.id.comparisonGlobalText);
         comparisonNationalText = findViewById(R.id.comparisonNationalText);
+        BottomNavigationView navi = findViewById(R.id.bottomview);
+        navi.setSelectedItemId(R.id.ecogauge);
 
         String[] categories = getResources().getStringArray(R.array.timeValues);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, categories);

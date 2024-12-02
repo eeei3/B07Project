@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -38,6 +39,8 @@ public class EcoTrackerHomeFragment extends AppCompatActivity {
         setContentView(R.layout.activity_ecotrackerhome_fragment);
 
         CalendarView calendarView = findViewById(R.id.calendar_view);
+        BottomNavigationView navi = findViewById(R.id.bottomview);
+        navi.setSelectedItemId(R.id.ecotracker);
 
 
         // Set a listener to get the selected date

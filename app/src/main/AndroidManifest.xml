@@ -19,7 +19,7 @@
         <activity
             android:name=".EcoGauge"
             android:exported="true"
-            android:label="@string/app_name">
+            android:theme="@style/Base.Theme.BottomMenu">
         </activity>
         <activity
             android:name=".SurveyActivity"
@@ -32,7 +32,7 @@
         <activity
             android:name=".HabitsMenu"
             android:exported="true"
-            android:theme="@style/Theme.Material3.DayNight.NoActionBar">
+            android:theme="@style/Base.Theme.BottomMenu">
         </activity>
         <activity
             android:name=".EcoTrackerHomeFragment"
