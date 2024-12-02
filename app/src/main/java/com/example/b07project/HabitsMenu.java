@@ -76,15 +76,13 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         ImageView filterTool = findViewById(R.id.filter_icon);
         SearchView searchTool = findViewById(R.id.search_tool);
         CardView recommendHabitsCard = findViewById(R.id.card_recomd);
-        BottomNavigationView navi = findViewById(R.id.bottomview);
-        navi.setSelectedItemId(R.id.habit);
 
         // set default look for some interactive components
         searchTool.clearFocus();
-        int planetzeColour2 = ContextCompat.getColor(this, R.color.selected);
         int planetzeColour3 = ContextCompat.getColor(this, R.color.planetze_colour_3);
-        allHabits.setBackgroundColor(planetzeColour2);
-        usersHabits.setBackgroundColor(planetzeColour3);
+        int planetzeColour4 = ContextCompat.getColor(this, R.color.planetze_colour_4);
+        allHabits.setBackgroundColor(planetzeColour3);
+        usersHabits.setBackgroundColor(planetzeColour4);
 
         // set up the RecyclerView and its adapter
         setUpAllGoals();
@@ -100,9 +98,9 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
             if (currentMenu[0] != 1) {
                 HabitsMenu.presenter.userGetGoal();
                 filterChips.clearCheck();
-                usersHabits.setBackgroundColor(planetzeColour2);
-                allHabits.setBackgroundColor(planetzeColour3);
-                recommendHabitsCard.setCardBackgroundColor(planetzeColour3);
+                usersHabits.setBackgroundColor(planetzeColour3);
+                allHabits.setBackgroundColor(planetzeColour4);
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
                 currentMenu[0] = 1;
                 setUserArrayForAdapter();
             }
@@ -114,9 +112,9 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
             if (currentMenu[0] != 0) {
 //                userGoals = new ArrayList<>();
                 filterChips.clearCheck();
-                allHabits.setBackgroundColor(planetzeColour2);
-                usersHabits.setBackgroundColor(planetzeColour3);
-                recommendHabitsCard.setCardBackgroundColor(planetzeColour3);
+                allHabits.setBackgroundColor(planetzeColour3);
+                usersHabits.setBackgroundColor(planetzeColour4);
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
                 currentMenu[0] = 0;
                 setOriginalArrayForAdapter();
             }
@@ -127,9 +125,9 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
                 filterChips.clearCheck();
                 recommendedGoals.clear();
                 presenter.personalSuggestions();
-                recommendHabitsCard.setCardBackgroundColor(planetzeColour2);
-                allHabits.setBackgroundColor(planetzeColour3);
-                usersHabits.setBackgroundColor(planetzeColour3);
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour3);
+                allHabits.setBackgroundColor(planetzeColour4);
+                usersHabits.setBackgroundColor(planetzeColour4);
                 currentMenu[0] = 2;
                 setRecommendedArrayForAdapter();
             }
@@ -139,8 +137,8 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         filterChips.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (currentMenu[0] == 2) {
                 currentMenu[0] = 0;
-                allHabits.setBackgroundColor(planetzeColour2);
-                recommendHabitsCard.setCardBackgroundColor(planetzeColour3);
+                allHabits.setBackgroundColor(planetzeColour3);
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
             }
 
             ArrayList<String> checkedCategories = new ArrayList<>();
@@ -162,8 +160,8 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
             // reset the RecyclerView (i.e. removing any Chips selected)
             if (currentMenu[0] == 2) {
                 currentMenu[0] = 0;
-                allHabits.setBackgroundColor(planetzeColour2);
-                recommendHabitsCard.setCardBackgroundColor(planetzeColour3);
+                allHabits.setBackgroundColor(planetzeColour3);
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
                 setOriginalArrayForAdapter();
             } else {
                 setUserArrayForAdapter();
@@ -205,8 +203,8 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
                 // Note: uncheck all Chips and previous filters (no idea how to implement otherwise)
                 if (currentMenu[0] == 2) {
                     currentMenu[0] = 0;
-                    allHabits.setBackgroundColor(planetzeColour2);
-                    recommendHabitsCard.setCardBackgroundColor(planetzeColour3);
+                    allHabits.setBackgroundColor(planetzeColour3);
+                    recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
                 }
                 filterChips.clearCheck();
                 filterBySearch(newText);
