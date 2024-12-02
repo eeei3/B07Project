@@ -75,12 +75,4 @@ public class ForgotPasswordFragment extends Fragment {
     public void failure() {
         Toast.makeText(getContext(), "Failure", Toast.LENGTH_SHORT).show();
     }
-
-    private void loadFragment(Fragment fragment) {
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
 }
