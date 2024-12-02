@@ -60,6 +60,58 @@
     <string name="forgot_password_frame_desc">reset password panel</string>
     <string name="reset">Reset</string>
 
+    <string-array name="timeValues">
+        <item>Select a time period</item>
+        <item>Daily</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+    </string-array>
+
+    <string-array name="vehicle_types">
+        <item>Gasoline</item>
+        <item>Diesel</item>
+        <item>Hybrid</item>
+        <item>Electric</item>
+    </string-array>
+
+    <string-array name="transport_types">
+        <item>Bus</item>
+        <item>Train</item>
+        <item>Subway</item>
+    </string-array>
+
+    <string-array name="flight_types">
+        <item>Short-haul(less than 1500 km)</item>
+        <item>Long-haul(more than 1500 km)</item>
+    </string-array>
+
+    <string-array name="meal_types">
+        <item>Beef</item>
+        <item>Pork</item>
+        <item>Chicken</item>
+        <item>Fisk</item>
+        <item>Plant Based</item>
+    </string-array>
+
+    <string-array name="electronics_types">
+        <item>Phone</item>
+        <item>Laptop</item>
+        <item>TV</item>
+    </string-array>
+
+    <string-array name="other_purchase_types">
+        <item>Furniture</item>
+        <item>Appliances</item>
+        <item>Books</item>
+    </string-array>
+
+    <string-array name="energy_bill_types">
+        <item>Electricity</item>
+        <item>Gas</item>
+        <item>Water</item>
+    </string-array>
+
+
     <string name="BYOB">Bring your own bag when shopping</string>
     <string name="eco_friendly_habits">All Habits</string>
     <string name="search">Search</string>
