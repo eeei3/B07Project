@@ -12,41 +12,18 @@ import com.google.firebase.auth.FirebaseAuth;
 /**
  * This is the Model portion of the Login Module. It handles login and password reset requests
  */
-public class ServerCommunicator extends Fragment {
+public class FirebaseAuthHandler extends Model{
     final FirebaseAuth mAuth;
-    ModelPresenterPipe listener;
-
-    LoginPresenter lPresenter;
-    ForgetPresenter fPresenter;
-
-
-    /**
-     * ModelPresenterPipe - Interface representing the communication pipe (listener) between Model
-     * and Presenter
-     */
-    public interface ModelPresenterPipe {
-        void onObjectReady(SuccessListener betweener);
-    }
 
 
     /**
      * ServerCommunicator - Default constructor, gets Firebase Authentication instance
      * and sets listener to null
      */
-    public ServerCommunicator() {
+    public FirebaseAuthHandler() {
         this.mAuth = FirebaseAuth.getInstance();
         this.listener = null;
     }
-
-
-    /**
-     * setModelPipe - To permit communications between Model and Presenter
-     * @param listener - How we notify the Presenter that the results are ready
-     */
-    public void setModelPipe(ModelPresenterPipe listener) {
-        this.listener = listener;
-    }
-
 
     /**
      * login - For when the user attempts to log in
@@ -54,15 +31,15 @@ public class ServerCommunicator extends Fragment {
      * @param passwd - The user's entered password
      * @param watcher - How we notify the Presenter that the results are ready
      */
-    void login(String email, String passwd, SuccessListener watcher) {
+    void login(String email, String passwd, AsyncAuthComms watcher) {
         Task<AuthResult> task =  mAuth.signInWithEmailAndPassword(email, passwd);
         task.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                       @Override
-                                       public void onComplete(@NonNull Task<AuthResult> task) {
-                                           watcher.setSuccess(task.isSuccessful());
-                                           listener.onObjectReady(watcher);
-                                       }
-                                   }
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                watcher.setResult(task.isSuccessful());
+                listener.onObjectReady(watcher);
+                }
+            }
         );
     }
 
@@ -72,14 +49,15 @@ public class ServerCommunicator extends Fragment {
      * @param email - The user's email
      * @param watcher - How we notify the Presenter that the results are ready
      */
-    void resetPasswd(String email, SuccessListener watcher) {
+    void resetPasswd(String email, AsyncAuthComms watcher) {
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        watcher.setSuccess(task.isSuccessful());
-                        listener.onObjectReady(watcher);
+                            watcher.setResult(task.isSuccessful());
+                            listener.onObjectReady(watcher);
                     }
-                });
+                }
+                );
     }
 }

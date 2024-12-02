@@ -111,4 +111,42 @@
         <item>Water</item>
     </string-array>
 
+
+    <string name="BYOB">Bring your own bag when shopping</string>
+    <string name="eco_friendly_habits">All Habits</string>
+    <string name="search">Search</string>
+    <string name="filter">Filter</string>
+    <string name="transportation">Transportation</string>
+    <string name="energy">Energy</string>
+    <string name="consumption">Consumption</string>
+    <string name="food">Food</string>
+    <string name="image_of_habit">Image of Habit</string>
+    <string name="adopt_habit">Adopt Habit</string>
+    <string name="times_habit">How many times do you want to do this habit?</string>
+    <string name="enter_times_habits">Enter number of times</string>
+    <string name="want_reminders">Do you want reminders?</string>
+    <string name="reminder_time">Reminder Time</string>
+    <string name="reminder_frequency">Reminder Frequency</string>
+    <string name="save">Save</string>
+    <string name="icon_of_habit">Icon of Habit</string>
+    <string name="categories">Categories</string>
+    <string name="impact_on_co2_emission">Impact on CO2 Emission</string>
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
+    <string name="your_habits">Your Habits</string>
+    <string name="zero">0</string>
+    <string name="progress">Progress</string>
+    <string name="number_of_days">Number of days:</string>
+    <string name="log_activity">Log Activity</string>
+    <string name="remove_habit">remove habit button</string>
+    <string name="personalized_recommendations">Personalized Recommendations</string>
+
+    <string-array name="frequency_options">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
+
+
 </resources>
