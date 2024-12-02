@@ -3,9 +3,13 @@ package com.example.b07project;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -43,17 +47,32 @@ public class EcoGauge extends AppCompatActivity {
         timeSpinner.setAdapter(adapter);
 
         // Initialize GaugeReader and pass UI elements
-        GaugeReader gaugeReader = new GaugeReader();
-        gaugeReader.pieChart = pieChart;
-        gaugeReader.lineChart = lineChart;
-        gaugeReader.transportation = transportation;
-        gaugeReader.foodConsumption = foodConsumption;
-        gaugeReader.shopping = shopping;
-        gaugeReader.totalEmissionsText = totalEmissionsText;
+        UpdateLineChart updateLineChart = new UpdateLineChart();
+        UpdatePieChart updatePieChart = new UpdatePieChart();
+        updatePieChart.pieChart = pieChart;
+        updateLineChart.lineChart = lineChart;
+        updatePieChart.transportation = transportation;
+        updatePieChart.foodConsumption = foodConsumption;
+        updatePieChart.shopping = shopping;
+        updatePieChart.totalEmissionsText = totalEmissionsText;
+        updateLineChart.totalEmissionsText = totalEmissionsText;
 
         // Example: Update chart for daily data
-        gaugeReader.updateChartForTimePeriod("Monthly");
-        gaugeReader.updateLastThirtyDaysChart();
+        timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedTimePeriod = (String) parent.getItemAtPosition(position);
+
+                // Update the pie chart based on the selected time period
+                updatePieChart.updateChartForTimePeriod(selectedTimePeriod);
+                updateLineChart.updateLineChartForTimePeriod(selectedTimePeriod);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle the case when no item is selected (optional)
+            }
+        });
 
         customizeLegendFont(pieChart);
     }
