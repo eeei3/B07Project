@@ -14,4 +14,6 @@
     <color name="planetze_colour_4">#373f51</color>
     <color name="planetze_colour_5">#1b1b1e</color>
     <color name="spinnercolor1">#466872</color>
+    <color name="menu_color">#D1D5DB</color>
+    <color name="menu_text_color">#466872</color>
 </resources>
