@@ -1,4 +1,4 @@
-package com.example.registration
+package com.example.b07project
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

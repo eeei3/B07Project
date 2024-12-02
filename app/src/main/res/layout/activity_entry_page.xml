@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:id="@+id/fragment_container"
+<FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/entry_page_background">
 
     <ImageView
         android:id="@+id/planetzeLogo"
-        android:layout_width="301dp"
-        android:layout_height="83dp"
+        android:layout_width="439dp"
+        android:layout_height="128dp"
         android:layout_marginTop="172dp"
         android:src="@drawable/trans_planetze_logo"
         app:layout_constraintEnd_toEndOf="parent"
