@@ -1,1 +1,3 @@
 /build
+.attach_pid*
+deploymentTargetSelector.xml
