@@ -3,6 +3,7 @@ plugins {
     id("com.google.gms.google-services")
 }
 
+
 android {
     namespace = "com.example.b07project"
     compileSdk = 34
@@ -44,6 +45,7 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.firebase.auth)
     testImplementation("junit:junit:4.+")
+    testImplementation(libs.ext.junit)
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     implementation(libs.firebase.database)
     testImplementation("junit:junit:4.+")
@@ -53,4 +55,10 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
     implementation("com.google.firebase:firebase-analytics")
     testImplementation("org.mockito:mockito-all:1.10.19")
+    implementation ("androidx.cardview:cardview:1.0.0")
+    implementation ("com.github.blackfizz:eazegraph:1.2.2")
+    implementation ("com.nineoldandroids:library:2.4.0")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation ("androidx.profileinstaller:profileinstaller:1.3.0")
+
 }
