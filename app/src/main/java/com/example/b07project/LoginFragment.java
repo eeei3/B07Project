@@ -15,11 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
-import java.util.Objects;
 //import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment{
     private EditText editTextUserEmail, editTextUserPassword;
 
     LoginPresenter presenter;
@@ -73,32 +71,8 @@ public class LoginFragment extends Fragment {
         // Create communication channel with the Presenter
         presenter.setEmail(email);
         presenter.setPasswd(password);
-        // Create object to hold if operation is successful or not
-        SuccessListener watcher = new SuccessListener();
-        // Create Listener to check if password reset successful or not.
-        presenter.setViewPipe(new LoginPresenter.PresenterViewPipe() {
-            @Override
-            public void onObjectReady(SuccessListener watcher) {
-                if (watcher.success) {
-                    success();
-                }
-                else {
-                    failure();
-                }
-            }
-        });
         // Log in user
-        presenter.beginAuthenticate(watcher);
-
-        /*
-        UserLogin user = new UserLogin(email, password, DatabaseUrl);
-
-        if (user.BeginAuthenticate()) {
-            // change to dashboard layout?
-        } else {
-            Toast.makeText(getContext(),"Invalid email address or password", Toast.LENGTH_SHORT).show();
-        }
-        */
+        presenter.beginAuthenticate();
     }
 
     public void success() {
