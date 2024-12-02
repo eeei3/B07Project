@@ -1,6 +1,7 @@
 package com.example.b07project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,9 +127,11 @@ public class HabitsDetailsDialogFragment extends DialogFragment {
                 Toast.makeText(requireContext(), "Habit already added.", Toast.LENGTH_SHORT).show();
             } else {
                 // if habit not yet adopted, launch a dialog for the user to set their goals
+                Log.e("fuck", "bruh1");
                 dismiss();
                 HabitsSetGoalsDialogFragment setGoalsDialog = HabitsSetGoalsDialogFragment.newInstance(getArguments().getString(argHabitDesc));
                 setGoalsDialog.show(getParentFragmentManager(), "SetGoalsDialog");
+                Log.e("fuck", "bruh2");
 
                 // notify the activity that the habit has been updated by calling onHabitUpdated
                 if (getActivity() instanceof OnHabitUpdatedListener) {

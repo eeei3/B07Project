@@ -3,6 +3,7 @@ package com.example.b07project;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,7 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.e("fuck", "bruh3");
         View view = inflater.inflate(R.layout.setting_goals_user, container, false);
 
         // find all interactive/core components of this view
@@ -105,7 +107,7 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
                 // sync timesSeekbar with timesEditText
                 if (!timesEditText.getText().toString().isEmpty()) {
                     timesEditText.setText(String.valueOf(progress));
-                    timesEditText.setSelection(timesEditText.getText().length());
+                    //timesEditText.setSelection(timesEditText.getText().length());
                 }
             }
 

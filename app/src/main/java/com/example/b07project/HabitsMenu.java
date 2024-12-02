@@ -213,9 +213,6 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
                 return true;
             }
         });
-
-
-
     }
 
     /**
