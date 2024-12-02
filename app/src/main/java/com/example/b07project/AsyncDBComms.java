@@ -7,8 +7,7 @@ import java.util.ArrayList;
  * SuccessListener - Class representing the results of our asynchronous calls to Firebase auth
  */
 public class AsyncDBComms extends AsyncComms {
-    long value;
-    ArrayList<Object> values;
+    final ArrayList<Object> values;
     HashSet<Goal> usergoals;
     HashSet<Goal> listgoals;
 
