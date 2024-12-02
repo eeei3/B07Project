@@ -30,5 +30,16 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="CustomToolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="actionOverflowMenuStyle">@style/CustomOverflowMenu</item>
+        <item name="android:textColor">#466872</item>  <!-- Title text color -->
+        <item name="android:textStyle">bold</item>  <!-- Bold text -->
+        <item name="android:textSize">18sp</item>   <!-- Text size -->
+        <item name="android:fontFamily">@font/garet</item> <!-- Custom font -->
+    </style>
+
+    <style name="CustomOverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">#A1C6CA</item>  <!-- Background color of the overflow menu -->
+    </style>
 
 </resources>
