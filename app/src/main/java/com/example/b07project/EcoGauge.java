@@ -1,5 +1,6 @@
 package com.example.b07project;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,10 @@ public class EcoGauge extends AppCompatActivity {
     public PieChart pieChart;
     public LineChart lineChart;
     public TextView transportation, foodConsumption, shopping, totalEmissionsText;
+    TextView totalEmissions,
+            nationalEmissions,
+            globalEmissions;
+    TextView comparisonNationalText, comparisonGlobalText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,11 @@ public class EcoGauge extends AppCompatActivity {
         pieChart = findViewById(R.id.piechart);
         lineChart = findViewById(R.id.chart);
         totalEmissionsText = findViewById(R.id.totalEmissionsText);
+        totalEmissions = findViewById(R.id.yourEmissionsNumber);
+        nationalEmissions = findViewById(R.id.NationalEmissions);
+        globalEmissions = findViewById(R.id.GlobalEmissions);
+        comparisonGlobalText = findViewById(R.id.comparisonGlobalText);
+        comparisonNationalText = findViewById(R.id.comparisonNationalText);
 
         String[] categories = getResources().getStringArray(R.array.timeValues);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, categories);
@@ -49,6 +59,7 @@ public class EcoGauge extends AppCompatActivity {
         // Initialize GaugeReader and pass UI elements
         UpdateLineChart updateLineChart = new UpdateLineChart();
         UpdatePieChart updatePieChart = new UpdatePieChart();
+        ComparisonText updateComparisonText = new ComparisonText(comparisonGlobalText, comparisonNationalText, totalEmissions, globalEmissions, nationalEmissions);
         updatePieChart.pieChart = pieChart;
         updateLineChart.lineChart = lineChart;
         updatePieChart.transportation = transportation;
@@ -57,6 +68,7 @@ public class EcoGauge extends AppCompatActivity {
         updatePieChart.totalEmissionsText = totalEmissionsText;
         updateLineChart.totalEmissionsText = totalEmissionsText;
 
+        updateComparisonText.updateComparisonText();
         // Example: Update chart for daily data
         timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -66,6 +78,8 @@ public class EcoGauge extends AppCompatActivity {
                 // Update the pie chart based on the selected time period
                 updatePieChart.updateChartForTimePeriod(selectedTimePeriod);
                 updateLineChart.updateLineChartForTimePeriod(selectedTimePeriod);
+                customizeLegendFont(pieChart);
+                customizeLabelFont(pieChart);
             }
 
             @Override
@@ -74,7 +88,7 @@ public class EcoGauge extends AppCompatActivity {
             }
         });
 
-        customizeLegendFont(pieChart);
+
     }
 
     public static String initializeFirebaseUser() {
@@ -99,4 +113,19 @@ public class EcoGauge extends AppCompatActivity {
             legend.setTypeface(customTypeface);
         }
     }
+
+    private void customizeLabelFont(PieChart pieChart) {
+        // Load the custom font from res/font
+        Typeface customTypeface = ResourcesCompat.getFont(this, R.font.garet);
+
+        // Apply the custom font to the entry labels
+        if (customTypeface != null) {
+            pieChart.setEntryLabelTypeface(customTypeface);
+        }
+
+        // Optional: Customize label text size and color
+        pieChart.setEntryLabelTextSize(8f); // Adjust text size
+        pieChart.setEntryLabelColor(Color.WHITE); // Adjust text color
+    }
+
 }

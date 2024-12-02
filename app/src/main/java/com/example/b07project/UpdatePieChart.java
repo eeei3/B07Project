@@ -1,10 +1,12 @@
 package com.example.b07project;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -130,7 +132,10 @@ public class UpdatePieChart extends EcoGauge{
         dataSet.setColors(colors); // Set pie slice colors
         PieData data = new PieData(dataSet);
         pieChart.setDrawHoleEnabled(false);
+        pieChart.getDescription().setEnabled(false);
         dataSet.setValueTextSize(12f);
+        dataSet.setValueTextSize(14f); // Set text size for values
+        dataSet.setValueTextColor(Color.WHITE); // Set text color for values
 
         // Customizing the Legend
         Legend legend = pieChart.getLegend();

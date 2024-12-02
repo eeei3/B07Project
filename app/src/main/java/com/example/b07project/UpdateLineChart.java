@@ -1,8 +1,11 @@
 package com.example.b07project;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -168,6 +171,10 @@ public class UpdateLineChart extends EcoGauge {
      * @param dateArray the corresponding dates
      */
     private void updateChartWithData(double[] emissionsArray, String[] dateArray) {
+        String transportationColorHex = "#AD80C4";
+        String foodColorHex = "#81BAC5"; //Darker Blue
+        String shoppingColorHex = "#A1C6CA"; //Lighter Blue
+
         // Prepare the data for the chart
         ArrayList<Entry> entries = new ArrayList<>();
         for (int i = 0; i < emissionsArray.length; i++) {
@@ -177,6 +184,12 @@ public class UpdateLineChart extends EcoGauge {
         // Set up the data set and chart
         LineDataSet dataSet = new LineDataSet(entries, "Total Emissions (kg CO2)"); // Emissions data
         LineData lineData = new LineData(dataSet);
+
+        dataSet.setColor(Color.parseColor(foodColorHex));
+        dataSet.setLineWidth(2f);
+        dataSet.setDrawCircles(true);
+        dataSet.setCircleColor(Color.parseColor(transportationColorHex));
+        dataSet.setCircleRadius(5f);
 
         System.out.println("Line Data: ");
         for (int i = 0; i < lineData.getDataSetCount(); i++) {
