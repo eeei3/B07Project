@@ -76,14 +76,17 @@ public class HabitsDetailsDialogFragment extends DialogFragment {
      * @param inflater           The LayoutInflater object that can be used to inflate
      *                           any views in the fragment,
      * @param container          If non-null, this is the parent view that the fragment's
-     *                           UI should be attached to.  The fragment should not add the view itself,
-     *                           but this can be used to generate the LayoutParams of the view.
+     *                           UI should be attached to.  The fragment should not add the view
+     *                           itself, but this can be used to generate the LayoutParams of the
+     *                           view.
      * @param savedInstanceState If non-null, this fragment is being re-constructed
      *                           from a previous saved state as given here.
      * @return                   The view for the fragment's UI.
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.habits_item_details, container, false);
 
         // Get the arguments passed to the fragment
@@ -124,12 +127,15 @@ public class HabitsDetailsDialogFragment extends DialogFragment {
         habitAdopt.setOnClickListener(v -> {
             if (HabitsMenu.userGoals.contains(habit)) {
                 // handle when habit had already been adopted
-                Toast.makeText(requireContext(), "Habit already added.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Habit already added.", Toast.LENGTH_SHORT)
+                        .show();
             } else {
                 // if habit not yet adopted, launch a dialog for the user to set their goals
                 Log.e("fuck", "bruh1");
                 dismiss();
-                HabitsSetGoalsDialogFragment setGoalsDialog = HabitsSetGoalsDialogFragment.newInstance(getArguments().getString(argHabitDesc));
+                HabitsSetGoalsDialogFragment setGoalsDialog =
+                        HabitsSetGoalsDialogFragment.newInstance(getArguments()
+                                .getString(argHabitDesc));
                 setGoalsDialog.show(getParentFragmentManager(), "SetGoalsDialog");
                 Log.e("fuck", "bruh2");
 
@@ -139,7 +145,6 @@ public class HabitsDetailsDialogFragment extends DialogFragment {
                 }
             }
         });
-
         return view;
     }
 }
