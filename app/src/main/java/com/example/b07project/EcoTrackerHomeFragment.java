@@ -3,6 +3,9 @@ package com.example.b07project;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,6 +25,12 @@ import com.google.firebase.auth.FirebaseUser;
 public class EcoTrackerHomeFragment extends Fragment {
 
     private long selectedDate;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -70,6 +79,8 @@ public class EcoTrackerHomeFragment extends Fragment {
             }
         });
 
+
+
 //        buttonDetails.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -102,4 +113,26 @@ public class EcoTrackerHomeFragment extends Fragment {
 //        });
         return view;
     }
+
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.option_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.ecogauge) {
+            // Handle ecogauge action
+            return true;
+        } else if (id == R.id.ecotracker) {
+            // Handle ecotracker action
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+
 }

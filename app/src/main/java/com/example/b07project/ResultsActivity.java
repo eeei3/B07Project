@@ -3,6 +3,11 @@ import android.graphics.Color;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Arrays;
@@ -20,6 +25,8 @@ public class ResultsActivity extends AppCompatActivity {
             housingTextView,
             consumptionTextView;
     TextView comparisonTextView, globalTargetComparisonTextView;
+
+    private Button btnSubmit;
 
     /**
      * onCreate - Method run when ResultsActivity is created
@@ -43,6 +50,7 @@ public class ResultsActivity extends AppCompatActivity {
         consumptionTextView = findViewById(R.id.consumptionTextView);
         comparisonTextView = findViewById(R.id.comparisonTextView);
         globalTargetComparisonTextView = findViewById(R.id.globalTargetComparisonTextView);
+        btnSubmit = findViewById(R.id.submitButton);
 
         // Retrieve the total emissions passed from the SurveyActivity
         double totalEmissions = getIntent().getDoubleExtra("totalEmissions", 0)/1000;
@@ -77,5 +85,27 @@ public class ResultsActivity extends AppCompatActivity {
                                                 globalComparison));
 
         // If needed, also display individual breakdowns for categories like food, transportation, etc.
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFragment(new EcoTrackerHomeFragment());
+            }
+        });
+    }
+
+    /**
+     * loadFragment - Method for handling the loading of a fragment
+     * @param fragment - fragment to load
+     */
+    private void loadFragment(Fragment fragment) {
+        // Use the correct FragmentManager for activities
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        // Optional transition
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        // R.id.fragment_container is your container's ID
+        transaction.replace(R.id.fragment_container, fragment);
+        // Optional: allows fragment to be popped back
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
