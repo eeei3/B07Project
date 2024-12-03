@@ -32,55 +32,6 @@
             android:layout_marginTop="16dp"
             android:max="20" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/want_reminders"
-            android:textSize="16sp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp" />
-
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/reminder_switch"
-            android:layout_width="55dp"
-            android:layout_height="48dp" />
-
-        <LinearLayout
-            android:id="@+id/reminder_options_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_marginTop="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/reminder_time"
-                android:textSize="16sp" />
-
-            <TimePicker
-                android:id="@+id/time_habit_reminder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:timePickerMode="spinner"
-                android:layout_marginBottom="16dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/reminder_frequency"
-                android:textSize="16sp" />
-
-            <Spinner
-                android:id="@+id/habit_frequency"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:entries="@array/frequency_options"
-                android:layout_marginTop="8dp" />
-        </LinearLayout>
-
         <Button
             android:id="@+id/save_button"
             android:layout_width="wrap_content"

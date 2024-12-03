@@ -69,17 +69,12 @@ public class HabitsSetGoalsDialogFragment extends DialogFragment {
         // find all interactive/core components of this view
         timesEditText = view.findViewById(R.id.times_edit_text);
         timesSeekBar = view.findViewById(R.id.times_seek_bar);
-        TimePicker timePicker = view.findViewById(R.id.time_habit_reminder);
         Button saveButton = view.findViewById(R.id.save_button);
-        reminderOptionsContainer = view.findViewById(R.id.reminder_options_container);
 
         // Set default values and visibility to certain components
         timesSeekBar.setProgress(1);
         timesSeekBar.setMax(365);
         timesEditText.setText("1");
-        timePicker.setMinute(0);
-        timePicker.setHour(7);
-        reminderOptionsContainer.setVisibility(View.GONE);
 
         // define behaviour for when the SeekBar is updated
         timesSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

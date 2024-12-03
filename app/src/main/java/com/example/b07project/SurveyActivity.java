@@ -1,12 +1,8 @@
 package com.example.b07project;
-import static java.security.AccessController.getContext;
 
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
-
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -18,18 +14,10 @@ import android.widget.RadioGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.concurrent.ThreadFactory;
-
 /**
  * SurveyActivity class containing methods and fields related to the Emissions survey activity
  */
 public class SurveyActivity extends AppCompatActivity {
-
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference emissionsRef = database.getReference("emissions");
     private RadioGroup CarOwnership, CarUsage, CarMiles, PublicTransport, PublicTransportUse,
             ShortFlights, LongFlights, Diet, BeefConsumption, PorkConsumption,
             ChickenConsumption, FishConsumption, FoodWaste, Housing, HousingPeople,
@@ -121,7 +109,6 @@ public class SurveyActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                User user = new User();
                 double transportationEmissions = 0;
                 double foodEmissions = 0;
                 double housingEmissions = 0;
@@ -180,7 +167,6 @@ public class SurveyActivity extends AppCompatActivity {
                                 + foodEmissions
                                 + housingEmissions
                                 + consumptionEmissions;
-                        user.totalEmissions = totalEmissions;
                         FirebaseSurvey model = new FirebaseSurvey(view);
                         model.writeResult(transportationEmissions, foodEmissions, housingEmissions, consumptionEmissions, totalEmissions, selectedLocation);
                         //carbon.footprint = CalculateCarOwnership(SelectedOption(CarOwnership)) + CalculatePublicTransportation(SelectedOption(PublicTransport), SelectedOption(PublicTransportUse)) + CalculateShortFlight(SelectedOption(ShortFlights)) + CalculateLongFlight(SelectedOption(LongFlights));
