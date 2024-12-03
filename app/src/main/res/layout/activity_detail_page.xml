@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/garet"
             android:gravity="center"
-            android:text="Detailed Activities Pagee"
+            android:text="Detailed Activities Page"
             android:textSize="18sp"
             android:textStyle="bold" />
 

@@ -1,5 +1,16 @@
 package com.example.b07project;
 
+/**
+ * EcoTrackerCalculations class is responsible for calculating the carbon emissions
+ * associated with various activities that contribute to a user's carbon footprint.
+ *
+ * The class provides methods to calculate emissions from:
+ * - Transportation: including vehicle usage, public transport, cycling, and flights.
+ * - Food consumption: based on the type and number of meals.
+ * - Shopping: emissions from clothing, electronics, and other purchases.
+ *
+ */
+
 public class EcoTrackerCalculations {
 
     String vehicleType;

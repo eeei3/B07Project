@@ -28,31 +28,39 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * EcoTrackerHomeActivity serves as the main screen for the Planetze app after user login.
+ *
+ * It allows the user to:
+ * - Select a date from the calendar.
+ * - Log activities for the selected date.
+ * - View details of previously logged activities.
+ * - View emissions summary for the current day
+ *
+ * The activity fetches and displays the user's total emissions (transportation, food, shopping)
+ * and energy bills from the Firebase database.
+ *
+ * @see LogActivitiesActivity
+ * @see DetailPageActivity
+ */
+
 public class EcoTrackerHomeActivity extends AppCompatActivity {
 
     public static String userId;
     private DatabaseReference databaseReference;
     private long selectedDate;
     private String selectedDay;
-    private TextView transpoTextView, foodTextView, shoppingTextView, billsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ecotrackerhome_fragment);
 
-        // Get a reference to the UI components
+        // get reference to the CalendarView
         CalendarView calendarView = findViewById(R.id.calendar_view);
-        BottomNavigationView navi = findViewById(R.id.bottomview);
-        transpoTextView = findViewById(R.id.transport_emissions);
-        foodTextView = findViewById(R.id.food_emissions);
-        shoppingTextView = findViewById(R.id.shopping_emissions);
-        billsTextView = findViewById(R.id.energy_bills);
-        navi.setSelectedItemId(R.id.ecotracker);
-
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        // Set a listener to get the selected date
+        // set listener to get the selected date
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
@@ -61,7 +69,7 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
                 Toast.makeText(EcoTrackerHomeActivity.this, dayOfMonth + "/" + month + "/" + year, Toast.LENGTH_SHORT).show();
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                 calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, month - 1); // Subtract 1 to convert back to 0-based month
+                calendar.set(Calendar.MONTH, month - 1); // subtract 1 to convert back to 0-based month
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 calendar.set(Calendar.HOUR_OF_DAY, 0);
                 calendar.set(Calendar.MINUTE, 0);
@@ -70,111 +78,118 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
                 selectedDate = calendar.getTimeInMillis();
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                // Set the time zone
+                // set time zone
                 sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
                 selectedDay = sdf.format(new Date(selectedDate));
             }
         });
 
-        // Initialize buttons
+        // initialize buttons
         Button buttonLog = findViewById(R.id.log_activity_button);
         Button buttonDetails = findViewById(R.id.detail_activity_button);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();  // Get the current authenticated user
+        FirebaseUser user = auth.getCurrentUser();  // get the current authenticated user
 
-        // Get the user's id
+        // get the user's id
         if (user != null) {
             userId = user.getUid();
         }
 
-        // Log button click listener
+        // log button click listener
         buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectedDay != null &&!selectedDay.isEmpty()) {
-                    // Check if activities have already been logged for this date
+                if (selectedDay != null && !selectedDay.isEmpty()) {
+                    // check if activities have already been logged for this date
                     checkActivitiesForDate(selectedDay, new OnActivitiesCheckListener() {
                         @Override
                         public void onActivitiesChecked(boolean hasActivities) {
                             if (!hasActivities) {
-                                // No activities logged for this date, proceed to log
+                                // if no activities logged for this date, proceed to log
                                 Intent intent = new Intent(EcoTrackerHomeActivity.this, LogActivitiesActivity.class);
                                 intent.putExtra("selectedDate", selectedDay);
                                 intent.putExtra("user_id", userId);
                                 startActivity(intent);
                             } else {
-                                // Activities already exist for this date
+                                // activities already exist for this date, show toast
                                 Toast.makeText(EcoTrackerHomeActivity.this, "Activities history found! Please go directly to detail page", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
                 } else {
-                    // No date selected
+                    // if no date selected
                     Toast.makeText(EcoTrackerHomeActivity.this, "Please select a date", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        // Details button click listener
+        // details button click listener
         buttonDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectedDay != null && (!selectedDay.isEmpty())) {
-                    // Check if activities exist for this date before viewing details
+                if (selectedDay != null && !selectedDay.isEmpty()) {
+                    // check if activities exist for this date before viewing details
                     checkActivitiesForDate(selectedDay, new OnActivitiesCheckListener() {
                         @Override
                         public void onActivitiesChecked(boolean hasActivities) {
-                            // If there are activities logged before, open the details page
+                            // if activities logged before, open the details page
                             if (hasActivities) {
                                 Intent intent = new Intent(EcoTrackerHomeActivity.this, DetailPageActivity.class);
                                 intent.putExtra("selectedDate", selectedDay);
                                 intent.putExtra("user_id", userId);
                                 startActivity(intent);
                             } else {
-                                // No activities logged for this date, show a toast
+                                // if no activities logged for this date, show toast
                                 Toast.makeText(EcoTrackerHomeActivity.this, "No activities history found! Please log activities first", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
                 } else {
-                    // No date selected
+                    // no date selected
                     Toast.makeText(EcoTrackerHomeActivity.this, "Please select a date", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+        // retrieve and display the totals of emissions and energy bills
         retrieveAndDisplayTotalsTraditional();
 
     }
 
-    // Interface to handle activities check callback
+    /**
+     * Interface to handle the callback after checking whether activities are logged for a specific date.
+     */
     private interface OnActivitiesCheckListener {
         void onActivitiesChecked(boolean hasActivities);
     }
 
-    // To check if there are activities logged on the selected date
+    /**
+     * Checks if there are any activities logged for the selected date.
+     *
+     * @param selectedDay - the date to check for logged activities
+     * @param listener - callback listener to handle the result of the check
+     */
     private void checkActivitiesForDate(String selectedDay, OnActivitiesCheckListener listener) {
-        // Reference to the user's activities for the specific date
+        // reference to the user's activities for the specific date
         DatabaseReference userActivitiesRef = databaseReference
                 .child("users")
                 .child(userId)
-                .child("ecotracker");
-//                .child(String.valueOf(selectedDay));
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay));
 
         userActivitiesRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     DataSnapshot snapshot = task.getResult();
-//                    if (snapshot.exists()) {
-                    if (snapshot.hasChild(selectedDay)) {
+                    if (snapshot.exists()) {
                         listener.onActivitiesChecked(true);
                     } else {
                         listener.onActivitiesChecked(false);
                     }
                 } else {
-                    // Handle potential errors
+                    // handles potential errors
                     Toast.makeText(EcoTrackerHomeActivity.this, "Error checking activities", Toast.LENGTH_SHORT).show();
                     listener.onActivitiesChecked(false);
                 }
@@ -182,76 +197,93 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Retrieves and displays the user's total emissions and energy bills from the system date or "today"
+     */
     private void retrieveAndDisplayTotalsTraditional() {
 
         long systemDate = System.currentTimeMillis();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        //set the time zone
+        // set the time zone
         String dateToday = sdf.format(new Date(systemDate));
 
 
-        // Reference to the "rawInputs" node
+        // reference to the "rawInputs" node
         DatabaseReference ref = databaseReference
                 .child("users")
                 .child(userId)
                 .child("ecotracker")
                 .child(String.valueOf(dateToday));
 
-        // Retrieve totalTranspo
+        // retrieve totalTranspo
         ref.child("calculatedEmissions").child("totalTranspo").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     long totalTranspo = task.getResult().getValue(Long.class);
+                    TextView transpoTextView = findViewById(R.id.transport_emissions);
                     transpoTextView.setText("Total Transportation Emissions: " + totalTranspo + "kg");
                 } else {
+                    TextView transpoTextView = findViewById(R.id.transport_emissions);
                     transpoTextView.setText("Total Transportation Emissions: Not logged yet");
                 }
             }
         });
 
-        // Retrieve totalFood
+        // retrieve totalFood
         ref.child("calculatedEmissions").child("totalFood").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     long totalFood = task.getResult().getValue(Long.class);
+                    TextView foodTextView = findViewById(R.id.food_emissions);
                     foodTextView.setText("Total Food Emissions: " + totalFood + "kg" );
                 } else {
+                    TextView foodTextView = findViewById(R.id.food_emissions);
                     foodTextView.setText("Total Food Emissions: Not logged yet");
                 }
             }
         });
 
-        // Retrieve totalShopping
+        // retrieve totalShopping
         ref.child("calculatedEmissions").child("totalShopping").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     long totalShopping = task.getResult().getValue(Long.class);
+                    TextView shoppingTextView = findViewById(R.id.shopping_emissions);
                     shoppingTextView.setText("Total Shopping Emissions: " + totalShopping + "kg");
                 } else {
+                    TextView shoppingTextView = findViewById(R.id.shopping_emissions);
                     shoppingTextView.setText("Total Shopping Emissions: Not logged yet");
                 }
             }
         });
 
-        // Retrieve totalBills
+        // retrieve totalBills
         ref.child("rawInputs").child("billAmount").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     long totalBills = task.getResult().getValue(Long.class);
+                    TextView billsTextView = findViewById(R.id.energy_bills);
                     billsTextView.setText("Total Bills: " + totalBills + "$");
                 } else {
+                    TextView billsTextView = findViewById(R.id.energy_bills);
                     billsTextView.setText("Total Bills: Not logged yet");
                 }
             }
         });
     }
 
+    /**
+     * onCreateOptionsMenu- creates the options menu for navigating to EcoGauge and HabitsMenu.
+     *
+     * @param menu - the options menu
+     * @return true if the menu is created successfully
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -259,6 +291,12 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * onOptionsItemSelected - handles item selection from the options menu.
+     *
+     * @param item - the selected menu item
+     * @return true if the item was handled, otherwise passes to the superclass
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
