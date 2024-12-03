@@ -1,26 +1,21 @@
 package com.example.b07project;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.util.Log;
 import android.widget.Toast;
 import java.util.Locale;
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
-
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

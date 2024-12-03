@@ -12,30 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
-/**
- * LogActivitiesActivity handles the logging of various user activities and calculates
- * their environmental impact in terms of CO2 emissions. This activity includes sections
- * for transportation, food consumption, shopping, and energy bills. The user can input
- * relevant data for each category, and the app will calculate and display their total emissions.
-
- * After collecting the user input, the activity calculates emissions for each category and
- * saves the data to a Firebase database. The app then transitions to a detail page where the
- * user can view a breakdown of their emissions.
- *
- * @see UserEmissionData
- * @see DatabaseCommunicator
- * @see DetailPageActivity
- */
 
 public class LogActivitiesActivity extends AppCompatActivity {
 
@@ -74,13 +53,6 @@ public class LogActivitiesActivity extends AppCompatActivity {
     private double distanceDriven, cyclingTime, walkingCyclingDistance, BillAmount;
     private int numFlights, numClothes, numDevices, numPurchases, numServings;
 
-    /**
-     * onCreate - initializes the activity, sets up the UI components, and configures the spinners
-     * and checkboxes for user input. Also, it retrieves the selected date passed from the previous activity
-     * and sets it as the date input.
-     *
-     * @param savedInstanceState A bundle containing the activity's previously saved state.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,9 +90,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * initializeUIComponents - initializes UI components by matching to front end IDs
-     */
+    //initialize UI components by matching to front end IDs
     private void initializeUIComponents() {
         titleTextView = findViewById(R.id.title_text_view);
         inputDate = findViewById(R.id.input_date);
@@ -169,13 +139,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
         spinnerBillType = findViewById(R.id.spinner_bill_type);
     }
 
-    /**
-     * setupSpinner - set up a spinner with data from a given string array resource allowing user to
-     * choose options from a dropdown
-     *
-     * @param spinner The spinner to be configured.
-     * @param arrayResId The resource ID for the array of items to be displayed in the spinner.
-     */
+    //spinner setup for user to choose between options
     private void setupSpinner(Spinner spinner, int arrayResId) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
@@ -186,13 +150,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
     }
 
-    /**
-     * setupCheckbox configures the checkbox to toggle the visibility of its associated input layout based on whether
-     * the checkbox is checked or not.
-     *
-     * @param checkbox The checkbox to be configured.
-     * @param layout The layout to be shown/hidden based on the checkbox's state.
-     */
+    //checkbox set up for toggle down
     private void setupCheckbox(CheckBox checkbox, LinearLayout layout) {
         checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // Show or hide the associated input layout based on the checkbox state
@@ -334,13 +292,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
         return emission;
     }
 
-    /**
-     * parseDouble - parses the value entered in an EditText field into a double. If the value is invalid or empty,
-     * it returns 0.0 to avoid exceptions.
-     *
-     * @param editText The EditText field containing the user input.
-     * @return The parsed double value, or 0.0 if the input is invalid.
-     */
+
     private double parseDouble(EditText editText) {
         String text = editText.getText().toString();
         try {
@@ -394,13 +346,6 @@ public class LogActivitiesActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * isInputVisible - checks if a given layout is currently visible
-     * on the screen. This is used to determine whether the user has selected to input data for that category.
-     *
-     * @param layout The layout to check the visibility of.
-     * @return true if the layout is visible, false otherwise.
-     */
     private boolean isInputVisible(View layout) {
         return layout.getVisibility() == View.VISIBLE;
     }
@@ -409,11 +354,6 @@ public class LogActivitiesActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * saveData - collects the user's input data from the UI elements, calculates the emissions for transportation,
-     * food, and shopping activities, and saves the data to the Firebase database. It then transitions
-     * to the DetailPageActivity and passes the collected data for display.
-     */
     private void saveData() {
         try {
             vehicleType = spinnerVehicleType.getSelectedItem().toString();

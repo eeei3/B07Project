@@ -3,28 +3,11 @@ package com.example.b07project;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import kotlin.text.UStringsKt;
-
-/**
- * DatabaseCommunicator - class responsible for managing interactions with a Firebase Realtime Database.
- * It facilitates reading user data, including both raw inputs and calculated emissions, and processes
- * this data for further use in EcoTrackerHome Actvitiy, LogActivitiesActivity, and DetailPageActivity.
- *
- * - Read and retrieve data from Firebase database for specific user actions.
- * - Fetch both raw inputs (e.g., distance driven, meal type) and calculated emissions (e.g., total transportation, food emissions).
- * - Use asynchronous operations to fetch data and trigger a callback when all required data is retrieved.
- * - Handle database errors by throwing runtime exceptions when issues arise during the data retrieval process.
- *
- */
 
 public class DatabaseCommunicator {
 
