@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 /**
  * SuccessListener - Class representing the results of our asynchronous calls to Firebase auth
+ *
+ * @see AsyncComms
  */
 public class AsyncDBComms extends AsyncComms {
     final ArrayList<Object> values;

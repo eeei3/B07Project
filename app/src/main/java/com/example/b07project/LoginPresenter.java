@@ -2,6 +2,9 @@ package com.example.b07project;
 
 /**
  * Class representing the Presenter portion of the Login module
+ *
+ * @see LoginFragment
+ * @see FirebaseAuthHandler
  */
 public class LoginPresenter {
     private String email;

@@ -11,7 +11,6 @@ import com.google.android.gms.tasks.Task;
 import java.util.Arrays;
 
 /**
- *
  * ComparisonText class containing methods relating updating the comparison text in EcoGauge
  */
 public class ComparisonText {

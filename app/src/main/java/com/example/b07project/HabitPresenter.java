@@ -1,7 +1,6 @@
 package com.example.b07project;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import java.util.HashSet;
@@ -68,7 +67,6 @@ public class HabitPresenter {
         calculator.prepare();
         calculator.calculateScore();
 
-        System.out.println("HELLO");
         Goal recomd = calculator.calculateRecommendation();
         Goal newToTry = calculator.calculateNew();
 
@@ -101,12 +99,7 @@ public class HabitPresenter {
         FirebaseModel.counter = 0;
         AsyncDBComms mp = new AsyncDBComms();
         FirebaseModel model = new FirebaseModel();
-        model.setModelPipe(new Model.ModelPresenterPipe() {
-            @Override
-            public void onObjectReady(AsyncComms betweener) {
-                FirebaseModel.counter = 1;
-            }
-        });
+        model.setModelPipe(betweener -> FirebaseModel.counter = 1);
         goal.aim = Integer.parseInt(aim);
         model.setGoals(goal, mp);
     }
@@ -118,12 +111,9 @@ public class HabitPresenter {
     public void userGetGoal() {
         AsyncDBComms mp = new AsyncDBComms();
         FirebaseModel model = new FirebaseModel();
-        model.setModelPipe(new Model.ModelPresenterPipe() {
-            @Override
-            public void onObjectReady(AsyncComms betweener) {
-                if (mp.res) {
-                    HabitsMenu.userGoals.addAll(mp.usergoals);
-                }
+        model.setModelPipe(betweener -> {
+            if (mp.res) {
+                HabitsMenu.userGoals.addAll(mp.usergoals);
             }
         });
         model.getGoals(mp);
@@ -135,19 +125,12 @@ public class HabitPresenter {
     public void userSetProg(Goal habit) {
         AsyncDBComms mp = new AsyncDBComms();
         FirebaseModel model = new FirebaseModel();
-        model.setModelPipe(new Model.ModelPresenterPipe() {
-            @Override
-            public void onObjectReady(AsyncComms betweener) {
-                Log.e("fuck3", String.valueOf(habit.prog));
-                HabitsMenu.progress++;
-                Log.e("fuck4", String.valueOf(habit.prog));
-                progdiafrag.setTextNumDays(HabitsMenu.progress);
-                progdiafrag.setProgressBar(HabitsMenu.progress);
-            }
+        model.setModelPipe(betweener -> {
+            HabitsMenu.progress++;
+            progdiafrag.setTextNumDays(HabitsMenu.progress);
+            progdiafrag.setProgressBar(HabitsMenu.progress);
         });
-        Log.e("fuck1", String.valueOf(habit.prog));
-        model.setProg(habit.name, HabitsMenu.progress + 1, mp);
-        Log.e("fuck2", String.valueOf(habit.prog));
+        model.setProg(habit.getName(), HabitsMenu.progress + 1, mp);
     }
 
     /**
@@ -157,24 +140,19 @@ public class HabitPresenter {
     public void userGetProg(String goal) {
         AsyncDBComms mp = new AsyncDBComms();
         FirebaseModel model = new FirebaseModel();
-        model.setModelPipe(new Model.ModelPresenterPipe() {
-            @Override
-            public void onObjectReady(AsyncComms betweener) {
-                AsyncDBComms plug = (AsyncDBComms) betweener;
-                if (plug.res) {
-                    // update the progress and aim in the view for the specified goal
-                    HabitsMenu.progress = (int) plug.values.get(0);
-                    HabitsMenu.aim = (int) plug.values.get(1);
-                    progdiafrag.setProgressBar(HabitsMenu.progress);
-                    progdiafrag.setTextNumDays(HabitsMenu.progress);
-                }
-                else {
-                    HabitsMenu.progress = 0;
-                    HabitsMenu.aim = 1;
-                    progdiafrag.setProgressBar(HabitsMenu.progress);
-                    progdiafrag.setTextNumDays(HabitsMenu.progress);
-                }
+        model.setModelPipe(betweener -> {
+            AsyncDBComms plug = (AsyncDBComms) betweener;
+            if (plug.res) {
+                // update the progress and aim in the view for the specified goal
+                HabitsMenu.progress = (int) plug.values.get(0);
+                HabitsMenu.aim = (int) plug.values.get(1);
             }
+            else {
+                HabitsMenu.progress = 0;
+                HabitsMenu.aim = 1;
+            }
+            progdiafrag.setProgressBar(HabitsMenu.progress);
+            progdiafrag.setTextNumDays(HabitsMenu.progress);
         });
         model.getProg(goal, mp);
     }
@@ -187,30 +165,24 @@ public class HabitPresenter {
      *               a. A habit has been completed
      *               b. The user wants to drop a habit
      */
-    public void userDeleteGoal(String goal, Context con, int toggle) {
+    public void userDeleteGoal(Goal goal, Context con, int toggle) {
         AsyncDBComms mp = new AsyncDBComms();
         FirebaseModel model = new FirebaseModel();
-        model.setModelPipe(new Model.ModelPresenterPipe() {
-            @Override
-            public void onObjectReady(AsyncComms betweener) {
-                AsyncDBComms plug = (AsyncDBComms) betweener;
-                if (plug.res) {
-                    if (toggle == 0) {
-                        Toast.makeText(con, "Goal Finished!",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    else if (toggle == 1) {
-                        HabitsMenu.userGoals.remove(goal);
-                        HabitsMenu.setUserArrayForAdapter();
-                        Toast.makeText(con, "Habit Removed", Toast.LENGTH_SHORT).show();
-                    }
+        model.setModelPipe(betweener -> {
+            AsyncDBComms plug = (AsyncDBComms) betweener;
+            if (plug.res) {
+                if (toggle == 0) {
+                    Toast.makeText(con, "Goal Finished!",
+                            Toast.LENGTH_SHORT).show();
                 }
-                else {
-
+                else if (toggle == 1) {
+                    HabitsMenu.userGoals.remove(goal);
+                    HabitsMenu.setUserArrayForAdapter();
+                    Toast.makeText(con, "Habit Removed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        model.deleteGoal(goal, mp);
+        model.deleteGoal(goal.getName(), mp);
     }
 
     /**
@@ -219,13 +191,10 @@ public class HabitPresenter {
     public void getAllHabits() {
         AsyncDBComms mp = new AsyncDBComms();
         FirebaseModel model = new FirebaseModel();
-        model.setModelPipe(new Model.ModelPresenterPipe() {
-            @Override
-            public void onObjectReady(AsyncComms betweener) {
-                AsyncDBComms plug = (AsyncDBComms) betweener;
-                HabitsMenu.allGoals.addAll(plug.listgoals);
-                HabitsMenu.setOriginalArrayForAdapter();
-            }
+        model.setModelPipe(betweener -> {
+            AsyncDBComms plug = (AsyncDBComms) betweener;
+            HabitsMenu.allGoals.addAll(plug.listgoals);
+            HabitsMenu.setOriginalArrayForAdapter();
         });
         model.getListGoals(mp);
     }

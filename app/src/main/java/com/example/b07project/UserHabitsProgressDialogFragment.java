@@ -137,7 +137,7 @@ public class UserHabitsProgressDialogFragment extends DialogFragment {
                         .setTitle("Confirm")
                         .setPositiveButton("No", (dialog, id) -> {
                             // Handle the "No" action
-                            HabitsMenu.presenter.userDeleteGoal(habit.getName(), getContext(), 0);
+                            HabitsMenu.presenter.userDeleteGoal(habit, getContext(), 0);
                             dismiss();
 
 

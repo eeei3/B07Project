@@ -30,14 +30,12 @@ public class LoginUnitTesting {
     @InjectMocks
     ForgetPresenter forgetPresenter;
 
-
     @Before
     public void setup() {
         // set up behaviour when model tries to log in
         doAnswer(invocation -> {
             String email = invocation.getArgument(0);
             String password = invocation.getArgument(1);
-
 
             if (email.equals("joshualiu0307@gmail.com") && password.equals("mockitotest")) {
                 // Simulating a successful login
@@ -65,7 +63,6 @@ public class LoginUnitTesting {
             return null;
         }).when(model).resetPasswd(anyString(), any());
     }
-
 
     @Test
     public void testGoodLogin() {
