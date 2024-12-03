@@ -131,6 +131,7 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/round_button"
+                android:fontFamily="@font/garet"
                 android:text="@string/sign_in"
                 android:textColor="@color/planetze_colour_1"
                 android:textSize="18sp" />

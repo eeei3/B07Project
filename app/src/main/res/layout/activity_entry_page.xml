@@ -24,11 +24,12 @@
         android:id="@+id/LogInButton"
         android:layout_width="264dp"
         android:layout_height="48dp"
-        android:text="Log In"
+        android:text="LOG IN"
         android:textColor="@color/white"
         android:background="@drawable/log_in_button"
         app:layout_constraintTop_toBottomOf="@id/planetzeLogo"
         app:layout_constraintEnd_toEndOf="parent"
+        android:fontFamily="@font/garet"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="32dp" />
 
@@ -37,7 +38,8 @@
         android:layout_width="264dp"
         android:layout_height="48dp"
         android:background="@drawable/log_in_button"
-        android:text="Sign Up"
+        android:text="SIGN UP"
+        android:fontFamily="@font/garet"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/LogInButton"
         app:layout_constraintEnd_toEndOf="parent"

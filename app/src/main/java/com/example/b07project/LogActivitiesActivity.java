@@ -82,6 +82,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
 
         buttonSave.setOnClickListener(v -> saveData());
 
+
     }
 
     //initialize UI components by matching to front end IDs
@@ -138,9 +139,9 @@ public class LogActivitiesActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
                 arrayResId,
-                android.R.layout.simple_spinner_dropdown_item
+                R.layout.spinner2
         );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.spinner2);
         spinner.setAdapter(adapter);
     }
 

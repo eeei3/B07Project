@@ -38,6 +38,14 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="CustomSpinner2" parent="TextAppearance.AppCompat.Medium">
+        <!-- Set text color, size, and font family -->
+        <item name="android:textSize">15dp</item>
+        <item name="android:fontFamily">@font/garet</item>
+        <item name="android:textColor">#757575</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
     <style name="CustomToolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="color">@color/white</item>
         <item name="actionOverflowMenuStyle">@style/CustomOverflowMenu</item>

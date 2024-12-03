@@ -1,26 +1,26 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
-    android:background="#ffffff">
+    android:background="@color/entry_page_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Title for the page -->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id = "@+id/title_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/garet"
+            android:gravity="center"
             android:text="Log Activities Page"
-            android:textStyle="bold"
             android:textSize="18sp"
-            android:layout_gravity="center"
-            android:paddingBottom="8dp"/>
+            android:textStyle="bold" />
 
-        <!-- Date input field -->
+        <!-- Date input field
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,171 +29,228 @@
             android:padding="8dp"
             android:background="@android:drawable/editbox_background"
             android:id="@+id/input_date" />
+            -->
 
         <!-- Transportation Details -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/garet"
             android:text="Transportation Details"
             android:textStyle="bold"
-            android:paddingTop="16dp"/>
+            android:paddingTop="20dp"/>
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Drive Personal Vehicle"
-            android:id="@+id/checkbox_drive_vehicle"/>
-
-        <LinearLayout
-            android:id="@+id/vehicle_details_layout"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:visibility="gone">
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <!-- EditText for entering the distance driven -->
-            <EditText
-                android:id="@+id/input_distance_driving"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter distance (km or miles)"
-                android:importantForAccessibility="yes"
-                android:inputType="numberDecimal"
-                android:textSize="14sp" />
+                android:orientation="vertical"
+                android:padding="10dp">
 
-            <!-- Spinner for selecting the vehicle type -->
-            <Spinner
-                android:id="@+id/spinner_vehicle_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:importantForAccessibility="yes" />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/garet"
+                    android:text="Drive Personal Vehicle"
+                    android:id="@+id/checkbox_drive_vehicle"/>
 
-        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/vehicle_details_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="gone">
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Take Public Transportation"
-            android:id="@+id/checkbox_public_transport"/>
+                    <!-- EditText for entering the distance driven -->
+                    <EditText
+                        android:id="@+id/input_distance_driving"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/garet"
+                        android:hint="Enter distance (km or miles)"
+                        android:importantForAccessibility="yes"
+                        android:inputType="numberDecimal"
+                        android:textSize="14sp" />
 
-        <LinearLayout
-            android:id="@+id/public_transport_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:visibility="gone">
+                    <!-- Spinner for selecting the vehicle type -->
+                    <Spinner
+                        android:id="@+id/spinner_vehicle_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/spinner2"
+                        android:importantForAccessibility="yes" />
 
-            <!-- Spinner for Transport Type (Bus, Train, Subway) -->
-            <Spinner
-                android:id="@+id/spinner_transport_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                </LinearLayout>
 
-            <!-- EditText for Time Spent on Public Transport -->
-            <EditText
-                android:id="@+id/input_time_spent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Time spent on public transport (hours)"
-                android:inputType="numberDecimal"
-                android:layout_marginTop="8dp"/>
-        </LinearLayout>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/garet"
+                    android:text="Take Public Transportation"
+                    android:id="@+id/checkbox_public_transport"/>
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cycling or Walking"
-            android:id="@+id/checkbox_cycling_walking"/>
+                <LinearLayout
+                    android:id="@+id/public_transport_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="gone">
 
-        <LinearLayout
-            android:id="@+id/cycling_walking_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:visibility="gone">
+                    <!-- Spinner for Transport Type (Bus, Train, Subway) -->
+                    <Spinner
+                        android:id="@+id/spinner_transport_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/spinner2" />
 
-            <!-- EditText for Distance (Cycling or Walking) -->
-            <EditText
-                android:id="@+id/input_distance_walking"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter distance in kilometers"
-                android:inputType="numberDecimal"
-                android:layout_marginBottom="8dp"/>
-        </LinearLayout>
+                    <!-- EditText for Time Spent on Public Transport -->
+                    <EditText
+                        android:id="@+id/input_time_spent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/garet"
+                        android:hint="Time spent on public transport (hours)"
+                        android:inputType="numberDecimal"
+                        android:textSize="14sp"
+                        android:layout_marginTop="8dp"/>
+                </LinearLayout>
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Flight (Short-Haul or Long-Haul)"
-            android:id="@+id/checkbox_flight"/>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cycling or Walking"
+                    android:fontFamily="@font/garet"
+                    android:id="@+id/checkbox_cycling_walking"/>
 
-        <LinearLayout
-            android:id="@+id/flight_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:visibility="gone">
+                <LinearLayout
+                    android:id="@+id/cycling_walking_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/garet"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="gone">
 
-            <!-- EditText for Number of Flights -->
-            <EditText
-                android:id="@+id/input_num_flights"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter number of flights taken today"
-                android:inputType="number"
-                android:layout_marginBottom="8dp"/>
+                    <!-- EditText for Distance (Cycling or Walking) -->
+                    <EditText
+                        android:id="@+id/input_distance_walking"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/garet"
+                        android:hint="Enter distance in kilometers"
+                        android:inputType="numberDecimal"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="8dp"/>
+                </LinearLayout>
 
-            <Spinner
-                android:id="@+id/spinner_flight_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/garet"
+                    android:text="Flight (Short-Haul or Long-Haul)"
+                    android:id="@+id/checkbox_flight"/>
 
-        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/flight_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="gone">
 
-        <!-- Food Consumption Activities -->
+                    <!-- EditText for Number of Flights -->
+                    <EditText
+                        android:id="@+id/input_num_flights"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/garet"
+                        android:hint="Enter number of flights taken today"
+                        android:inputType="number"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="8dp"/>
+
+                    <Spinner
+                        android:id="@+id/spinner_flight_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/spinner2" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Food Consumption Activities"
             android:textStyle="bold"
-            android:paddingTop="16dp"/>
+            android:fontFamily="@font/garet"
+            android:paddingTop="20dp"/>
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Meal"
-            android:id="@+id/checkbox_meal"/>
+        <!-- Food Consumption Activities -->
+        <androidx.cardview.widget.CardView
+        android:id="@+id/cardView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/white"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp">
 
         <LinearLayout
-            android:id="@+id/meal_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp"
-            android:visibility="gone">
+            android:padding="10dp">
 
-            <!-- EditText for Number of Servings -->
-            <EditText
-                android:id="@+id/input_servings"
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Meal"
+                android:fontFamily="@font/garet"
+                android:id="@+id/checkbox_meal"/>
+
+            <LinearLayout
+                android:id="@+id/meal_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter number of servings"
-                android:inputType="number" />
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:visibility="gone">
 
-            <!-- Spinner for Meal Type (beef, pork, chicken, etc.) -->
-            <Spinner
-                android:id="@+id/spinner_meal_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
+                <!-- EditText for Number of Servings -->
+                <EditText
+                    android:id="@+id/input_servings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/garet"
+                    android:textSize="14sp"
+                    android:hint="Enter number of servings"
+                    android:inputType="number" />
 
+                <!-- Spinner for Meal Type (beef, pork, chicken, etc.) -->
+                <Spinner
+                    android:id="@+id/spinner_meal_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/spinner2"/>
+
+                </LinearLayout>
         </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
         <!-- Shopping Activities -->
         <TextView
@@ -201,138 +258,173 @@
             android:layout_height="wrap_content"
             android:text="Consumption and Shopping Activities"
             android:textStyle="bold"
-            android:paddingTop="10dp"/>
+            android:fontFamily="@font/garet"
+            android:paddingTop="20dp"/>
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Buy New Clothes"
-            android:id="@+id/checkbox_clothes"/>
-
-        <LinearLayout
-            android:id="@+id/clothes_layout"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:visibility="gone">
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
 
-            <!-- Input field for number of clothes purchased -->
-            <EditText
-                android:id="@+id/input_num_clothes"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter number of clothing items purchased"
-                android:inputType="number"
-                android:importantForAccessibility="yes"
-                android:contentDescription="Input field for number of clothes" />
+                android:orientation="vertical"
+                android:padding="10dp">
 
-        </LinearLayout>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Buy New Clothes"
+                    android:fontFamily="@font/garet"
+                    android:id="@+id/checkbox_clothes"/>
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Buy Electronics"
-            android:id="@+id/checkbox_electronics"/>
+                <LinearLayout
+                    android:id="@+id/clothes_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="gone">
 
-        <LinearLayout
-            android:id="@+id/electronics_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:visibility="gone">
+                    <!-- Input field for number of clothes purchased -->
+                    <EditText
+                        android:id="@+id/input_num_clothes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter number of clothing items purchased"
+                        android:inputType="number"
+                        android:fontFamily="@font/garet"
+                        android:textSize="14sp"
+                        android:importantForAccessibility="yes"
+                        android:contentDescription="Input field for number of clothes" />
 
-            <!-- Spinner for selecting device type -->
-            <Spinner
-                android:id="@+id/spinner_device_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                </LinearLayout>
 
-            <!-- Input field for the number of devices purchased -->
-            <EditText
-                android:id="@+id/input_num_devices"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter number of devices"
-                android:inputType="number"
-                android:importantForAccessibility="yes"
-                android:contentDescription="Input field for number of devices" />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Buy Electronics"
+                    android:fontFamily="@font/garet"
+                    android:id="@+id/checkbox_electronics"/>
 
-        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/electronics_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="gone">
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Other Purchases"
-            android:id="@+id/checkbox_other_purchases"/>
+                    <!-- Spinner for selecting device type -->
+                    <Spinner
+                        android:id="@+id/spinner_device_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/spinner2" />
 
-        <LinearLayout
-            android:id="@+id/other_purchases_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:visibility="gone">
+                    <!-- Input field for the number of devices purchased -->
+                    <EditText
+                        android:id="@+id/input_num_devices"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter number of devices"
+                        android:inputType="number"
+                        android:fontFamily="@font/garet"
+                        android:textSize="14sp"
+                        android:importantForAccessibility="yes"
+                        android:contentDescription="Input field for number of devices" />
 
-            <!-- Spinner for selecting purchase type -->
-            <Spinner
-                android:id="@+id/spinner_purchase_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                </LinearLayout>
 
-            <!-- EditText for the number of items purchased -->
-            <EditText
-                android:id="@+id/input_num_other_purchases"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter number of items purchased"
-                android:inputType="number"
-                android:importantForAccessibility="yes"
-                android:contentDescription="Input field for other purchases" />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Other Purchases"
+                    android:fontFamily="@font/garet"
+                    android:id="@+id/checkbox_other_purchases"/>
 
-        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/other_purchases_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="gone">
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Energy Bills"
-            android:id="@+id/checkbox_energy_bills"/>
+                    <!-- Spinner for selecting purchase type -->
+                    <Spinner
+                        android:id="@+id/spinner_purchase_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/spinner2" />
 
-        <LinearLayout
-            android:id="@+id/energy_bills_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:padding="10dp">
+                    <!-- EditText for the number of items purchased -->
+                    <EditText
+                        android:id="@+id/input_num_other_purchases"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter number of items purchased"
+                        android:inputType="number"
+                        android:fontFamily="@font/garet"
+                        android:textSize="14sp"
+                        android:importantForAccessibility="yes"
+                        android:contentDescription="Input field for other purchases" />
 
-            <!-- Spinner for selecting the type of bill (Electricity, Gas, Water) -->
-            <Spinner
-                android:id="@+id/spinner_bill_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:importantForAccessibility="yes" />
+                </LinearLayout>
 
-            <!-- EditText for entering the bill amount -->
-            <EditText
-                android:id="@+id/input_bill_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter bill amount ($)"
-                android:inputType="numberDecimal"
-                android:textSize="14sp"
-                android:importantForAccessibility="yes" />
-        </LinearLayout>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Energy Bills"
+                    android:fontFamily="@font/garet"
+                    android:id="@+id/checkbox_energy_bills"/>
+
+                <LinearLayout
+                    android:id="@+id/energy_bills_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:padding="10dp">
+
+                    <!-- Spinner for selecting the type of bill (Electricity, Gas, Water) -->
+                    <Spinner
+                        android:id="@+id/spinner_bill_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:importantForAccessibility="yes"
+                        android:background="@drawable/spinner2" />
+
+                    <!-- EditText for entering the bill amount -->
+                    <EditText
+                        android:id="@+id/input_bill_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/garet"
+                        android:hint="Enter bill amount ($)"
+                        android:inputType="numberDecimal"
+                        android:textSize="14sp"
+                        android:importantForAccessibility="yes" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
         <Button
             android:id="@+id/button_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:backgroundTint="#009999"
+            android:backgroundTint="@color/teal_700"
+            android:fontFamily="@font/garet"
             android:text="Save"
-            android:textColor="#ffffff" />
-
+            android:background="@drawable/round_button"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
     </LinearLayout>
 </ScrollView>
