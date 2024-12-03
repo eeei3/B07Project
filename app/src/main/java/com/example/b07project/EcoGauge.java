@@ -155,16 +155,4 @@ public class EcoGauge extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-
-    private void loadFragment(Fragment fragment) {
-        // Use the correct FragmentManager for activities
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        // Optional transition
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        // R.id.fragment_container is your container's ID
-        transaction.replace(R.id.fragment_container, fragment);
-        // Optional: allows fragment to be popped back
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
 }
