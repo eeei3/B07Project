@@ -44,6 +44,10 @@ public class UserEmissionData {
         private double billAmount;
         private String billType;
 
+
+        public RawInputs() {
+        }
+
         //RawInputs constructor with the necessary paramenteres
         public RawInputs(double distanceDriven, String vehicleType, String transportType,
                          double cyclingTime, int numFlights, String flightType, String mealType,
@@ -112,6 +116,9 @@ public class UserEmissionData {
             this.totalFood = totalFood;
             this.totalShopping = totalShopping;
             this.totalEmission = totalTranspo + totalFood + totalShopping; // Calculate total emissions
+        }
+
+        public CalculatedEmissions() {
         }
 
         //getters and setters

@@ -35,7 +35,7 @@
             android:theme="@style/Base.Theme.BottomMenu">
         </activity>
         <activity
-            android:name=".EcoTrackerHomeFragment"
+            android:name=".EcoTrackerHomeActivity"
             android:exported="true">
         </activity>
         <activity

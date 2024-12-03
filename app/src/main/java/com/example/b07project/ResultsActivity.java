@@ -137,7 +137,7 @@ public class ResultsActivity extends AppCompatActivity {
         {
             @Override
             public void onClick (View v){
-                Intent intent = new Intent(ResultsActivity.this, EcoTrackerHomeFragment.class);
+                Intent intent = new Intent(ResultsActivity.this, EcoTrackerHomeActivity.class);
                 startActivity(intent);
             }
         });

@@ -79,7 +79,7 @@ public class LoginFragment extends Fragment{
     public void success() {
         Toast.makeText(getContext(), "Login Success", Toast.LENGTH_SHORT).show();
         // Send back to whatever screen is appropriate
-        Intent intent = new Intent(getActivity(), EcoTrackerHomeFragment.class);
+        Intent intent = new Intent(getActivity(), EcoTrackerHomeActivity.class);
         startActivity(intent);
     }
 

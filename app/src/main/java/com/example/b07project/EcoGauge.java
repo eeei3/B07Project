@@ -148,7 +148,7 @@ public class EcoGauge extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.ecotracker) {
-            Intent intent = new Intent(EcoGauge.this, EcoTrackerHomeFragment.class);
+            Intent intent = new Intent(EcoGauge.this, EcoTrackerHomeActivity.class);
             startActivity(intent);
             return true;
         } else if (id == R.id.habit) {

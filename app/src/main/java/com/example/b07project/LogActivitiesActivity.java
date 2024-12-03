@@ -3,7 +3,6 @@ package com.example.b07project;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,11 +15,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 public class LogActivitiesActivity extends AppCompatActivity {
+
+    private String selectedDay;
 
     //ui elements
     private TextView titleTextView, inputDate;
@@ -58,9 +62,16 @@ public class LogActivitiesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // get the selected date
+        Intent intent = getIntent();
+        selectedDay = intent.getStringExtra("selectedDate");
+
         setContentView(R.layout.log_activities_page);
 
         initializeUIComponents();
+
+        inputDate.setText(selectedDay);
 
         setupSpinner(spinnerVehicleType, R.array.vehicle_types);
         setupSpinner(spinnerTransportType, R.array.transport_types);
@@ -172,17 +183,22 @@ public class LogActivitiesActivity extends AppCompatActivity {
 
     private double calculatePublicTransportEmission() {
 
-        double emission = 0.0;
+        double emission;
 
         // Calculate emission using if-else logic
-        if (transportType.equals("Bus")) {
-            emission = 0.18 * cyclingTime;
-        } else if (transportType.equals("Train")) {
-            emission = 0.04 * cyclingTime;
-        } else if (transportType.equals("Subway")) {
-            emission = 0.03 * cyclingTime;
-        } else {
-            emission = 0.0;
+        switch (transportType) {
+            case "Bus":
+                emission = 0.18 * cyclingTime;
+                break;
+            case "Train":
+                emission = 0.04 * cyclingTime;
+                break;
+            case "Subway":
+                emission = 0.03 * cyclingTime;
+                break;
+            default:
+                emission = 0.0;
+                break;
         }
         return emission;
     }
@@ -193,7 +209,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
     }
 
     private double calculateFlightEmission() {
-        double emission = 0.0;
+        double emission;
 
         if (flightType.equals("Short-haul(less than 1500 km)")) {
             emission = numFlights * 225;
@@ -208,18 +224,25 @@ public class LogActivitiesActivity extends AppCompatActivity {
     private double calculateMealEmission() {
         double emission = 0.0;
 
-        if (mealType.equals("Beef")) {
-            emission = 10 * numServings;
-        } else if (mealType.equals("Pork")) {
-            emission = 5 * numServings;
-        } else if (mealType.equals("Chicken")) {
-            emission = 3* numServings;
-        } else if (mealType.equals("Fish")) {
-            emission = 2 * numServings;
-        } else if (mealType.equals("Plant Based")) {
-            emission = numServings;
-        } else {
-            emission = 0.0;
+        switch (mealType) {
+            case "Beef":
+                emission = 10 * numServings;
+                break;
+            case "Pork":
+                emission = 5 * numServings;
+                break;
+            case "Chicken":
+                emission = 3 * numServings;
+                break;
+            case "Fish":
+                emission = 2 * numServings;
+                break;
+            case "Plant Based":
+                emission = numServings;
+                break;
+            default:
+                emission = 0.0;
+                break;
         }
         return emission;
     }
@@ -234,32 +257,42 @@ public class LogActivitiesActivity extends AppCompatActivity {
     }
 
     private double calculateElectronicsEmission() {
-        double emission = 0.0;
+        double emission;
 
-        if (deviceType.equals("Phone")) {
-            emission = 250 * numDevices;
-        } else if (deviceType.equals("Laptop")) {
-            emission = 400 * numDevices;
-        } else if (deviceType.equals("TV")) {
-            emission = 600 * numDevices;
-        } else {
-            emission = 0.0;
+        switch (deviceType) {
+            case "Phone":
+                emission = 250 * numDevices;
+                break;
+            case "Laptop":
+                emission = 400 * numDevices;
+                break;
+            case "TV":
+                emission = 600 * numDevices;
+                break;
+            default:
+                emission = 0.0;
+                break;
         }
 
         return emission;
     }
 
     private double calculateOtherPurchasesEmission() {
-        double emission = 0.0;
+        double emission;
 
-        if (purchaseType.equals("Furniture")) {
-            emission = 250 * numPurchases;
-        } else if (purchaseType.equals("Appliance")) {
-            emission = 800 * numPurchases;
-        } else if (purchaseType.equals("Book")) {
-            emission = 5 * numPurchases;
-        } else {
-            emission = 0.0;
+        switch (purchaseType) {
+            case "Furniture":
+                emission = 250 * numPurchases;
+                break;
+            case "Appliance":
+                emission = 800 * numPurchases;
+                break;
+            case "Book":
+                emission = 5 * numPurchases;
+                break;
+            default:
+                emission = 0.0;
+                break;
         }
         return emission;
     }
@@ -358,11 +391,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
         } catch (NumberFormatException e) {
             numPurchases = 0;
         }
-        try {
 
-        } catch (NumberFormatException e) {
-            numFlights = 0;
-        }
         distanceDriven = parseDouble(inputDistanceDriving);
         transportType = spinnerTransportType.getSelectedItem().toString();
         cyclingTime = parseDouble(inputTimeSpent);
@@ -407,15 +436,14 @@ public class LogActivitiesActivity extends AppCompatActivity {
 
         //pass the database reference
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        DatabaseCommunicator databaseCommunicator = new DatabaseCommunicator(database, LogActivitiesActivity.this);
+        DatabaseCommunicator databaseCommunicator = new DatabaseCommunicator(database);
 
-        //take user id and date
-        FirebaseAuth mauth = FirebaseAuth.getInstance();
-        String userId = String.valueOf(mauth.getUid());
-        String selectedDate = getIntent().getStringExtra("selectedDate");
+        // get the selected date
+        Intent intentDate = getIntent();
+        selectedDay = intentDate.getStringExtra("selectedDate");
 
         //then save the emission data to Firebase
-        databaseCommunicator.saveUserEmissionData(userId, selectedDate, userEmissionData);
+        databaseCommunicator.saveUserEmissionData(selectedDay, userEmissionData);
 
         //show the success message
         Toast.makeText(getApplicationContext(), "Data saved successfully!", Toast.LENGTH_SHORT).show();
