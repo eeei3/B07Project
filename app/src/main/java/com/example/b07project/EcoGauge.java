@@ -93,7 +93,7 @@ public class EcoGauge extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // Handle the case when no item is selected (optional)
+                updatePieChart.updateChartForTimePeriod("Daily");
             }
         });
 
@@ -103,11 +103,6 @@ public class EcoGauge extends AppCompatActivity {
     public static String initializeFirebaseUser() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         String user = auth.getUid();
-//        if (user != null) {
-//            return "USER_ID";  // Return the actual user ID from Firebase
-//        } else {
-//            return "USER_ID";  // Fallback if no user is logged in
-//        }
         return user;
     }
 
