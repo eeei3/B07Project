@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -18,18 +17,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.auth.AuthResult;
 
 
 public class RegisterUserFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     private EditText editTextName, editTextEmail, editTextPass, editTextConfirmPass;
-    private Button buttonRegisterUser;
-    private FirebaseDatabase db;
-    private DatabaseReference itemsRef;
     private static final String TAG = "Register User";
 
 
@@ -46,69 +39,15 @@ public class RegisterUserFragment extends Fragment {
         editTextEmail = view.findViewById(R.id.editTextEmail);
         editTextPass = view.findViewById(R.id.editTextPass);
         editTextConfirmPass = view.findViewById(R.id.editTextConfirmPass);
-        buttonRegisterUser = view.findViewById(R.id.buttonRegisterUser);
         ImageButton imageButtonBack = view.findViewById(R.id.backButtonSignUp);
 
-        imageButtonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), EntryActivity.class);
-                startActivity(intent);
-            }
+        imageButtonBack.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), EntryActivity.class);
+            startActivity(intent);
         });
 
         //click listener for register button
-        buttonRegisterUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                registerUser();
-            }
-        });
         return view;
-
-    }
-
-    //create a registerUser method
-    //create a user using mAuth
-    //put user in database
-    private void registerUser() {
-
-        //gets email and password from input fields
-
-        String name = editTextName.getText().toString().trim();
-        String email = editTextEmail.getText().toString().trim();
-        String password = editTextPass.getText().toString().trim();
-        String confirmPass = editTextConfirmPass.getText().toString().trim();
-
-        //validate info (if fields are complete, if email is valid, if pass matches confirmpass, if user already exists)
-        if (validateInfo(name, email, password, confirmPass)) {
-
-            //create a user using mAuth
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "createUserWithEmail:success");
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                //update the user's name
-                                updateUserName(user, name); //update the username
-                                sendEmailVerification(user); //send email
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(getActivity(), "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                                updateUI(null);
-                            }
-                        }
-
-                    });
-
-        }
-
-        //add user to the firebase database
 
     }
 

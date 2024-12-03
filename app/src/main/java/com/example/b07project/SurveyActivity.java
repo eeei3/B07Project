@@ -14,6 +14,8 @@ import android.widget.RadioGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 /**
  * SurveyActivity class containing methods and fields related to the Emissions survey activity
  */
@@ -23,7 +25,6 @@ public class SurveyActivity extends AppCompatActivity {
             ChickenConsumption, FishConsumption, FoodWaste, Housing, HousingPeople,
             HousingSize, Energy, Bill, EnergyWater, Renewable, Clothes, Thrift,
             Electronic, Recycle;
-    private Button btnSubmit;
     private LinearLayout groupCarQuestionsLayout, dietQuestionsLayout;
 
     /**
@@ -45,7 +46,7 @@ public class SurveyActivity extends AppCompatActivity {
         CarUsage = findViewById(R.id.radioGroupCarUsage);
         CarMiles = findViewById(R.id.radioGroupCarMiles);
         PublicTransport = findViewById(R.id.ptUse);
-        btnSubmit = findViewById(R.id.submitButton);
+        Button btnSubmit = findViewById(R.id.submitButton);
         groupCarQuestionsLayout = findViewById(R.id.carQuestionsLayout);
         PublicTransportUse = findViewById(R.id.radioptTime);
         ShortFlights = findViewById(R.id.radioShortFlights);
@@ -77,108 +78,99 @@ public class SurveyActivity extends AppCompatActivity {
         locationSpinner.setAdapter(adapter);
 
         // Set a listener on the CarOwnership RadioGroup to show/hide additional questions
-        CarOwnership.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // Show the additional questions if "I own a car" or "I lease a car" is selected
-                if (checkedId == R.id.radioYes) {
-                    // Show the hidden questions
-                    groupCarQuestionsLayout.setVisibility(View.VISIBLE);
-                    makeChildrenVisible(groupCarQuestionsLayout);
-                } else if (checkedId == R.id.radioNo) {
-                    groupCarQuestionsLayout.setVisibility(View.GONE); // Hide the hidden questions
-                    makeChildrenGone(groupCarQuestionsLayout);
-                }
+        CarOwnership.setOnCheckedChangeListener((group, checkedId) -> {
+            // Show the additional questions if "I own a car" or "I lease a car" is selected
+            if (checkedId == R.id.radioYes) {
+                // Show the hidden questions
+                groupCarQuestionsLayout.setVisibility(View.VISIBLE);
+                makeChildrenVisible(groupCarQuestionsLayout);
+            } else if (checkedId == R.id.radioNo) {
+                groupCarQuestionsLayout.setVisibility(View.GONE); // Hide the hidden questions
+                makeChildrenGone(groupCarQuestionsLayout);
             }
         });
-        Diet.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.radioMeatBased) {
-                    // Show the additional questions for a meat-based diet
-                    dietQuestionsLayout.setVisibility(View.VISIBLE);
-                    makeChildrenVisible(dietQuestionsLayout);
-                } else {
-                    // Hide the additional questions
-                    dietQuestionsLayout.setVisibility(View.GONE);
-                    makeChildrenGone(dietQuestionsLayout);
-                }
+        Diet.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.radioMeatBased) {
+                // Show the additional questions for a meat-based diet
+                dietQuestionsLayout.setVisibility(View.VISIBLE);
+                makeChildrenVisible(dietQuestionsLayout);
+            } else {
+                // Hide the additional questions
+                dietQuestionsLayout.setVisibility(View.GONE);
+                makeChildrenGone(dietQuestionsLayout);
             }
         });
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                double transportationEmissions = 0;
-                double foodEmissions = 0;
-                double housingEmissions = 0;
-                double consumptionEmissions = 0;
-                double totalEmissions = 0;
-                RadioGroup[] allRadioGroups = {CarOwnership, CarUsage, CarMiles, PublicTransport,
-                        PublicTransportUse, ShortFlights, LongFlights, Diet,
-                        BeefConsumption, PorkConsumption, ChickenConsumption,
-                        FishConsumption, FoodWaste, Housing, HousingPeople,
-                        HousingSize, Energy, Bill, EnergyWater, Renewable,
-                        Clothes, Thrift, Electronic, Recycle};
+        btnSubmit.setOnClickListener(v -> {
+            double transportationEmissions;
+            double foodEmissions;
+            double housingEmissions;
+            double consumptionEmissions;
+            double totalEmissions;
+            RadioGroup[] allRadioGroups = {CarOwnership, CarUsage, CarMiles, PublicTransport,
+                    PublicTransportUse, ShortFlights, LongFlights, Diet,
+                    BeefConsumption, PorkConsumption, ChickenConsumption,
+                    FishConsumption, FoodWaste, Housing, HousingPeople,
+                    HousingSize, Energy, Bill, EnergyWater, Renewable,
+                    Clothes, Thrift, Electronic, Recycle};
 
-                // Check if a radio button is selected
-                if (!areAllQuestionsAnswered(allRadioGroups)
-                        || locationSpinner.getSelectedItem().equals("Select a Country")) {
-                    Toast.makeText(SurveyActivity.this,
-                            "Please answer all questions",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    if (!locationSpinner.getSelectedItem().toString().equals(("Select a Country"))){
-                        // Create an instance of EmissionsCalculator
-                        // Now, call the emissions calculation method
-                        EmissionsCalculator emissionsCalculator = new EmissionsCalculator();
-                        String selectedLocation = locationSpinner.getSelectedItem().toString();
+            // Check if a radio button is selected
+            if (!areAllQuestionsAnswered(allRadioGroups)
+                    || locationSpinner.getSelectedItem().equals("Select a Country")) {
+                Toast.makeText(SurveyActivity.this,
+                        "Please answer all questions",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                if (!locationSpinner.getSelectedItem().toString().equals(("Select a Country"))){
+                    // Create an instance of EmissionsCalculator
+                    // Now, call the emissions calculation method
+                    EmissionsCalculator emissionsCalculator = new EmissionsCalculator();
+                    String selectedLocation = locationSpinner.getSelectedItem().toString();
 
-                        // Calculate the transportation emissions (you can adjust method signature if necessary)
-                        transportationEmissions = emissionsCalculator
-                                .getTransportationEmissions(SelectedOption(CarOwnership),
-                                        SelectedOption(CarUsage),
-                                        SelectedOption(CarMiles),
-                                        SelectedOption(PublicTransport),
-                                        SelectedOption(PublicTransportUse),
-                                        SelectedOption(ShortFlights),
-                                        SelectedOption(LongFlights));
-                        foodEmissions = emissionsCalculator
-                                .getFoodEmissions(SelectedOption(Diet),
-                                        SelectedOption(BeefConsumption),
-                                        SelectedOption(PorkConsumption),
-                                        SelectedOption(ChickenConsumption),
-                                        SelectedOption(FishConsumption),
-                                        SelectedOption(FoodWaste));
-                        housingEmissions = emissionsCalculator
-                                .getHousingEmissions(SelectedOption(Housing),
-                                        SelectedOption(HousingSize),
-                                        SelectedOption(HousingPeople),
-                                        SelectedOption(Energy),
-                                        SelectedOption(EnergyWater),
-                                        SelectedOption(Bill),
-                                        SelectedOption(Renewable));
-                        consumptionEmissions = emissionsCalculator
-                                .getConsumptionEmissions(SelectedOption(Clothes),
-                                        SelectedOption(Thrift),
-                                        SelectedOption(Electronic),
-                                        SelectedOption(Recycle));
-                        totalEmissions = transportationEmissions
-                                + foodEmissions
-                                + housingEmissions
-                                + consumptionEmissions;
-                        FirebaseSurvey model = new FirebaseSurvey(view);
-                        model.writeResult(transportationEmissions, foodEmissions, housingEmissions, consumptionEmissions, totalEmissions, selectedLocation);
+                    // Calculate the transportation emissions (you can adjust method signature if necessary)
+                    transportationEmissions = emissionsCalculator
+                            .getTransportationEmissions(Objects.requireNonNull(SelectedOption(CarOwnership)),
+                                    SelectedOption(CarUsage),
+                                    SelectedOption(CarMiles),
+                                    SelectedOption(PublicTransport),
+                                    SelectedOption(PublicTransportUse),
+                                    SelectedOption(ShortFlights),
+                                    SelectedOption(LongFlights));
+                    foodEmissions = emissionsCalculator
+                            .getFoodEmissions(SelectedOption(Diet),
+                                    SelectedOption(BeefConsumption),
+                                    SelectedOption(PorkConsumption),
+                                    SelectedOption(ChickenConsumption),
+                                    SelectedOption(FishConsumption),
+                                    SelectedOption(FoodWaste));
+                    housingEmissions = emissionsCalculator
+                            .getHousingEmissions(SelectedOption(Housing),
+                                    SelectedOption(HousingSize),
+                                    SelectedOption(HousingPeople),
+                                    SelectedOption(Energy),
+                                    SelectedOption(EnergyWater),
+                                    SelectedOption(Bill),
+                                    SelectedOption(Renewable));
+                    consumptionEmissions = emissionsCalculator
+                            .getConsumptionEmissions(SelectedOption(Clothes),
+                                    SelectedOption(Thrift),
+                                    SelectedOption(Electronic),
+                                    SelectedOption(Recycle));
+                    totalEmissions = transportationEmissions
+                            + foodEmissions
+                            + housingEmissions
+                            + consumptionEmissions;
+                    FirebaseSurvey model = new FirebaseSurvey(view);
+                    model.writeResult(transportationEmissions, foodEmissions, housingEmissions, consumptionEmissions, totalEmissions, selectedLocation);
 
-                        // Pass the emissions data via Intent
-                        Intent intent = new Intent(SurveyActivity.this, ResultsActivity.class);
-                        intent.putExtra("userID", auth.getCurrentUser().getUid());
-                        startActivity(intent);
-                    }
+                    // Pass the emissions data via Intent
+                    Intent intent = new Intent(SurveyActivity.this, ResultsActivity.class);
+                    intent.putExtra("userID", Objects.requireNonNull(auth.getCurrentUser()).getUid());
+                    startActivity(intent);
                 }
-
-
             }
+
+
         });
     }
 
