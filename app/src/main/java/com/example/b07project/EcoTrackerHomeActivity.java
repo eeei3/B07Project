@@ -99,7 +99,7 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
         buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!selectedDay.isEmpty()) {
+                if (selectedDay != null && !selectedDay.isEmpty()) {
                     // check if activities have already been logged for this date
                     checkActivitiesForDate(selectedDay, new OnActivitiesCheckListener() {
                         @Override
@@ -127,7 +127,7 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
         buttonDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!selectedDay.isEmpty()) {
+                if (selectedDay != null && !selectedDay.isEmpty()) {
                     // check if activities exist for this date before viewing details
                     checkActivitiesForDate(selectedDay, new OnActivitiesCheckListener() {
                         @Override
