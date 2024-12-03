@@ -34,15 +34,20 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private long selectedDate;
     private String selectedDay;
+    private TextView transpoTextView, foodTextView, shoppingTextView, billsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ecotrackerhome_fragment);
 
-        // Get a reference to the CalendarView
+        // Get a reference to the UI components
         CalendarView calendarView = findViewById(R.id.calendar_view);
         BottomNavigationView navi = findViewById(R.id.bottomview);
+        transpoTextView = findViewById(R.id.transport_emissions);
+        foodTextView = findViewById(R.id.food_emissions);
+        shoppingTextView = findViewById(R.id.shopping_emissions);
+        billsTextView = findViewById(R.id.energy_bills);
         navi.setSelectedItemId(R.id.ecotracker);
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -200,10 +205,8 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     long totalTranspo = task.getResult().getValue(Long.class);
-                    TextView transpoTextView = findViewById(R.id.transport_emissions);
                     transpoTextView.setText("Total Transportation Emissions: " + totalTranspo + "kg");
                 } else {
-                    TextView transpoTextView = findViewById(R.id.transport_emissions);
                     transpoTextView.setText("Total Transportation Emissions: Not logged yet");
                 }
             }
@@ -215,10 +218,8 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     long totalFood = task.getResult().getValue(Long.class);
-                    TextView foodTextView = findViewById(R.id.food_emissions);
                     foodTextView.setText("Total Food Emissions: " + totalFood + "kg" );
                 } else {
-                    TextView foodTextView = findViewById(R.id.food_emissions);
                     foodTextView.setText("Total Food Emissions: Not logged yet");
                 }
             }
@@ -230,10 +231,8 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     long totalShopping = task.getResult().getValue(Long.class);
-                    TextView shoppingTextView = findViewById(R.id.shopping_emissions);
                     shoppingTextView.setText("Total Shopping Emissions: " + totalShopping + "kg");
                 } else {
-                    TextView shoppingTextView = findViewById(R.id.shopping_emissions);
                     shoppingTextView.setText("Total Shopping Emissions: Not logged yet");
                 }
             }
@@ -245,10 +244,8 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     long totalBills = task.getResult().getValue(Long.class);
-                    TextView billsTextView = findViewById(R.id.energy_bills);
                     billsTextView.setText("Total Bills: " + totalBills + "$");
                 } else {
-                    TextView billsTextView = findViewById(R.id.energy_bills);
                     billsTextView.setText("Total Bills: Not logged yet");
                 }
             }
