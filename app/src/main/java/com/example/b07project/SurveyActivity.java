@@ -186,14 +186,14 @@ public class SurveyActivity extends AppCompatActivity {
                         //carbon.footprint = CalculateCarOwnership(SelectedOption(CarOwnership)) + CalculatePublicTransportation(SelectedOption(PublicTransport), SelectedOption(PublicTransportUse)) + CalculateShortFlight(SelectedOption(ShortFlights)) + CalculateLongFlight(SelectedOption(LongFlights));
                         //Toast.makeText(SurveyActivity.this, "Carbon Footprint: " + totalEmissions, Toast.LENGTH_SHORT).show();
 
-
+                        // Pass the emissions data via Intent
+                        Intent intent = new Intent(SurveyActivity.this, ResultsActivity.class);
+                        intent.putExtra("userID", auth.getCurrentUser().getUid());
+                        startActivity(intent);
                     }
                 }
 
-                // Pass the emissions data via Intent
-                Intent intent = new Intent(SurveyActivity.this, ResultsActivity.class);
-                intent.putExtra("userID", auth.getCurrentUser().getUid());
-                startActivity(intent);
+
             }
         });
     }

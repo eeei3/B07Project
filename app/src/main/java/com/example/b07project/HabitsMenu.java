@@ -19,11 +19,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
-import org.checkerframework.common.subtyping.qual.Bottom;
-
 import java.util.ArrayList;
 
-// Merged HabitsModel into Goal so renamed a lot of fields to better reflect that
 
 /**
  * HabitsMenu class contains fields and methods related to the Habits activity
@@ -39,15 +36,14 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
     public static ArrayList<Goal> allGoals = new ArrayList<>();
     public static ArrayList<Goal> filteredGoals = new ArrayList<>();
     public static ArrayList<Goal> userGoals = new ArrayList<>();
-
     public static ArrayList<Goal> recommendedGoals = new ArrayList<>();
     // !!! NOTE: userHabitsModels needs to be replaced with the user's habits pulled from the firebase
-    public static final int[] currentMenu = {0}; // 0 for all habits, 1 for user's habits, 2 for recommended habits
+    // 0 for all habits, 1 for user's habits, 2 for recommended habits
+    public static final int[] currentMenu = {0};
 
     // tommy - static in order to be reached from various other dialog fragments classes
     public static HabitPresenter presenter;
     public static int progress;
-
     public static int aim;
 
     @SuppressLint("StaticFieldLeak")
@@ -80,24 +76,20 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         ImageView filterTool = findViewById(R.id.filter_icon);
         SearchView searchTool = findViewById(R.id.search_tool);
         CardView recommendHabitsCard = findViewById(R.id.card_recomd);
-        BottomNavigationView navi = findViewById(R.id.bottomview);
-        navi.setSelectedItemId(R.id.habit);
 
         // set default look for some interactive components
         searchTool.clearFocus();
-        int planetzeColour2 = ContextCompat.getColor(this, R.color.selected);
         int planetzeColour3 = ContextCompat.getColor(this, R.color.planetze_colour_3);
-        allHabits.setBackgroundColor(planetzeColour2);
-        usersHabits.setBackgroundColor(planetzeColour3);
+        int planetzeColour4 = ContextCompat.getColor(this, R.color.planetze_colour_4);
+        allHabits.setBackgroundColor(planetzeColour3);
+        usersHabits.setBackgroundColor(planetzeColour4);
 
         // set up the RecyclerView and its adapter
         setUpAllGoals();
-//        FirebaseModel.counter = 0;
         adapter = new HabitsAdapter(this, allGoals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        // tommy - get the user's goals which initializes the field userHabitsModels
         presenter.userGetGoal();
 
         // define behaviour for when the "Your Habits" button is clicked
@@ -105,11 +97,10 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
             // switch to the User's Habits page if not already on it
             if (currentMenu[0] != 1) {
                 HabitsMenu.presenter.userGetGoal();
-//                Log.e("fuck9999", String.valueOf(userGoals.size()));
                 filterChips.clearCheck();
-                usersHabits.setBackgroundColor(planetzeColour2);
-                allHabits.setBackgroundColor(planetzeColour3);
-                recommendHabitsCard.setCardBackgroundColor(planetzeColour3);
+                usersHabits.setBackgroundColor(planetzeColour3);
+                allHabits.setBackgroundColor(planetzeColour4);
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
                 currentMenu[0] = 1;
                 setUserArrayForAdapter();
             }
@@ -121,9 +112,9 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
             if (currentMenu[0] != 0) {
 //                userGoals = new ArrayList<>();
                 filterChips.clearCheck();
-                allHabits.setBackgroundColor(planetzeColour2);
-                usersHabits.setBackgroundColor(planetzeColour3);
-                recommendHabitsCard.setCardBackgroundColor(planetzeColour3);
+                allHabits.setBackgroundColor(planetzeColour3);
+                usersHabits.setBackgroundColor(planetzeColour4);
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
                 currentMenu[0] = 0;
                 setOriginalArrayForAdapter();
             }
@@ -134,9 +125,9 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
                 filterChips.clearCheck();
                 recommendedGoals.clear();
                 presenter.personalSuggestions();
-                recommendHabitsCard.setCardBackgroundColor(planetzeColour2);
-                allHabits.setBackgroundColor(planetzeColour3);
-                usersHabits.setBackgroundColor(planetzeColour3);
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour3);
+                allHabits.setBackgroundColor(planetzeColour4);
+                usersHabits.setBackgroundColor(planetzeColour4);
                 currentMenu[0] = 2;
                 setRecommendedArrayForAdapter();
             }
@@ -146,8 +137,8 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         filterChips.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (currentMenu[0] == 2) {
                 currentMenu[0] = 0;
-                allHabits.setBackgroundColor(planetzeColour2);
-                recommendHabitsCard.setCardBackgroundColor(planetzeColour3);
+                allHabits.setBackgroundColor(planetzeColour3);
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
             }
 
             ArrayList<String> checkedCategories = new ArrayList<>();
@@ -169,8 +160,8 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
             // reset the RecyclerView (i.e. removing any Chips selected)
             if (currentMenu[0] == 2) {
                 currentMenu[0] = 0;
-                allHabits.setBackgroundColor(planetzeColour2);
-                recommendHabitsCard.setCardBackgroundColor(planetzeColour3);
+                allHabits.setBackgroundColor(planetzeColour3);
+                recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
                 setOriginalArrayForAdapter();
             } else {
                 setUserArrayForAdapter();
@@ -212,8 +203,8 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
                 // Note: uncheck all Chips and previous filters (no idea how to implement otherwise)
                 if (currentMenu[0] == 2) {
                     currentMenu[0] = 0;
-                    allHabits.setBackgroundColor(planetzeColour2);
-                    recommendHabitsCard.setCardBackgroundColor(planetzeColour3);
+                    allHabits.setBackgroundColor(planetzeColour3);
+                    recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
                 }
                 filterChips.clearCheck();
                 filterBySearch(newText);
@@ -359,13 +350,18 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         if (position1 != -1) {
             // Update the background colour for the corresponding habit
             adapter.notifyItemChanged(position1);
-            //adapter.notifyDataSetChanged();
         }
         if (position2 != -1) {
             adapter.notifyItemChanged(position2);
         }
     }
 
+    /**
+     * onCreateOptionsMenu
+     * @param menu The options menu in which you place your items.
+     *
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -373,6 +369,12 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         return true;
     }
 
+    /**
+     * onOptionsItemSelected
+     * @param item The menu item that was selected.
+     *
+     * @return -
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

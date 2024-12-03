@@ -16,8 +16,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class DatabaseCommunicator {
 
-    private DatabaseReference database;
-    private Context context;
+    final private DatabaseReference database;
+    final private Context context;
 
     public DatabaseCommunicator(DatabaseReference databaseReference, Context context) {
         this.database = databaseReference;

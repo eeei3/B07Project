@@ -49,7 +49,7 @@ public class EcoTrackerHomeFragment extends AppCompatActivity {
         food = findViewById(R.id.food_emissions);
         energy = findViewById(R.id.energy_bills);
         consumption = findViewById(R.id.shopping_emissions);
-//        consumption.setText("hello");
+
         CalendarView calendarView = findViewById(R.id.calendar_view);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));

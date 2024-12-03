@@ -13,8 +13,8 @@ import java.util.Arrays;
 
 public class ComparisonText {
 
-    TextView totalEmissions, nationalEmissions, globalEmissions;
-    TextView comparisonNationalText, comparisonGlobalText;
+    final TextView totalEmissions, nationalEmissions, globalEmissions;
+    final TextView comparisonNationalText, comparisonGlobalText;
 
     public ComparisonText(TextView comparisonGlobalText, TextView comparisonNationalText,
                           TextView totalEmissions, TextView globalEmissions, TextView nationalEmissions) {

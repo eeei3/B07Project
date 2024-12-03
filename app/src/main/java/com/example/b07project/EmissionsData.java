@@ -6,7 +6,7 @@ package com.example.b07project;
 public class EmissionsData {
 
     //Transportation Data
-    public static double[][] carEmission = {
+    final public static double[][] carEmission = {
             //gas, diesel, hybrid, electric, not sure
             // "Up to 5,000 km"
             {0.24 * 5000, 0.27 * 5000, 0.16 * 5000, 0.05 * 5000, 0.18 * 5000},
@@ -21,7 +21,7 @@ public class EmissionsData {
             // "More than 25,000 km"
             {0.24 * 35000, 0.27 * 35000, 0.16 * 35000, 0.05 * 35000, 0.18 * 35000}
     };
-    public static double[][] publictransportEmission = {
+    final public static double[][] publictransportEmission = {
             //never, occasionally, frequently, always
             {0, 246, 573, 573}, //under 1 hour
             {0, 819, 1911, 1911}, //1-3 hours
@@ -29,11 +29,11 @@ public class EmissionsData {
             {0, 3071, 7166, 7166}, //5-10 hours
             {0, 4095, 9555, 9555}  //more than 10 hours
     };
-    public static double[] shortflightEmission = {0, 225, 600, 1200, 1800};
-    public static double[] longflightEmission = {0, 825, 2200, 4400, 6600};
+    final public static double[] shortflightEmission = {0, 225, 600, 1200, 1800};
+    final public static double[] longflightEmission = {0, 825, 2200, 4400, 6600};
 
     //Food Data
-    public static double[][][] foodEmission = {
+    final public static double[][][] foodEmission = {
             //vegetarian
             {{1000}},
             //vegan
@@ -49,10 +49,10 @@ public class EmissionsData {
                     {800, 500, 150, 0},  //fish
             }
     };
-    public static double[] foodwasteEmission = {0, 23.4, 70.2, 140.4};
+    final public static double[] foodwasteEmission = {0, 23.4, 70.2, 140.4};
 
     //Housing Data
-    public static double[][][][][] housingEmission = {
+    final public static double[][][][][] housingEmission = {
             //Detached house
             {
                     //Under 1000 square feet
@@ -719,28 +719,28 @@ public class EmissionsData {
     };
 
     //Consumption Data
-    public static double[][] clothesEmission = {
+    final public static double[][] clothesEmission = {
             //monthly, quarterly, annually, rarely
             {180, 60, 50, 2.5},//regularly
             {252, 84, 70, 3.5},//occasionally
             {360, 120, 100, 5}//no
     };
-    public static double[] electronicEmission = {0, 300, 600, 900, 1200};
-    public static double[][] recyclingClothesEmission = {
+    final public static double[] electronicEmission = {0, 300, 600, 900, 1200};
+    final public static double[][] recyclingClothesEmission = {
             //monthly, quarterly, annually, rarely
             {0, 0, 0, 0}, //never
             {-54, -18, -15, -0.75}, //occasionally
             {-108, -36. -30, -1.5}, //frequently
             {-180, -60, -50, -2.5} //always
     };
-    public static double[][] recyclingElectronicEmission = {
+    final public static double[][] recyclingElectronicEmission = {
             //1, 2, 3, 4+
             {0, 0, 0, 0}, //never
             {-45, -60, -90, -120}, //occasionally
             {-60, -120. -180, -240}, //frequently
             {-90, -180, -270, -360} //always
     };
-    public static double[] globalAverages = {
+    final public static double[] globalAverages = {
             0.29536375, 0.99422127, 1.7432004, 3.9272263, 4.6171236, 0.45155162, 8.752724,
             6.4218745, 4.2378173, 2.3045583, 8.133404, 4.611434, 4.017375, 14.985412, 6.8781943,
             3.6746833, 5.1708703, 25.672274, 0.5964455, 4.3772573, 6.1669006, 7.6875386, 1.7894346,
@@ -775,104 +775,104 @@ public class EmissionsData {
 
     //ALL OPTIONS
     // Travel related options
-    public static String[] carTypes = { "Gasoline",
+    final public static String[] carTypes = { "Gasoline",
                                         "Diesel",
                                         "Hybrid",
                                         "Electric",
                                         "I don't know" };
-    public static String[] annualKmDriven = {"Up to 5,000 km (3,000 miles)",
+    final public static String[] annualKmDriven = {"Up to 5,000 km (3,000 miles)",
                                             "5,000–10,000 km (3,000–6,000 miles)",
                                             "10,000–15,000 km (6,000–9,000 miles)",
                                             "15,000–20,000 km (9,000–12,000 miles)",
                                             "20,000–25,000 km (12,000–15,000 miles)",
                                             "More than 25,000 km (15,000 miles)"};
-    public static String[] publicTransportFrequency = {"Never",
+    final public static String[] publicTransportFrequency = {"Never",
                                                         "Occasionally (1-2 times/week)",
                                                         "Frequently (3-4 times/week)",
                                                         "Always (5+ times/week)"};
-    public static String[] publicTransportTime = {"Under 1 hour",
+    final public static String[] publicTransportTime = {"Under 1 hour",
                                                     "1-3 hours",
                                                     "3-5 hours",
                                                     "5-10 hours",
                                                     "More than 10 hours"};
-    public static String[] shortHaulFlights = {"None",
+    final public static String[] shortHaulFlights = {"None",
                                                 "1-2 flights",
                                                 "3-5 flights",
                                                 "6-10 flights",
                                                 "More than 10 flights"};
-    public static String[] longHaulFlights = {"None",
+    final public static String[] longHaulFlights = {"None",
                                                 "1-2 flights",
                                                 "3-5 flights",
                                                 "6-10 flights",
                                                 "More than 10 flights"};
 
     // Diet related options
-    public static String[] dietTypes = {"Vegetarian",
+    final  public static String[] dietTypes = {"Vegetarian",
                                         "Vegan",
                                         "Pescatarian (fish/seafood)",
                                         "Meat-based (eat all types of animal products)"};
-    public static String[] beefFrequency = { "Daily",
+    final public static String[] beefFrequency = { "Daily",
                                             "Frequently (3-5 times/week)",
                                             "Occasionally (1-2 times/week)",
                                             "Never" };
-    public static String[] porkFrequency = { "Daily",
+    final public static String[] porkFrequency = { "Daily",
                                                 "Frequently (3-5 times/week)",
                                                 "Occasionally (1-2 times/week)",
                                                 "Never" };
-    public static String[] chickenFrequency = { "Daily",
+    final public static String[] chickenFrequency = { "Daily",
                                                 "Frequently (3-5 times/week)",
                                                 "Occasionally (1-2 times/week)",
                                                 "Never" };
-    public static String[] fishSeafoodFrequency = { "Daily",
+    final public static String[] fishSeafoodFrequency = { "Daily",
                                                     "Frequently (3-5 times/week)",
                                                     "Occasionally (1-2 times/week)",
                                                     "Never" };
-    public static String[][] meatFrequencies = {beefFrequency,
+    final public static String[][] meatFrequencies = {beefFrequency,
                                                 porkFrequency,
                                                 chickenFrequency,
                                                 fishSeafoodFrequency};
-    public static String[] foodWasteFrequency = { "Never",
+    final public static String[] foodWasteFrequency = { "Never",
                                                     "Rarely",
                                                     "Occasionally",
                                                     "Frequently" };
 
     // Residence related options
-    public static String[] homeTypes = { "Detached house",
+    final public static String[] homeTypes = { "Detached house",
                                             "Semi-detached house",
                                             "Townhouse",
                                             "Condo/Apartment",
                                             "Other" };
-    public static String[] householdSizes = {"1", "2", "3-4", "5 or more"};
-    public static String[] housingSizes = {"Under 1000 sq. ft.",
+    final public static String[] householdSizes = {"1", "2", "3-4", "5 or more"};
+    final public static String[] housingSizes = {"Under 1000 sq. ft.",
                                             "1000-2000 sq. ft.", "Over 2000 sq. ft."};
-    public static String[] heatingTypes = { "Natural Gas",
+    final public static String[] heatingTypes = { "Natural Gas",
                                             "Electricity",
                                             "Oil",
                                             "Propane",
                                             "Wood",
                                             "Other" };
-    public static String[] electricityBills = { "Under $50",
+    final public static String[] electricityBills = { "Under $50",
                                                 "$50-$100",
                                                 "$100-$150",
                                                 "$150-$200",
                                                 "Over $200" };
-    public static String[] renewableEnergyUsage = { "Yes, primarily",
+    final public static String[] renewableEnergyUsage = { "Yes, primarily",
                                                     "Yes, partially",
                                                     "No" };
 
     // Consumption related options
-    public static String[] clothingPurchaseFrequency = { "Monthly",
+    final public static String[] clothingPurchaseFrequency = { "Monthly",
                                                             "Quarterly",
                                                             "Annually",
                                                             "Rarely" };
-    public static String[] secondHandPurchaseFrequency = { "Yes, regularly",
+    final public static String[] secondHandPurchaseFrequency = { "Yes, regularly",
                                                             "Yes, occasionally",
                                                             "No" };
-    public static String[] electronicDevicesPurchased = { "None", "1", "2", "3 or more" };
-    public static String[] recyclingFrequency = { "Never", "Occasionally", "Frequently", "Always" };
+    final public static String[] electronicDevicesPurchased = { "None", "1", "2", "3 or more" };
+    final public static String[] recyclingFrequency = { "Never", "Occasionally", "Frequently", "Always" };
 
     // Array of supported countries
-    public static String[] countries = {
+    final public static String[] countries = {
             "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
             "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan",
             "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde",

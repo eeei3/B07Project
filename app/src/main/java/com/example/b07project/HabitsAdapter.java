@@ -133,7 +133,8 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
         holder.itemView.setOnClickListener(v -> {
             if (HabitsMenu.currentMenu[0] == 1) {
                 // if on User's Habits menu, launch a dialog to display and log the habit's activities
-                UserHabitsProgressDialogFragment habitDialog = UserHabitsProgressDialogFragment.newInstance(habit.getName());
+                UserHabitsProgressDialogFragment habitDialog =
+                        UserHabitsProgressDialogFragment.newInstance(habit.getName());
                 habitDialog.show(((AppCompatActivity) context).getSupportFragmentManager(),
                         "user_progress" );
             } else {

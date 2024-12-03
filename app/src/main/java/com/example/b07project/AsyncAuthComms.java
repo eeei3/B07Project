@@ -14,12 +14,4 @@ public class AsyncAuthComms extends AsyncComms {
         super();
         this.value = 0;
     }
-
-    /**
-     * setValue - Modify the value field
-     * @param value - The new value of value
-     */
-    public void setValue(int value) {
-        this.value = value;
-    }
 }
