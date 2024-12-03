@@ -1,12 +1,9 @@
 package com.example.b07project;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
-
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -15,8 +12,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.github.mikephil.charting.charts.PieChart;
-
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 

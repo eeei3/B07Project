@@ -3,7 +3,6 @@ package com.example.b07project;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
