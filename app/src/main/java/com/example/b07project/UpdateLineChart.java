@@ -23,9 +23,6 @@ public class UpdateLineChart extends EcoGauge {
     public void updateLineChartForTimePeriod(String timePeriod) {
         if (timePeriod == null) return;
         switch (timePeriod) {
-            case "Daily":
-                updateLastSevenDaysChart();
-                break;
             case "Monthly":
                 updateLastThirtyDaysChart();
                 break;
@@ -39,9 +36,6 @@ public class UpdateLineChart extends EcoGauge {
     }
 
     /**
-     * Fetch the total emissions of the last seven days and display them on the line chart
-     */
-    /**
      * Update the chart with data for the last 7 days
      */
     public void updateLastSevenDaysChart() {
@@ -53,7 +47,7 @@ public class UpdateLineChart extends EcoGauge {
         fetchEmissionsData(userId, startTimestamp, endTimestamp, new EmissionsCallback() {
             @Override
             public void onEmissionsDataFetched(double[] emissionsArray, String[] dateArray) {
-                updateChartWithData(emissionsArray, dateArray);
+                updateChartWithData(emissionsArray);
             }
         }, 7); // Pass 7 for 7 days
     }
@@ -70,7 +64,7 @@ public class UpdateLineChart extends EcoGauge {
         fetchEmissionsData(userId, startTimestamp, endTimestamp, new EmissionsCallback() {
             @Override
             public void onEmissionsDataFetched(double[] emissionsArray, String[] dateArray) {
-                updateChartWithData(emissionsArray, dateArray);
+                updateChartWithData(emissionsArray);
             }
         }, 30); // Pass 30 for 30 days
     }
@@ -88,7 +82,7 @@ public class UpdateLineChart extends EcoGauge {
         fetchEmissionsData(userId, startTimestamp, endTimestamp, new EmissionsCallback() {
             @Override
             public void onEmissionsDataFetched(double[] emissionsArray, String[] dateArray) {
-                updateChartWithData(emissionsArray, dateArray);
+                updateChartWithData(emissionsArray);
             }
         }, 365); // Pass 365 for 365 days
     }
@@ -166,12 +160,10 @@ public class UpdateLineChart extends EcoGauge {
     /**
      * Update the chart with the fetched emissions data
      * @param emissionsArray the emissions data
-     * @param dateArray the corresponding dates
      */
-    private void updateChartWithData(double[] emissionsArray, String[] dateArray) {
+    private void updateChartWithData(double[] emissionsArray) {
         String transportationColorHex = "#AD80C4";
         String foodColorHex = "#81BAC5"; //Darker Blue
-        String shoppingColorHex = "#A1C6CA"; //Lighter Blue
 
         // Prepare the data for the chart
         ArrayList<Entry> entries = new ArrayList<>();

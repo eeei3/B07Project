@@ -149,7 +149,8 @@ public class FirebaseModel extends Model {
                 break;
             }
         }
-        dbworker.child("users").child(userid).child("habits").child(goal.name).child("prog").setValue(0)
+        dbworker.child("users").child(userid).child("habits")
+                .child(goal.name).child("prog").setValue(0)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (completed[0] >= 7) {
@@ -164,7 +165,8 @@ public class FirebaseModel extends Model {
                         listener.onObjectReady(watcher);
                     }
                 });
-        dbworker.child("users").child(userid).child("habits").child(goal.name).child("aim").setValue(goal.aim)
+        dbworker.child("users").child(userid).child("habits")
+                .child(goal.name).child("aim").setValue(goal.aim)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (completed[0] >= 7) {
@@ -179,7 +181,8 @@ public class FirebaseModel extends Model {
                         listener.onObjectReady(watcher);
                     }
                 });
-        dbworker.child("users").child(userid).child("habits").child(goal.name).child("habitDesc").setValue(goal.habitDesc)
+        dbworker.child("users").child(userid).child("habits")
+                .child(goal.name).child("habitDesc").setValue(goal.habitDesc)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (completed[0] >= 7) {
@@ -194,7 +197,8 @@ public class FirebaseModel extends Model {
                         listener.onObjectReady(watcher);
                     }
                 });
-        dbworker.child("users").child(userid).child("habits").child(goal.name).child("category").setValue(goal.category)
+        dbworker.child("users").child(userid).child("habits")
+                .child(goal.name).child("category").setValue(goal.category)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (completed[0] >= 7) {
@@ -209,7 +213,8 @@ public class FirebaseModel extends Model {
                         listener.onObjectReady(watcher);
                     }
                 });
-        dbworker.child("users").child(userid).child("habits").child(goal.name).child("image").setValue(image_index)
+        dbworker.child("users").child(userid).child("habits")
+                .child(goal.name).child("image").setValue(image_index)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (completed[0] >= 7) {
@@ -224,7 +229,8 @@ public class FirebaseModel extends Model {
                         listener.onObjectReady(watcher);
                     }
                 });
-        dbworker.child("users").child(userid).child("habits").child(goal.name).child("impact").setValue(goal.impact)
+        dbworker.child("users").child(userid).child("habits")
+                .child(goal.name).child("impact").setValue(goal.impact)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (completed[0] >= 7) {
@@ -239,7 +245,8 @@ public class FirebaseModel extends Model {
                         listener.onObjectReady(watcher);
                     }
                 });
-        dbworker.child("users").child(userid).child("habits").child(goal.name).child("impactDesc").setValue(goal.impactDesc)
+        dbworker.child("users").child(userid).child("habits")
+                .child(goal.name).child("impactDesc").setValue(goal.impactDesc)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (completed[0] >= 7) {
@@ -262,8 +269,8 @@ public class FirebaseModel extends Model {
      * @param watcher - Listener to notify HabitPresenter about result
      */
     void getProg(String goal, AsyncDBComms watcher) {
-        dbworker.child("users").child(userid).child("habits").child(goal)
-                .get().addOnCompleteListener(task -> {
+        dbworker.child("users").child(userid).child("habits")
+                .child(goal).get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         // Fetch the values we want
                         watcher.values.add(Integer.parseInt(String.valueOf(task.getResult().child("prog").getValue())));
@@ -286,7 +293,8 @@ public class FirebaseModel extends Model {
      * @param watcher - Listener to notify HabitPresenter about result
      */
     void setProg(String goalname, int prog, AsyncDBComms watcher) {
-        dbworker.child("users").child(userid).child("habits").child(goalname).child("prog").setValue(prog)
+        dbworker.child("users").child(userid).child("habits")
+                .child(goalname).child("prog").setValue(prog)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         watcher.setResult(true);
@@ -304,8 +312,8 @@ public class FirebaseModel extends Model {
      * @param watcher - Listener to notify HabitPresenter about result
      */
     void deleteGoal(String goalname, AsyncDBComms watcher) {
-        dbworker.child("users").child(userid).child("habits").child(goalname)
-                .setValue(null).addOnCompleteListener(task -> {
+        dbworker.child("users").child(userid).child("habits")
+                .child(goalname).setValue(null).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         watcher.setResult(true);
                         listener.onObjectReady(watcher);

@@ -23,6 +23,8 @@ public class ForgetPresenter {
     /**
      * ForgetPresenter - default constructor that set's the fView field so that the presenter
      * may interact with the View.
+     * Note: this constructor is used for testing.
+     *
      * @param fView - the reference to the View
      */
     public ForgetPresenter(ForgotPasswordFragment fView, FirebaseAuthHandler model) {

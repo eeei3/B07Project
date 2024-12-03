@@ -24,8 +24,11 @@ public class LoginPresenter {
     }
 
     /**
-     * LoginPresenter - Constructor mainly for testing
-     * @param lView
+     * LoginPresenter - constructor that initializes the view and model
+     * Note: this constructor is used for testing.
+     *
+     * @param lView the view component of the login
+     * @param model the model component of the login
      */
     public LoginPresenter(LoginFragment lView, FirebaseAuthHandler model) {
         super();
@@ -56,16 +59,13 @@ public class LoginPresenter {
         // An object between the Model and Presenter to track outcome of operation
         AsyncAuthComms mp = new AsyncAuthComms();
         // Create a Listener for the Model's operation
-        model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
-            @Override
-            public void onObjectReady(AsyncComms mp) {
-                AsyncAuthComms plug = (AsyncAuthComms) mp;
-                if (plug.res) {
-                    lView.success();
-                }
-                else {
-                    lView.failure();
-                }
+        model.setModelPipe(mp1 -> {
+            AsyncAuthComms plug = (AsyncAuthComms) mp1;
+            if (plug.res) {
+                lView.success();
+            }
+            else {
+                lView.failure();
             }
         });
         // Tell Model to login
