@@ -4,21 +4,17 @@ import android.content.Intent;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import java.util.Arrays;
-
 
 /**
  * ResultsActivity class containing methods relating to the results screen from the survey
@@ -64,10 +60,12 @@ public class ResultsActivity extends AppCompatActivity {
         String userID = getIntent().getStringExtra("userID");
 
         // Firebase reference to the user's data (including emissions and location)
+        assert userID != null;
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userID);
 
         // Fetch data from Firebase
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -129,29 +127,9 @@ public class ResultsActivity extends AppCompatActivity {
         });
 
         // If needed, also display individual breakdowns for categories like food, transportation, etc.
-        btnSubmit.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick (View v){
-                Intent intent = new Intent(ResultsActivity.this, EcoTrackerHomeActivity.class);
-                startActivity(intent);
-            }
+        btnSubmit.setOnClickListener(v -> {
+            Intent intent = new Intent(ResultsActivity.this, EcoTrackerHomeActivity.class);
+            startActivity(intent);
         });
-    }
-
-    /**
-     * loadFragment - Method for handling the loading of a fragment
-     * @param fragment - fragment to load
-     */
-    private void loadFragment(Fragment fragment) {
-        // Use the correct FragmentManager for activities
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        // Optional transition
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        // R.id.fragment_container is your container's ID
-        transaction.replace(R.id.fragment_container, fragment);
-        // Optional: allows fragment to be popped back
-        transaction.addToBackStack(null);
-        transaction.commit();
     }
 }

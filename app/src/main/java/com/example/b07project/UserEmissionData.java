@@ -3,13 +3,11 @@ package com.example.b07project;
 /**
  * UserEmissionData holds both the raw input data provided by the user and the calculated emission
  * data for various activities.
- *
  * The class consists of two main components:
  * - **RawInputs**: Stores the raw data related to the user's activities such as distance driven,
  *   flights taken, meals consumed, and shopping purchases.
  * - **CalculatedEmissions**: Contains the calculated emissions for transportation, food, shopping,
  *   and the total carbon footprint.
- *
  * This class helps in tracking, packaging, and storing user input into the Firebase database
  *
  * @see RawInputs
@@ -17,13 +15,8 @@ package com.example.b07project;
  */
 
 public class UserEmissionData {
-
     private RawInputs rawInputs;
     private CalculatedEmissions calculatedEmissions;
-
-    public UserEmissionData() {
-    }
-
     public UserEmissionData(RawInputs rawInputs, CalculatedEmissions calculatedEmissions) {
         this.rawInputs = rawInputs;
         this.calculatedEmissions = calculatedEmissions;
@@ -32,14 +25,9 @@ public class UserEmissionData {
     public RawInputs getRawInputs() {
         return rawInputs;
     }
-    public void setRawInputs(RawInputs rawInputs) {
-        this.rawInputs = rawInputs;
-    }
+
     public CalculatedEmissions getCalculatedEmissions() {
         return calculatedEmissions;
-    }
-    public void setCalculatedEmissions(CalculatedEmissions calculatedEmissions) {
-        this.calculatedEmissions = calculatedEmissions;
     }
 
     //created a nested class to store the rawinputs
@@ -64,7 +52,7 @@ public class UserEmissionData {
         public RawInputs() {
         }
 
-        //RawInputs constructor with the necessary paramenteres
+        //RawInputs constructor with the necessary parameters
         public RawInputs(double distanceDriven, String vehicleType, String transportType,
                          double cyclingTime, int numFlights, String flightType, String mealType,
                          int numServings, int numClothes, String deviceType, int numDevices,
@@ -139,7 +127,6 @@ public class UserEmissionData {
 
         //getters and setters
         public double getTotalTranspo() { return totalTranspo; }
-        public void setTotalTranspo(double totalTranspo) { this.totalTranspo = totalTranspo; }
         public double getTotalFood() { return totalFood; }
         public void setTotalFood(double totalFood) { this.totalFood = totalFood; }
         public double getTotalShopping() { return totalShopping; }

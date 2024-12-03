@@ -32,27 +32,11 @@ public class LoginFragment extends Fragment{
         TextView textViewForgotPassword = view.findViewById(R.id.forgotPassWordLink);
         ImageButton imageButtonBack = view.findViewById(R.id.backButtonLogin);
 
-        buttonSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                verifyCredentials();
-
-            }
-        });
-
-        textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadFragment(new ForgotPasswordFragment());
-            }
-        });
-
-        imageButtonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), EntryActivity.class);
-                startActivity(intent);
-            }
+        buttonSignIn.setOnClickListener(v -> verifyCredentials());
+        textViewForgotPassword.setOnClickListener(v -> loadFragment(new ForgotPasswordFragment()));
+        imageButtonBack.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), EntryActivity.class);
+            startActivity(intent);
         });
 
         return view;
