@@ -1,5 +1,9 @@
 package com.example.b07project;
 
+/**
+ * ForgetPresenter is the presenter handling the interactions between the firebase and the view
+ * regarding forgetting passwords.
+ */
 public class ForgetPresenter {
     private String email;
     ForgotPasswordFragment fView;

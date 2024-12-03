@@ -14,11 +14,26 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+/**
+ * ForgotPasswordFragment is the fragment displayed when the user clicks Forgot Password.
+ */
 public class ForgotPasswordFragment extends Fragment {
     private EditText editTextUserEmail;
 
     ForgetPresenter presenter;
 
+    /**
+     * onCreateView in the method responsible for inflating the view and binding the UI components.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate
+     *                           any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's
+     *                           UI should be attached to.  The fragment should not add the view itself,
+     *                           but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state as given here.
+     * @return                   view
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,6 +69,13 @@ public class ForgotPasswordFragment extends Fragment {
 
         return view;
     }
+
+    /**
+     * finishLoading is the method handling the UI behaviour when clicked Reset.
+     *
+     * @param btn reset button
+     * @param pgb progress bar to show loading
+     */
     private void finishLoading(Button btn, ProgressBar pgb) {
         btn.postDelayed(new Runnable() {
             @Override
@@ -64,12 +86,19 @@ public class ForgotPasswordFragment extends Fragment {
             }}, 5000);
     }
 
+    /**
+     * success is the method to notify the user that password is reset successfully, also sends
+     * the user to the login fragment.
+     */
     public void success() {
         Toast.makeText(getContext(), "Email Sent", Toast.LENGTH_SHORT).show();
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.popBackStack();
     }
 
+    /**
+     * failure is the method to notify the user that password is reset unsuccessfully.
+     */
     public void failure() {
         Toast.makeText(getContext(), "Failure", Toast.LENGTH_SHORT).show();
     }
