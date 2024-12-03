@@ -6,10 +6,15 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 
 
 /**
  * Class representing the Presenter portion of the Habit Suggestion Module
+ *
+ * @see HabitsMenu
+ * @see UserHabitsProgressDialogFragment
+ * @see Goal
  */
 public class HabitPresenter {
 //    FirebaseModel model;
@@ -76,11 +81,7 @@ public class HabitPresenter {
                 HabitsMenu.recommendedGoals.add(recomd);
                 HabitsMenu.recommendedGoals.add(newToTry);
             }
-        } else if (recomd == null) {
-            HabitsMenu.recommendedGoals.add(newToTry);
-        } else {
-            HabitsMenu.recommendedGoals.add(recomd);
-        }
+        } else HabitsMenu.recommendedGoals.add(Objects.requireNonNullElse(recomd, newToTry));
 
         System.out.println(HabitsMenu.recommendedGoals.size());
 
@@ -99,8 +100,7 @@ public class HabitPresenter {
     public void userAddGoal(Goal goal, String aim) {
         FirebaseModel.counter = 0;
         AsyncDBComms mp = new AsyncDBComms();
-        FirebaseModel model = new FirebaseModel(
-                String.valueOf(mauth.getCurrentUser()));
+        FirebaseModel model = new FirebaseModel();
         model.setModelPipe(new Model.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncComms betweener) {
@@ -117,8 +117,7 @@ public class HabitPresenter {
      */
     public void userGetGoal() {
         AsyncDBComms mp = new AsyncDBComms();
-        FirebaseModel model = new FirebaseModel(
-                String.valueOf(mauth.getCurrentUser()));
+        FirebaseModel model = new FirebaseModel();
         model.setModelPipe(new Model.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncComms betweener) {
@@ -135,8 +134,7 @@ public class HabitPresenter {
      */
     public void userSetProg(Goal habit) {
         AsyncDBComms mp = new AsyncDBComms();
-        FirebaseModel model = new FirebaseModel(
-                String.valueOf(mauth.getCurrentUser()));
+        FirebaseModel model = new FirebaseModel();
         model.setModelPipe(new Model.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncComms betweener) {
@@ -158,8 +156,7 @@ public class HabitPresenter {
      */
     public void userGetProg(String goal) {
         AsyncDBComms mp = new AsyncDBComms();
-        FirebaseModel model = new FirebaseModel(
-                String.valueOf(mauth.getCurrentUser()));
+        FirebaseModel model = new FirebaseModel();
         model.setModelPipe(new Model.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncComms betweener) {
@@ -192,8 +189,7 @@ public class HabitPresenter {
      */
     public void userDeleteGoal(String goal, Context con, int toggle) {
         AsyncDBComms mp = new AsyncDBComms();
-        FirebaseModel model = new FirebaseModel(
-                String.valueOf(mauth.getUid()));
+        FirebaseModel model = new FirebaseModel();
         model.setModelPipe(new Model.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncComms betweener) {
@@ -222,7 +218,7 @@ public class HabitPresenter {
      */
     public void getAllHabits() {
         AsyncDBComms mp = new AsyncDBComms();
-        FirebaseModel model = new FirebaseModel( (String.valueOf(mauth.getUid())));
+        FirebaseModel model = new FirebaseModel();
         model.setModelPipe(new Model.ModelPresenterPipe() {
             @Override
             public void onObjectReady(AsyncComms betweener) {
