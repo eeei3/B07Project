@@ -85,6 +85,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         int planetzeColour4 = ContextCompat.getColor(this, R.color.planetze_colour_4);
         allHabits.setBackgroundColor(planetzeColour3);
         usersHabits.setBackgroundColor(planetzeColour4);
+        recommendHabitsCard.setCardBackgroundColor(planetzeColour4);
 
         // set up the RecyclerView and its adapter
         setUpAllGoals();
