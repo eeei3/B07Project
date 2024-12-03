@@ -205,9 +205,11 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
         long systemDate = System.currentTimeMillis();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         // set the time zone
         String dateToday = sdf.format(new Date(systemDate));
+
 
 
         // reference to the "rawInputs" node
