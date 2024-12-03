@@ -468,7 +468,8 @@ public class LogActivitiesActivity extends AppCompatActivity {
         intent.putExtra("BillType", rawInputs.getBillType());
         intent.putExtra("totalEmissions", totalTranspo + totalFood + totalShopping);
 
-        // Start the DetailPageActivity
-        startActivity(intent);
+        // Start the EcoTrackerHomeActivity
+        Intent homeIntent = new Intent(this, EcoTrackerHomeActivity.class);
+        startActivity(homeIntent);
     }
 }

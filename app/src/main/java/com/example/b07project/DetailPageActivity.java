@@ -115,6 +115,7 @@ public class DetailPageActivity extends AppCompatActivity {
             enableEditing(false);
             buttonSave.setVisibility(View.GONE);
             buttonEdit.setVisibility(View.VISIBLE);
+
         });
         //once database communicator gets all the required data
 
