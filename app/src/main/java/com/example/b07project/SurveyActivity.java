@@ -1,12 +1,8 @@
 package com.example.b07project;
-import static java.security.AccessController.getContext;
 
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
-
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -17,11 +13,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.concurrent.ThreadFactory;
 
 /**
  * SurveyActivity class containing methods and fields related to the Emissions survey activity
