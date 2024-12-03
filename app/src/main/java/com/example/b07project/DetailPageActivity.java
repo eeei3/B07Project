@@ -223,9 +223,9 @@ public class DetailPageActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
                 arrayResId,
-                android.R.layout.simple_spinner_dropdown_item
+                R.layout.spinner2
         );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.spinner2);
         spinner.setAdapter(adapter);
     }
 
