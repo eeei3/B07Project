@@ -384,7 +384,7 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
             return true;
         } else if (id == R.id.ecotracker) {
             // Handle ecotracker action
-            Intent intent = new Intent(HabitsMenu.this, EcoTrackerHomeFragment.class);
+            Intent intent = new Intent(HabitsMenu.this, EcoTrackerHomeActivity.class);
             startActivity(intent);
             return true;
         } else {
