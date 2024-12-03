@@ -1,5 +1,21 @@
 package com.example.b07project;
 
+/**
+ * UserEmissionData holds both the raw input data provided by the user and the calculated emission
+ * data for various activities.
+ *
+ * The class consists of two main components:
+ * - **RawInputs**: Stores the raw data related to the user's activities such as distance driven,
+ *   flights taken, meals consumed, and shopping purchases.
+ * - **CalculatedEmissions**: Contains the calculated emissions for transportation, food, shopping,
+ *   and the total carbon footprint.
+ *
+ * This class helps in tracking, packaging, and storing user input into the Firebase database
+ *
+ * @see RawInputs
+ * @see CalculatedEmissions
+ */
+
 public class UserEmissionData {
 
     private RawInputs rawInputs;

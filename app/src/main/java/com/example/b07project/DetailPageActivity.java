@@ -26,6 +26,24 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * DetailPageActivity is responsible for managing and displaying a detailed page where the user
+ * can input and view their data for the activities - transportation, food consumption, shopping,
+ * and energy bills. The user can modify the data through input fields, checkboxes, and spinners,
+ * and the app calculates the CO2 emissions for each activity based on the entered information.
+ *
+ * The activity also allows the user to edit the information and save it to Firebase. After the
+ * the user clicks Save, the information is used to recalculate emissions and is updated on Firebase.
+ * The input fields and checkboxes are dynamically shown or hidden based on user selection.
+ *
+ * Once the data is saved, the app transitions back to the EcoTracker Home Screen.
+ *
+ * @see DatabaseCommunicator
+ * @see EcoTrackerCalculations
+ * @see UserEmissionData
+ * @see FirebaseDatabase
+ */
+
 public class DetailPageActivity extends AppCompatActivity {
 
     // date and userID
@@ -110,6 +128,10 @@ public class DetailPageActivity extends AppCompatActivity {
         buttonSave.setOnClickListener(v -> {
             //Save data to Firebase
             saveDataToFirebase();
+
+            // Start the EcoTrackerHomeActivity
+            Intent homeIntent = new Intent(this, EcoTrackerHomeActivity.class);
+            startActivity(homeIntent);
 
             // Disable editing and toggle buttons
             enableEditing(false);
@@ -218,7 +240,7 @@ public class DetailPageActivity extends AppCompatActivity {
         spinnerBillType = findViewById(R.id.spinner_bill_type);
     }
 
-    // Sets up a spinner with the provided array resource
+    // Helper method to setup a spinner with values from a string array resource
     private void setupSpinner(Spinner spinner, int arrayResId) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
@@ -229,7 +251,7 @@ public class DetailPageActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
     }
 
-    // Sets up a checkbox to toggle the visibility of its associated layout
+    // Helper method to set up a checkbox to toggle the visibility of its associated layout
     private void setupCheckbox(CheckBox checkbox, LinearLayout layout) {
         checkbox.setOnCheckedChangeListener((buttonView, isChecked) ->
                 layout.setVisibility(isChecked ? View.VISIBLE : View.GONE)
@@ -237,7 +259,7 @@ public class DetailPageActivity extends AppCompatActivity {
         layout.setVisibility(checkbox.isChecked() ? View.VISIBLE : View.GONE);
     }
 
-    // Enable or disable editing for all input fields and spinners
+    // Helper method to enable or disable editing mode on UI components
     private void enableEditing(boolean isEnabled) {
         inputDate.setEnabled(isEnabled);
         inputDistanceDriving.setEnabled(isEnabled);
@@ -259,7 +281,6 @@ public class DetailPageActivity extends AppCompatActivity {
         spinnerBillType.setEnabled(isEnabled);
     }
 
-    //judy will change this to just reflect the user's selected date
     private void showDatePickerDialog() {
         // Get the current date
         final Calendar calendar = Calendar.getInstance();
@@ -300,8 +321,23 @@ public class DetailPageActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-
+    /**
+     * saveDataToFirebase collects all the user inputs from the various UI elements (e.g., spinners, text fields)
+     * and uses them to create a new `UserEmissionData` object. The data is then saved to Firebase under
+     * a specified date. The method also performs necessary data parsing and exception handling when converting
+     * user input (e.g., integers, doubles) and calculates the environmental impact based on the input.
+     *
+     * The following categories are processed: transportation, food, shopping, and energy bills. Each category's
+     * emissions are calculated using the `EcoTrackerCalculations` class, and the total emissions are stored
+     * in the `UserEmissionData.CalculatedEmissions` object.
+     *
+     * @see EcoTrackerCalculations
+     * @see UserEmissionData
+     * @see DatabaseCommunicator
+     * @see FirebaseDatabase
+     */
     private void saveDataToFirebase() {
+        // variables to hold user input data
         String vehicleType;
         double distanceDriven;
         String transportType;
@@ -401,6 +437,14 @@ public class DetailPageActivity extends AppCompatActivity {
         presenter.saveUserEmissionData(selectedDay, userEmissionData, DetailPageActivity.this);
     }
 
+    /**
+     * setSpinnerSelection - sets the selected value in a `Spinner` based on the provided value. It searches through
+     * the spinner's adapter to find the needed item and sets it as the selected item. If a matching
+     * value is found, it updates the spinner's selection accordingly.
+     *
+     * @param spinner The `Spinner` whose selection will be updated.
+     * @param value The value to set as the selected item in the spinner.
+     */
     private void setSpinnerSelection(Spinner spinner, String value) {
         SpinnerAdapter adapter = spinner.getAdapter();
         if (adapter != null) {
