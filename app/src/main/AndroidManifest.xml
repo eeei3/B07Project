@@ -37,11 +37,9 @@
             android:theme="@style/Base.Theme.BottomMenu">
         </activity>
         <activity
-            android:name=".EcoTrackerHomeFragment"
             android:exported="true"
-            android:theme="@style/Base.Theme.BottomMenu">
             android:name=".EcoTrackerHomeActivity"
-            android:exported="true">
+            android:theme="@style/Base.Theme.BottomMenu">
         </activity>
         <activity
             android:name=".LogActivitiesActivity"

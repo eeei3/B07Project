@@ -444,7 +444,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
         selectedDay = intentDate.getStringExtra("selectedDate");
 
         //then save the emission data to Firebase
-        databaseCommunicator.saveUserEmissionData(selectedDay, userEmissionData);
+        databaseCommunicator.saveUserEmissionData(selectedDay, userEmissionData, LogActivitiesActivity.this);
 
         //show the success message
         Toast.makeText(getApplicationContext(), "Data saved successfully!", Toast.LENGTH_SHORT).show();

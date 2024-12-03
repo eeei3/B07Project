@@ -519,7 +519,7 @@ public class DatabaseCommunicator {
      * @param selectedDay the selected date
      * @param data the emission data (raw inputs & calculated emissions)
      */
-    public void saveUserEmissionData(String selectedDay, UserEmissionData data) {
+    public void saveUserEmissionData(String selectedDay, UserEmissionData data, Context con) {
 
         DatabaseReference userRef = database.child("users").child(EcoTrackerHomeActivity.userId);
 
@@ -556,11 +556,11 @@ public class DatabaseCommunicator {
         dateRef.child("createdAt").setValue(System.currentTimeMillis())
                 .addOnSuccessListener(aVoid -> {
                     Log.d("Firebase", "User emission data saved successfully!");
-                    Toast.makeText(context.getApplicationContext(), "Data saved successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(con.getApplicationContext(), "Data saved successfully!", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firebase", "Error saving data: " + e.getMessage());
-                    Toast.makeText(context.getApplicationContext(), "Error saving data.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(con.getApplicationContext(), "Error saving data.", Toast.LENGTH_SHORT).show();
                 });
     }
 

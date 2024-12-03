@@ -398,7 +398,7 @@ public class DetailPageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         selectedDay = intent.getStringExtra("selectedDate");
 
-        presenter.saveUserEmissionData(selectedDay, userEmissionData);
+        presenter.saveUserEmissionData(selectedDay, userEmissionData, DetailPageActivity.this);
     }
 
     private void setSpinnerSelection(Spinner spinner, String value) {

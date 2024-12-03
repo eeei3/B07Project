@@ -12,12 +12,12 @@
         android:id="@+id/imageView"
         android:layout_width="300dp"
         android:layout_height="93dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:src="@drawable/trans_planetze_logo"
         android:layout_gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBaseline_toTopOf="@+id/habits_toolbar"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomview"

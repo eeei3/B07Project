@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,6 +42,9 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
 
         // Get a reference to the CalendarView
         CalendarView calendarView = findViewById(R.id.calendar_view);
+        BottomNavigationView navi = findViewById(R.id.bottomview);
+        navi.setSelectedItemId(R.id.ecotracker);
+
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         // Set a listener to get the selected date
@@ -83,7 +87,7 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
         buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!selectedDay.isEmpty()) {
+                if (selectedDay != null &&!selectedDay.isEmpty()) {
                     // Check if activities have already been logged for this date
                     checkActivitiesForDate(selectedDay, new OnActivitiesCheckListener() {
                         @Override
@@ -111,7 +115,7 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
         buttonDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!selectedDay.isEmpty()) {
+                if (selectedDay != null && (!selectedDay.isEmpty())) {
                     // Check if activities exist for this date before viewing details
                     checkActivitiesForDate(selectedDay, new OnActivitiesCheckListener() {
                         @Override
@@ -150,15 +154,16 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
         DatabaseReference userActivitiesRef = databaseReference
                 .child("users")
                 .child(userId)
-                .child("ecotracker")
-                .child(String.valueOf(selectedDay));
+                .child("ecotracker");
+//                .child(String.valueOf(selectedDay));
 
         userActivitiesRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     DataSnapshot snapshot = task.getResult();
-                    if (snapshot.exists()) {
+//                    if (snapshot.exists()) {
+                    if (snapshot.hasChild(selectedDay)) {
                         listener.onActivitiesChecked(true);
                     } else {
                         listener.onActivitiesChecked(false);

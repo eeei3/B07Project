@@ -20,7 +20,6 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <!-- Date input field
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,7 +28,7 @@
             android:padding="8dp"
             android:background="@android:drawable/editbox_background"
             android:id="@+id/input_date" />
-            -->
+
 
         <!-- Transportation Details -->
         <TextView

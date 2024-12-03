@@ -76,6 +76,8 @@ public class HabitsMenu extends AppCompatActivity implements OnHabitUpdatedListe
         ImageView filterTool = findViewById(R.id.filter_icon);
         SearchView searchTool = findViewById(R.id.search_tool);
         CardView recommendHabitsCard = findViewById(R.id.card_recomd);
+        BottomNavigationView navi = findViewById(R.id.bottomview);
+        navi.setSelectedItemId(R.id.habit);
 
         // set default look for some interactive components
         searchTool.clearFocus();
