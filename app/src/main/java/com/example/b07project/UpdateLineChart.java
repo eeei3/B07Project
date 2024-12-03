@@ -20,6 +20,9 @@ import com.github.mikephil.charting.charts.PieChart;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * UpdateLineChart class containing methods relating to updating the LineChart in EcoGauge
+ */
 public class UpdateLineChart extends EcoGauge {
 
     public void updateLineChartForTimePeriod(String timePeriod) {

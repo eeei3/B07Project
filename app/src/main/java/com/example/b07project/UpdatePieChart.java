@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * UpdatePieChart class containing methods relating to updating the pie chart in EcoGauge
+ */
 public class UpdatePieChart extends EcoGauge{
     public PieChart pieChart;
 

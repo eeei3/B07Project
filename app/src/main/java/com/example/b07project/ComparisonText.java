@@ -11,11 +11,24 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.Arrays;
 
+/**
+ *
+ * ComparisonText class containing methods relating updating the comparison text in EcoGauge
+ */
 public class ComparisonText {
 
     final TextView totalEmissions, nationalEmissions, globalEmissions;
     final TextView comparisonNationalText, comparisonGlobalText;
 
+    /**
+     * ComparisonText - Default Constructor that sets totalEmissions, globalEmissions, nationalEmissions,
+     *                  comparisonGlobalText, comparisonNationalText
+     * @param comparisonNationalText - TextView of the user's national data
+     * @param comparisonGlobalText - TextView of the global data
+     * @param totalEmissions - TextView of the user's total Emissions
+     * @param globalEmissions - TextView of the user's global Emissions
+     * @param nationalEmissions - TextView of the user's national Emissions
+     */
     public ComparisonText(TextView comparisonGlobalText, TextView comparisonNationalText,
                           TextView totalEmissions, TextView globalEmissions, TextView nationalEmissions) {
         this.totalEmissions = totalEmissions;
@@ -25,6 +38,10 @@ public class ComparisonText {
         this.comparisonNationalText = comparisonNationalText;
     }
 
+    /**
+     * updateComparisonText - Updates the text on Eco Gauge page by calling fetchUserData and getting
+     *                        data from the firebase
+     */
     public void updateComparisonText() {
         fetchUserData(new UserDataCallback() {
             @Override
@@ -66,6 +83,9 @@ public class ComparisonText {
         });
     }
 
+    /**
+     * fetchUserData - Gets users total annualEmissions and location from the firebase
+     */
     private void fetchUserData(UserDataCallback callback) {
         EcoGauge temp = new EcoGauge(); // Assuming EcoGauge provides user initialization
         String userId = temp.initializeFirebaseUser();
