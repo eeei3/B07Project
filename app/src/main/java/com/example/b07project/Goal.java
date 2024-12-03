@@ -1,24 +1,5 @@
 package com.example.b07project;
 
-
-import android.util.Log;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import androidx.annotation.NonNull;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-
-// TOMMY notes - changed the field HashSet<String> types to just String category.
-// - On 2nd thought, im combining Goal and HabitsModel cuz they practically have the same purpose
-
 /**
  * Goal - Class representing the Goal object for storing information about user goals
  */
@@ -104,14 +85,6 @@ class Goal {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * getName - return the habit's progress
-     * @return - return the habit's progress
-     */
-    public int getProg() {
-        return prog;
     }
 
     /**

@@ -45,26 +45,20 @@ public class ForgotPasswordFragment extends Fragment {
         ProgressBar btnProgressReset = view.findViewById(R.id.loadingProgress);
         ImageButton imageBtnBack = view.findViewById(R.id.backFromForgotPass);
 
-        btnResetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnResetPassword.setVisibility(View.GONE);
-                btnProgressReset.setVisibility(View.VISIBLE);
-                // Retrieve the email the User entered
-                String email = editTextUserEmail.getText().toString().trim();
-                // Create communication channel with the Presenter
-                presenter.setEmail(email);
-                // Reset password
-                presenter.beginReset();
-                finishLoading(btnResetPassword, btnProgressReset);
-            }
+        btnResetPassword.setOnClickListener(v -> {
+            btnResetPassword.setVisibility(View.GONE);
+            btnProgressReset.setVisibility(View.VISIBLE);
+            // Retrieve the email the User entered
+            String email = editTextUserEmail.getText().toString().trim();
+            // Create communication channel with the Presenter
+            presenter.setEmail(email);
+            // Reset password
+            presenter.beginReset();
+            finishLoading(btnResetPassword, btnProgressReset);
         });
-        imageBtnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = getParentFragmentManager();
-                fragmentManager.popBackStack();
-            }
+        imageBtnBack.setOnClickListener(v -> {
+            FragmentManager fragmentManager = getParentFragmentManager();
+            fragmentManager.popBackStack();
         });
 
         return view;
@@ -77,13 +71,11 @@ public class ForgotPasswordFragment extends Fragment {
      * @param pgb progress bar to show loading
      */
     private void finishLoading(Button btn, ProgressBar pgb) {
-        btn.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // After task is done, hide the progress bar and show the button again
-                btn.setVisibility(View.VISIBLE);
-                pgb.setVisibility(View.GONE);
-            }}, 5000);
+        btn.postDelayed(() -> {
+            // After task is done, hide the progress bar and show the button again
+            btn.setVisibility(View.VISIBLE);
+            pgb.setVisibility(View.GONE);
+        }, 5000);
     }
 
     /**

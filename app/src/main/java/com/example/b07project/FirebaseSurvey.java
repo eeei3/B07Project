@@ -1,23 +1,21 @@
 package com.example.b07project;
 
 import android.util.Log;
-import androidx.annotation.NonNull;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
+
 public class FirebaseSurvey {
-    final private FirebaseDatabase db;
     final private DatabaseReference dbworker;
     final private String userID;
     final private SurveyActivity view;
 
     public FirebaseSurvey(SurveyActivity view) {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        this.userID = mAuth.getCurrentUser().getUid();
-        this.db = FirebaseDatabase.getInstance("https://b07project-b43b0-default-rtdb.firebaseio.com/");
+        this.userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        FirebaseDatabase db = FirebaseDatabase.getInstance("https://b07project-b43b0-default-rtdb.firebaseio.com/");
         this.dbworker = db.getReference();
         this.view = view;
     }
@@ -36,14 +34,11 @@ public class FirebaseSurvey {
         DatabaseReference userRef = dbworker.child("users").child(userID);
         DatabaseReference locationRef = userRef.child("location");
         locationRef.setValue(location)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("ServerCommunicator", "Location saved successfully.");
-                        } else {
-                            Log.e("ServerCommunicator", "Error saving location.");
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("ServerCommunicator", "Location saved successfully.");
+                    } else {
+                        Log.e("ServerCommunicator", "Error saving location.");
                     }
                 });
 
@@ -61,18 +56,15 @@ public class FirebaseSurvey {
                 .addOnFailureListener(e -> Log.e("ServerCommunicator", "Error saving consumptionEmissions: ", e));
 
         userRef.child("annualEmissions").child("totalEmission").setValue(totalEmissions)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("ServerCommunicator", "Total emission saved successfully.");
-                            // Trigger success callback if all data is saved successfully
-                            view.success();
-                        } else {
-                            Log.e("ServerCommunicator", "Error saving totalEmission.");
-                            // Trigger failure callback if there was an issue saving the data
-                            view.failure();
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("ServerCommunicator", "Total emission saved successfully.");
+                        // Trigger success callback if all data is saved successfully
+                        view.success();
+                    } else {
+                        Log.e("ServerCommunicator", "Error saving totalEmission.");
+                        // Trigger failure callback if there was an issue saving the data
+                        view.failure();
                     }
                 });
     }

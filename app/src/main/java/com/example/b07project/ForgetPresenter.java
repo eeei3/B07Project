@@ -35,16 +35,13 @@ public class ForgetPresenter {
         // An object between the Model and Presenter to track outcome of operation
         AsyncAuthComms mp = new AsyncAuthComms();
         // Create a Listener for the Model's operation
-        model.setModelPipe(new FirebaseAuthHandler.ModelPresenterPipe() {
-            @Override
-            public void onObjectReady(AsyncComms mp) {
-                AsyncAuthComms plug = (AsyncAuthComms) mp;
-                if (plug.res) {
-                    fView.success();
-                }
-                else {
-                    fView.failure();
-                }
+        model.setModelPipe(mp1 -> {
+            AsyncAuthComms plug = (AsyncAuthComms) mp1;
+            if (plug.res) {
+                fView.success();
+            }
+            else {
+                fView.failure();
             }
         });
         // Tell Model to send reset email
