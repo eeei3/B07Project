@@ -159,7 +159,7 @@ public class EcoGauge extends AppCompatActivity {
      * Add Menu
      * @param menu The options menu in which you place your items.
      *
-     * @return
+     * @return true is menu is created
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -172,7 +172,7 @@ public class EcoGauge extends AppCompatActivity {
      * Handles what is clicked on menu
      * @param item The menu item that was selected.
      *
-     * @return
+     * @return true if something is selected in menu
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
