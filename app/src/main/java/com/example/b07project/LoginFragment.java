@@ -18,7 +18,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class LoginFragment extends Fragment{
     private EditText editTextUserEmail, editTextUserPassword;
-
     LoginPresenter presenter;
 
     @Nullable

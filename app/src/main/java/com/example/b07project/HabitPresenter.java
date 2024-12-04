@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 
-
 /**
  * Class representing the Presenter portion of the Habit Suggestion Module
  *

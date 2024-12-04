@@ -22,7 +22,6 @@ import com.google.firebase.auth.AuthResult;
 
 
 public class RegisterUserFragment extends Fragment {
-
     private FirebaseAuth mAuth;
     private EditText editTextName, editTextEmail, editTextPass, editTextConfirmPass;
     private static final String TAG = "Register User";
