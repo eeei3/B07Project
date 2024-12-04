@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TextView;
@@ -27,13 +26,11 @@ import java.util.TimeZone;
 
 /**
  * EcoTrackerHomeActivity serves as the main screen for the Planetze app after user login.
- *
  * It allows the user to:
  * - Select a date from the calendar.
  * - Log activities for the selected date.
  * - View details of previously logged activities.
  * - View emissions summary for the current day
- *
  * The activity fetches and displays the user's total emissions (transportation, food, shopping)
  * and energy bills from the Firebase database.
  *
@@ -56,29 +53,28 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
         // get reference to the CalendarView
         CalendarView calendarView = findViewById(R.id.calendar_view);
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        BottomNavigationView navi = findViewById(R.id.bottomview);
+        navi.setSelectedItemId(R.id.ecotracker);
 
         // set listener to get the selected date
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                // Month is 0-based, so add 1 to the month
-                month++;
-                Toast.makeText(EcoTrackerHomeActivity.this, dayOfMonth + "/" + month + "/" + year, Toast.LENGTH_SHORT).show();
-                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, month - 1); // subtract 1 to convert back to 0-based month
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                calendar.set(Calendar.HOUR_OF_DAY, 0);
-                calendar.set(Calendar.MINUTE, 0);
-                calendar.set(Calendar.SECOND, 0);
-                calendar.set(Calendar.MILLISECOND, 0);
-                selectedDate = calendar.getTimeInMillis();
+        calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            // Month is 0-based, so add 1 to the month
+            month++;
+            Toast.makeText(EcoTrackerHomeActivity.this, dayOfMonth + "/" + month + "/" + year, Toast.LENGTH_SHORT).show();
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month - 1); // subtract 1 to convert back to 0-based month
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            selectedDate = calendar.getTimeInMillis();
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                // set time zone
-                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                selectedDay = sdf.format(new Date(selectedDate));
-            }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            // set time zone
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            selectedDay = sdf.format(new Date(selectedDate));
         });
 
         // initialize buttons
@@ -94,58 +90,46 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
         }
 
         // log button click listener
-        buttonLog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedDay != null && !selectedDay.isEmpty()) {
-                    // check if activities have already been logged for this date
-                    checkActivitiesForDate(selectedDay, new OnActivitiesCheckListener() {
-                        @Override
-                        public void onActivitiesChecked(boolean hasActivities) {
-                            if (!hasActivities) {
-                                // if no activities logged for this date, proceed to log
-                                Intent intent = new Intent(EcoTrackerHomeActivity.this, LogActivitiesActivity.class);
-                                intent.putExtra("selectedDate", selectedDay);
-                                intent.putExtra("user_id", userId);
-                                startActivity(intent);
-                            } else {
-                                // activities already exist for this date, show toast
-                                Toast.makeText(EcoTrackerHomeActivity.this, "Activities history found! Please go directly to detail page", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                } else {
-                    // if no date selected
-                    Toast.makeText(EcoTrackerHomeActivity.this, "Please select a date", Toast.LENGTH_SHORT).show();
-                }
+        buttonLog.setOnClickListener(v -> {
+            if (selectedDay != null && !selectedDay.isEmpty()) {
+                // check if activities have already been logged for this date
+                checkActivitiesForDate(selectedDay, hasActivities -> {
+                    if (!hasActivities) {
+                        // if no activities logged for this date, proceed to log
+                        Intent intent = new Intent(EcoTrackerHomeActivity.this, LogActivitiesActivity.class);
+                        intent.putExtra("selectedDate", selectedDay);
+                        intent.putExtra("user_id", userId);
+                        startActivity(intent);
+                    } else {
+                        // activities already exist for this date, show toast
+                        Toast.makeText(EcoTrackerHomeActivity.this, "Activities history found! Please go directly to detail page", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                // if no date selected
+                Toast.makeText(EcoTrackerHomeActivity.this, "Please select a date", Toast.LENGTH_SHORT).show();
             }
         });
 
         // details button click listener
-        buttonDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedDay != null && !selectedDay.isEmpty()) {
-                    // check if activities exist for this date before viewing details
-                    checkActivitiesForDate(selectedDay, new OnActivitiesCheckListener() {
-                        @Override
-                        public void onActivitiesChecked(boolean hasActivities) {
-                            // if activities logged before, open the details page
-                            if (hasActivities) {
-                                Intent intent = new Intent(EcoTrackerHomeActivity.this, DetailPageActivity.class);
-                                intent.putExtra("selectedDate", selectedDay);
-                                intent.putExtra("user_id", userId);
-                                startActivity(intent);
-                            } else {
-                                // if no activities logged for this date, show toast
-                                Toast.makeText(EcoTrackerHomeActivity.this, "No activities history found! Please log activities first", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                } else {
-                    // no date selected
-                    Toast.makeText(EcoTrackerHomeActivity.this, "Please select a date", Toast.LENGTH_SHORT).show();
-                }
+        buttonDetails.setOnClickListener(v -> {
+            if (selectedDay != null && !selectedDay.isEmpty()) {
+                // check if activities exist for this date before viewing details
+                checkActivitiesForDate(selectedDay, hasActivities -> {
+                    // if activities logged before, open the details page
+                    if (hasActivities) {
+                        Intent intent = new Intent(EcoTrackerHomeActivity.this, DetailPageActivity.class);
+                        intent.putExtra("selectedDate", selectedDay);
+                        intent.putExtra("user_id", userId);
+                        startActivity(intent);
+                    } else {
+                        // if no activities logged for this date, show toast
+                        Toast.makeText(EcoTrackerHomeActivity.this, "No activities history found! Please log activities first", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                // no date selected
+                Toast.makeText(EcoTrackerHomeActivity.this, "Please select a date", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -177,14 +161,10 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
 
         userActivitiesRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onComplete(Task<DataSnapshot> task) {
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     DataSnapshot snapshot = task.getResult();
-                    if (snapshot.exists()) {
-                        listener.onActivitiesChecked(true);
-                    } else {
-                        listener.onActivitiesChecked(false);
-                    }
+                    listener.onActivitiesChecked(snapshot.exists());
                 } else {
                     // handles potential errors
                     Toast.makeText(EcoTrackerHomeActivity.this, "Error checking activities", Toast.LENGTH_SHORT).show();
@@ -214,7 +194,7 @@ public class EcoTrackerHomeActivity extends AppCompatActivity {
                 .child("users")
                 .child(userId)
                 .child("ecotracker")
-                .child(String.valueOf(dateToday));
+                .child(dateToday);
 
         // retrieve totalTranspo
         ref.child("calculatedEmissions").child("totalTranspo").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {

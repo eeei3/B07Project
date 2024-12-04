@@ -4,14 +4,21 @@ import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.Objects;
 
+/**
+ * FirebaseSurvey class is concerned with interacting with the firebase when filling out the survey.
+ */
 public class FirebaseSurvey {
     final private DatabaseReference dbworker;
     final private String userID;
     final private SurveyActivity view;
 
+    /**
+     * A constructor for FirebaseSurvey.
+     *
+     * @param view the SurveyActivity activity to get data from the user.
+     */
     public FirebaseSurvey(SurveyActivity view) {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         this.userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
@@ -20,7 +27,18 @@ public class FirebaseSurvey {
         this.view = view;
     }
 
-    public void writeResult(double Transportation, double Food, double Housing, double Consumption, double totalEmissions, String location) {
+    /**
+     * writeResult method writes the result of the survey to the firebase.
+     *
+     * @param Transportation transportation
+     * @param Food food
+     * @param Housing housing
+     * @param Consumption consumptions
+     * @param totalEmissions total emissions
+     * @param location location
+     */
+    public void writeResult(double Transportation, double Food, double Housing,
+                            double Consumption, double totalEmissions, String location) {
         // Logging the values to verify they are not null
         Log.d("ServerCommunicator", "Transportation Emission: " + Transportation);
         Log.d("ServerCommunicator", "Food Emission: " + Food);
