@@ -21,13 +21,28 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.auth.AuthResult;
 
 
+/**
+ * RegisterUserFragment is responsible for binding and displaying the registration page.
+ *
+ */
 public class RegisterUserFragment extends Fragment {
     private FirebaseAuth mAuth;
     private EditText editTextName, editTextEmail, editTextPass, editTextConfirmPass;
     private static final String TAG = "Register User";
 
 
-    //initializes the registration screen
+    /**
+     * onCreateView creates the view.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate
+     *                           any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's
+     *                           UI should be attached to.  The fragment should not add the view itself,
+     *                           but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state as given here.
+     * @return                   the view.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,13 +69,12 @@ public class RegisterUserFragment extends Fragment {
 
     }
 
-    //create a registerUser method
-    //create a user using mAuth
-    //put user in database
+
+    /**
+     * registerUser method attempts to register the user into the firebase.
+     *
+     */
     private void registerUser() {
-
-        //gets email and password from input fields
-
         String name = editTextName.getText().toString().trim();
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPass.getText().toString().trim();
@@ -91,15 +105,16 @@ public class RegisterUserFragment extends Fragment {
                                 updateUI(null);
                             }
                         }
-
                     });
-
         }
-
-        //add user to the firebase database
-
     }
 
+    /**
+     * updateUserName method updates the user name.
+     *
+     * @param user the firebase user
+     * @param name the name the user had typed
+     */
     private void updateUserName(FirebaseUser user, String name) {
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
@@ -119,6 +134,11 @@ public class RegisterUserFragment extends Fragment {
                 });
     }
 
+    /**
+     * updateID method updates the UI if the user is signed in or not signed in.
+     *
+     * @param user the firebase user
+     */
     private void updateUI(FirebaseUser user) {
         if (user != null) {
 
@@ -134,6 +154,15 @@ public class RegisterUserFragment extends Fragment {
     }
 
 
+    /**
+     * validateInfo method seeks to validate the information typed by the user.
+     *
+     * @param name the user's name
+     * @param email the user's email
+     * @param password the user's typed password
+     * @param confirmPass the user's typed confirmed password
+     * @return true if info typed is correct, false otherwise
+     */
     public boolean validateInfo(String name, String email, String password, String confirmPass) {
 
         String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
@@ -158,8 +187,12 @@ public class RegisterUserFragment extends Fragment {
         return true;
     }
 
+    /**
+     * sendEmailVerification method sends an email verification to the user.
+     *
+     * @param user the firebase user
+     */
     private void sendEmailVerification(FirebaseUser user) {
-
         user.sendEmailVerification()
                 .addOnCompleteListener(new OnCompleteListener<>() {
                     @Override

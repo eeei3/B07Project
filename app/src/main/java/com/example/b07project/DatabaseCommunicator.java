@@ -9,6 +9,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
+/**
+ * DatabaseCommunicator class is concerned with communicating with the firebase
+ *
+ */
 public class DatabaseCommunicator {
 
     final DatabaseReference database;
@@ -21,11 +25,20 @@ public class DatabaseCommunicator {
 
     Waiter waiter;
 
+    /**
+     * Waiter interface is used to indicate when an operation has finished.
+     *
+     */
     public interface Waiter {
         // This is the event that we fire when operation has been completed
         void onObjectReady();
     }
 
+    /**
+     * A constructor for DatabaseCommunicator.
+     *
+     * @param db the firebase reference
+     */
     public DatabaseCommunicator(DatabaseReference db) {
         this.database = db;
         data = "";
@@ -33,10 +46,20 @@ public class DatabaseCommunicator {
         this.calciter = 0;
     }
 
+    /**
+     * setWaiter method sets the waiter.
+     *
+     * @param waiter waiter to be set to.
+     */
     public void setWaiter(Waiter waiter) {
         this.waiter = waiter;
     }
 
+    /**
+     * serverCalcEmissionReader method reads the total calculated emissions from the firebase.
+     *
+     * @param selectedDay the date selected
+     */
     public void serverCalcEmissionReader(String selectedDay) {
         this.calc = new UserEmissionData.CalculatedEmissions();
         DatabaseReference userRef = database.child("users")
@@ -131,6 +154,11 @@ public class DatabaseCommunicator {
         });
     }
 
+    /**
+     * serverRawInputReader method reads the raw inputs from the firebase for a particular day.
+     *
+     * @param selectedDay the date selected
+     */
     public void serverRawInputReader(String selectedDay) {
         this.raw = new UserEmissionData.RawInputs();
         DatabaseReference userRef = database.child("users")
@@ -610,6 +638,12 @@ public class DatabaseCommunicator {
         });
     }
 
+    /**
+     * recalculateEmissions recalculates the user's emissions using the raw inputs.
+     *
+     * @param rawInputs the user's raw inputs
+     * @return the calculated emissions as a CalculatedEmissions
+     */
     private UserEmissionData.CalculatedEmissions recalculateEmissions(UserEmissionData.RawInputs rawInputs) {
         double distance = rawInputs.getDistanceDriven();
         String transportType = rawInputs.getVehicleType();

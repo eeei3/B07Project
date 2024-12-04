@@ -4,15 +4,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-/*
+/**
  * Helpful methods for working with firebase
  * Can use getStartOfDay() and getEndOfDay() to create a range query
  * that gets all emissions created within that day
  */
 public class DatesForDataBase {
-    /*
+    /**
      * getStartOfDay returns the timestamp for the start of the day (00:00:00.000) for that date
-     * @TimeMillis takes a time in milliseconds
+     *
+     * @param TimeMillis  takes a time in milliseconds
      */
     public static long getStartOfDay(long TimeMillis) {
         Calendar calendar = Calendar.getInstance();
@@ -24,9 +25,10 @@ public class DatesForDataBase {
         return calendar.getTimeInMillis();
     }
 
-    /*
+    /**
      * getStartOfDay returns the timestamp for the end of the day (00:00:00.000) for that date
-     * @TimeMillis takes a time in milliseconds
+     *
+     * @param TimeMillis  takes a time in milliseconds
      */
     public static long getEndOfDay(long TimeMillis) {
         Calendar calendar = Calendar.getInstance();
@@ -38,9 +40,10 @@ public class DatesForDataBase {
         return calendar.getTimeInMillis();
     }
 
-    /*
+    /**
      * getStartOfDay returns the timestamp for the start of the month (00:00:00.000) for that date
-     * @TimeMillis takes a time in milliseconds
+     *
+     * @param TimeMillis  takes a time in milliseconds
      */
     public static long getStartOfMonth(long TimeMillis) {
         Calendar calendar = Calendar.getInstance();
@@ -53,9 +56,10 @@ public class DatesForDataBase {
         return calendar.getTimeInMillis();
     }
 
-    /*
+    /**
      * getStartOfDay returns the timestamp for the end of the month (00:00:00.000) for that date
-     * @TimeMillis takes a time in milliseconds
+     *
+     * @param currentTimeMillis  takes a time in milliseconds
      */
     public static long getEndOfMonth(long currentTimeMillis) {
         Calendar calendar = Calendar.getInstance();
@@ -67,7 +71,13 @@ public class DatesForDataBase {
         calendar.set(Calendar.MILLISECOND, 999);
         return calendar.getTimeInMillis();
     }
-    // Get the start of the year (00:00:00 on January 1st of the given timestamp's year)
+
+    /**
+     * getStartOfYear returns the start of the year.
+     *
+     * @param timeInMillis time in milliseconds
+     * @return the start of the year in milliseconds
+     */
     public static long getStartOfYear(long timeInMillis) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timeInMillis);
@@ -80,7 +90,12 @@ public class DatesForDataBase {
         return calendar.getTimeInMillis();
     }
 
-    // Get the end of the year (23:59:59 on December 31st of the given timestamp's year)
+    /**
+     * getEndOfYear returns the start of the year.
+     *
+     * @param timeInMillis time in milliseconds
+     * @return the end of the year in milliseconds
+     */
     public static long getEndOfYear(long timeInMillis) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timeInMillis);
@@ -93,6 +108,12 @@ public class DatesForDataBase {
         return calendar.getTimeInMillis();
     }
 
+    /**
+     * getFormattedDate formats the date from milliseconds to YYYY-MM-DD HH:mm:ss
+     *
+     * @param timeInMillis time in milliseconds
+     * @return the formated date
+     */
     public static String getFormattedDate(long timeInMillis) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(new Date(timeInMillis));
