@@ -16,17 +16,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+/**
+ * LogActivitiesActivity class is responsible for letting the user log their activities.
+ *
+ */
 public class LogActivitiesActivity extends AppCompatActivity {
-
     private String selectedDay;
-
-    //ui elements
     private TextView inputDate;
     private Button buttonSave;
-
     //transportation details
-    private CheckBox checkboxDriveVehicle, checkboxPublicTransport, checkboxCyclingWalking, checkboxFlight;
-    private LinearLayout vehicleDetailsLayout, publicTransportLayout, cyclingWalkingLayout, flightLayout;
+    private CheckBox checkboxDriveVehicle, checkboxPublicTransport,
+            checkboxCyclingWalking, checkboxFlight;
+    private LinearLayout vehicleDetailsLayout, publicTransportLayout,
+            cyclingWalkingLayout, flightLayout;
     private EditText inputDistanceDriving;
     private EditText inputTimeSpent;
     private EditText inputNumFlights;
@@ -61,6 +63,13 @@ public class LogActivitiesActivity extends AppCompatActivity {
     private double cyclingTime;
     private int numFlights, numClothes, numDevices, numPurchases, numServings;
 
+    /**
+     * onCreate method is responsible for binding together the UI components and showing the view.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *                           previously being shut down then this Bundle contains the data it most
+     *                           recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,11 +103,12 @@ public class LogActivitiesActivity extends AppCompatActivity {
         setupCheckbox(checkboxEnergyBills, energyBillsLayout);
 
         buttonSave.setOnClickListener(v -> saveData());
-
-
     }
 
-    //initialize UI components by matching to front end IDs
+    /**
+     * initializeUIComponents method is responsible for initializing the needed UI components.
+     *
+     */
     private void initializeUIComponents() {
         inputDate = findViewById(R.id.input_date);
         buttonSave = findViewById(R.id.button_save);
@@ -145,7 +155,12 @@ public class LogActivitiesActivity extends AppCompatActivity {
         spinnerBillType = findViewById(R.id.spinner_bill_type);
     }
 
-    //spinner setup for user to choose between options
+    /**
+     * setupSpinner method sets up the Spinner for the user to choose between options.
+     *
+     * @param spinner spinner to be set
+     * @param arrayResId the array ID
+     */
     private void setupSpinner(Spinner spinner, int arrayResId) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
@@ -156,7 +171,13 @@ public class LogActivitiesActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
     }
 
-    //checkbox set up for toggle down
+
+    /**
+     * setupCheckbox method sets up Checkbox for user to see drop down menu.
+     *
+     * @param checkbox checkbox to be set
+     * @param layout layout to enable visibility
+     */
     private void setupCheckbox(CheckBox checkbox, LinearLayout layout) {
         checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // Show or hide the associated input layout based on the checkbox state
@@ -164,29 +185,42 @@ public class LogActivitiesActivity extends AppCompatActivity {
         });
     }
 
-    //emission calculations
+    /**
+     * calculateShoppingEmissions calculates the vehicle emissions produced by the user.
+     *
+     * @return the calculated vehicle emissions from the user.
+     */
     private double calculateVehicleEmission() {
         double emission;
 
-        if ("Gasoline".equals(vehicleType)) {
-            emission = 0.24 * distanceDriven;
-        } else if ("Diesel".equals(vehicleType)) {
-            emission = 0.27 * distanceDriven;
-        } else if ("Electric".equals(vehicleType)) {
-            emission = 0.05 * distanceDriven;
-        } else if ("Hybrid".equals(vehicleType)) {
-            emission = 0.16 * distanceDriven;
-        } else {
-            emission = 0.0;
+        switch (vehicleType) {
+            case "Gasoline":
+                emission = 0.24 * distanceDriven;
+                break;
+            case "Diesel":
+                emission = 0.27 * distanceDriven;
+                break;
+            case "Electric":
+                emission = 0.05 * distanceDriven;
+                break;
+            case "Hybrid":
+                emission = 0.16 * distanceDriven;
+                break;
+            default:
+                emission = 0.0;
+                break;
         }
         return emission;
     }
 
+    /**
+     * calculateShoppingEmissions calculates the public transport emissions produced by the user.
+     *
+     * @return the calculated public transport emissions from the user.
+     */
     private double calculatePublicTransportEmission() {
-
         double emission;
 
-        // Calculate emission using if-else logic
         switch (transportType) {
             case "Bus":
                 emission = 0.18 * cyclingTime;
@@ -204,23 +238,33 @@ public class LogActivitiesActivity extends AppCompatActivity {
         return emission;
     }
 
-    private double calculateCyclingEmission() {
-        return 0.0;
-    }
-
+    /**
+     * calculateShoppingEmissions calculates the flight emissions produced by the user.
+     *
+     * @return the calculated flight emissions from the user.
+     */
     private double calculateFlightEmission() {
         double emission;
 
-        if (flightType.equals("Short-haul(less than 1500 km)")) {
-            emission = numFlights * 225;
-        } else if (flightType.equals("Long-haul(more than 1500 km)")) {
-            emission = numFlights * 825;
-        } else {
-            emission = 0.0;
+        switch (flightType) {
+            case "Short-haul(less than 1500 km)":
+                emission = numFlights * 225;
+                break;
+            case "Long-haul(more than 1500 km)":
+                emission = numFlights * 825;
+                break;
+            default:
+                emission = 0.0;
+                break;
         }
         return emission;
     }
 
+    /**
+     * calculateShoppingEmissions calculates the meal emissions produced by the user.
+     *
+     * @return the calculated meal emissions from the user.
+     */
     private double calculateMealEmission() {
         double emission;
 
@@ -247,15 +291,23 @@ public class LogActivitiesActivity extends AppCompatActivity {
         return emission;
     }
 
+    /**
+     * calculateShoppingEmissions calculates the clothes emissions produced by the user.
+     *
+     * @return the calculated clothes emissions from the user.
+     */
     private double calculateClothesEmission(){
-        double emission = 0.0;
-
         if (numClothes >= 1) {
             return numClothes * 25;
         }
-        return emission;
+        return 0.0;
     }
 
+    /**
+     * calculateShoppingEmissions calculates the electronics emissions produced by the user.
+     *
+     * @return the calculated electronics emissions from the user.
+     */
     private double calculateElectronicsEmission() {
         double emission;
 
@@ -273,10 +325,14 @@ public class LogActivitiesActivity extends AppCompatActivity {
                 emission = 0.0;
                 break;
         }
-
         return emission;
     }
 
+    /**
+     * calculateShoppingEmissions calculates the other purchases' emissions produced by the user.
+     *
+     * @return the calculated other purchases' emissions from the user.
+     */
     private double calculateOtherPurchasesEmission() {
         double emission;
 
@@ -298,6 +354,12 @@ public class LogActivitiesActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * parseDouble method tries to parse a double from an EditText.
+     *
+     * @param editText the EditText to be parse
+     * @return the parsed double
+     */
     private double parseDouble(EditText editText) {
         String text = editText.getText().toString();
         try {
@@ -307,61 +369,72 @@ public class LogActivitiesActivity extends AppCompatActivity {
         }
     }
 
-    double totalTranspo = 0.0;
-    double totalFood = 0.0;
-    double totalShopping = 0.0;
+    double totalTranspo;
+    double totalFood;
+    double totalShopping;
 
+    /**
+     * calculateTransportationEmissions calculates the total emissions from modes of
+     * transportations taken by the user.
+     */
     private void calculateTransportationEmissions() {
-
         if (isInputVisible(vehicleDetailsLayout)) {
             totalTranspo += calculateVehicleEmission();
         }
-
         if (isInputVisible(publicTransportLayout)) {
             totalTranspo += calculatePublicTransportEmission();
         }
-
-        if (isInputVisible(cyclingWalkingLayout)) {
-            totalTranspo += calculateCyclingEmission();
-        }
-
         if (isInputVisible(flightLayout)) {
             totalTranspo += calculateFlightEmission();
         }
     }
 
+    /**
+     * calculateFoodEmissions calculates the food emissions produced by the user.
+     *
+     */
     private void calculateFoodEmissions() {
         if (isInputVisible(mealLayout)) {
             totalFood += calculateMealEmission();
         }
     }
 
+    /**
+     * calculateShoppingEmissions calculates the shopping emissions produced by the user.
+     *
+     */
     private void calculateShoppingEmissions() {
         if (isInputVisible(clothesLayout)) {
             totalShopping += calculateClothesEmission();
         }
-
         if (isInputVisible(electronicsLayout)) {
             totalShopping += calculateElectronicsEmission();
         }
-
         if (isInputVisible(otherPurchasesLayout)) {
             totalShopping += calculateOtherPurchasesEmission();
         }
-
     }
 
+    /**
+     * isInputVisible method checks if a layout is visible to the user.
+     *
+     * @param layout the layout to inspect visibility
+     * @return true if layout is visible, false otherwise
+     */
     private boolean isInputVisible(View layout) {
         return layout.getVisibility() == View.VISIBLE;
     }
 
+    /**
+     * saveData method saves the logged activities by the user to the firebase.
+     *
+     */
     private void saveData() {
         try {
             vehicleType = spinnerVehicleType.getSelectedItem().toString();
         } catch (NumberFormatException e) {
             vehicleType = "";
         }
-
         try {
             numFlights = Integer.parseInt(inputNumFlights.getText().toString());
         } catch (NumberFormatException e) {
@@ -423,8 +496,8 @@ public class LogActivitiesActivity extends AppCompatActivity {
 
         //create a calculatedEmissions object using the total emissions data
 
-        UserEmissionData.CalculatedEmissions calculatedEmissions = new UserEmissionData.CalculatedEmissions(
-                totalTranspo, totalFood, totalShopping);
+        UserEmissionData.CalculatedEmissions calculatedEmissions =
+                new UserEmissionData.CalculatedEmissions(totalTranspo, totalFood, totalShopping);
 
         //create the UserEmissionData object with raw inputs and calculated emissions
         UserEmissionData userEmissionData = new UserEmissionData(rawInputs, calculatedEmissions);

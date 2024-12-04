@@ -90,9 +90,7 @@ public class EcoTrackerCalculations {
      * @return the calculated food emissions from the user.
      */
     public double calculateFoodEmissions() {
-        double res = 0.0;
-        res += calculateMealEmission();
-        return res;
+        return calculateMealEmission();
     }
 
 
@@ -102,11 +100,9 @@ public class EcoTrackerCalculations {
      * @return the calculated shopping emissions from the user.
      */
     public double calculateShoppingEmissions() {
-        double res = 0.0;
-        res += calculateClothesEmission();
-        res += calculateElectronicsEmission();
-        res += calculateOtherPurchasesEmission();
-        return res;
+        return calculateClothesEmission() +
+                calculateElectronicsEmission() +
+                calculateOtherPurchasesEmission();
     }
 
     /**
@@ -256,7 +252,8 @@ public class EcoTrackerCalculations {
     /**
      * calculateShoppingEmissions calculates the other purchases' emissions produced by the user.
      *
-     * @return the calculated other purchases' emissions from the user.     */
+     * @return the calculated other purchases' emissions from the user.
+     */
     private double calculateOtherPurchasesEmission() {
         double emission;
 
