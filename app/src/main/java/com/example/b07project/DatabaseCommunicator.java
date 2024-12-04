@@ -181,7 +181,7 @@ public class DatabaseCommunicator {
                     }
 
 
-                    if (rawiter >= 14) {
+                    if (rawiter >= 15) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -207,7 +207,7 @@ public class DatabaseCommunicator {
                         System.out.println("able to grab vehicle type");
                         System.out.println(raw.getVehicleType());
                     }
-                    if (rawiter >= 14) {
+                    if (rawiter >= 15) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -241,6 +241,35 @@ public class DatabaseCommunicator {
                 }
             }
         });
+
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("pubtransTime");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    try {
+                        raw.setPubtransportTime(Double.parseDouble(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setPubtransportTime(0);
+                    }
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+
+
         userRef = database.child("users")
                 .child(EcoTrackerHomeActivity.userId)
                 .child("ecotracker")
@@ -256,7 +285,7 @@ public class DatabaseCommunicator {
                     } catch (NumberFormatException e) {
                         raw.setCyclingTime(0);
                     }
-                    if (rawiter >= 14) {
+                    if (rawiter >= 15) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -283,7 +312,7 @@ public class DatabaseCommunicator {
                     catch (NumberFormatException e) {
                         raw.setNumFlights(0);
                     }
-                    if (rawiter >= 14) {
+                    if (rawiter >= 15) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -305,7 +334,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     raw.setFlightType(String.valueOf(task.getResult().getValue()));
-                    if (rawiter >= 14) {
+                    if (rawiter >= 15) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -327,7 +356,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     raw.setMealType(String.valueOf(task.getResult().getValue()));
-                    if (rawiter >= 14) {
+                    if (rawiter >= 15) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -353,7 +382,7 @@ public class DatabaseCommunicator {
                     } catch (NumberFormatException e) {
                         raw.setNumServings(0);
                     }
-                    if (rawiter >= 14) {
+                    if (rawiter >= 15) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -379,7 +408,7 @@ public class DatabaseCommunicator {
                     } catch (NumberFormatException e) {
                         raw.setNumClothes(0);
                     }
-                    if (rawiter >= 14) {
+                    if (rawiter >= 15) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -401,7 +430,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     raw.setDeviceType(String.valueOf(task.getResult().getValue()));
-                    if (rawiter>= 14) {
+                    if (rawiter>= 15) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -427,7 +456,7 @@ public class DatabaseCommunicator {
                     } catch (NumberFormatException e) {
                         raw.setNumDevices(0);
                     }
-                    if (rawiter >= 14) {
+                    if (rawiter >= 15) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -449,7 +478,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     raw.setPurchaseType(String.valueOf(task.getResult().getValue()));
-                    if (rawiter >= 14) {
+                    if (rawiter >= 15) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -475,7 +504,7 @@ public class DatabaseCommunicator {
                     } catch (NumberFormatException e) {
                         raw.setNumOtherPurchases(0);
                     }
-                    if (rawiter >= 14) {
+                    if (rawiter >= 15) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -501,7 +530,7 @@ public class DatabaseCommunicator {
                     } catch (NumberFormatException e) {
                         raw.setBillAmount(0);
                     }
-                    if (rawiter >= 14) {
+                    if (rawiter >= 15) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -523,7 +552,7 @@ public class DatabaseCommunicator {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     raw.setBillType(String.valueOf(task.getResult().getValue()));
-                    if (rawiter >= 14) {
+                    if (rawiter >= 15) {
                         waiter.onObjectReady();
                     }
                     rawiter++;
@@ -554,6 +583,7 @@ public class DatabaseCommunicator {
         rawInputsRef.child("distanceDriven").setValue(data.getRawInputs().getDistanceDriven());
         rawInputsRef.child("vehicleType").setValue(data.getRawInputs().getVehicleType());
         rawInputsRef.child("transportType").setValue(data.getRawInputs().getTransportType());
+        rawInputsRef.child("pubtransTime").setValue(data.getRawInputs().getPubtransportTime());
         rawInputsRef.child("cyclingTime").setValue(data.getRawInputs().getCyclingTime());
         rawInputsRef.child("numFlights").setValue(data.getRawInputs().getNumFlights());
         rawInputsRef.child("flightType").setValue(data.getRawInputs().getFlightType());

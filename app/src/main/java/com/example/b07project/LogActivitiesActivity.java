@@ -32,6 +32,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
     private EditText inputDistanceDriving;
     private EditText inputTimeSpent;
     private EditText inputNumFlights;
+    private EditText inputDisWalkSpent;
     private Spinner spinnerVehicleType, spinnerTransportType, spinnerFlightType;
 
     //food consumption details
@@ -55,6 +56,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
     //global variables
     private String vehicleType;
     private String transportType;
+    private double pubtransTime;
     private String flightType;
     private String mealType;
     private String deviceType;
@@ -124,6 +126,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
         flightLayout = findViewById(R.id.flight_layout);
         inputDistanceDriving = findViewById(R.id.input_distance_driving);
         inputTimeSpent = findViewById(R.id.input_time_spent);
+        inputDisWalkSpent = findViewById(R.id.input_distance_walking);
         inputNumFlights = findViewById(R.id.input_num_flights);
         spinnerVehicleType = findViewById(R.id.spinner_vehicle_type);
         spinnerTransportType = findViewById(R.id.spinner_transport_type);
@@ -463,7 +466,9 @@ public class LogActivitiesActivity extends AppCompatActivity {
 
         distanceDriven = parseDouble(inputDistanceDriving);
         transportType = spinnerTransportType.getSelectedItem().toString();
-        cyclingTime = parseDouble(inputTimeSpent);
+
+        pubtransTime = parseDouble(inputTimeSpent);
+        cyclingTime = parseDouble(inputDisWalkSpent);
         flightType = spinnerFlightType.getSelectedItem().toString();
         mealType = spinnerMealType.getSelectedItem().toString();
         deviceType = spinnerDeviceType.getSelectedItem().toString();
@@ -480,6 +485,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
                 distanceDriven,         // e.g., inputDistance
                 vehicleType,            // e.g., "Car"
                 transportType,          // e.g., "Bus" or "Train"
+                pubtransTime,
                 cyclingTime,            // e.g., inputCyclingDistance (or time spent cycling, depending on your data)
                 numFlights,             // e.g., inputNumFlights
                 flightType,             // e.g., "Commercial"

@@ -13,6 +13,7 @@ public class EcoTrackerCalculations {
     String vehicleType;
     double distanceDriven;
     String transportType;
+    double pubtransTime;
     double cyclingTime;
     int numFlights;
     String flightType;
@@ -44,6 +45,7 @@ public class EcoTrackerCalculations {
     public EcoTrackerCalculations(String vehicleType,
                                   double distanceDriven,
                                   String transportType,
+                                  double pubtransTime,
                                   double cyclingTime,
                                   int numFlights,
                                   String flightType,
@@ -57,6 +59,7 @@ public class EcoTrackerCalculations {
         this.vehicleType = vehicleType;
         this.distanceDriven = distanceDriven;
         this.transportType = transportType;
+        this.pubtransTime = pubtransTime;
         this.cyclingTime = cyclingTime;
         this.numFlights = numFlights;
         this.flightType = flightType;
@@ -174,13 +177,13 @@ public class EcoTrackerCalculations {
 
         switch (transportType) {
             case "Bus":
-                emission = 0.18 * cyclingTime;
+                emission = 0.18 * pubtransTime;
                 break;
             case "Train":
-                emission = 0.04 * cyclingTime;
+                emission = 0.04 * pubtransTime;
                 break;
             case "Subway":
-                emission = 0.03 * cyclingTime;
+                emission = 0.03 * pubtransTime;
                 break;
             default:
                 emission = 0.0;

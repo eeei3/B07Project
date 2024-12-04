@@ -4,6 +4,7 @@ package com.example.b07project;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -151,8 +152,8 @@ public class DetailPageActivity extends AppCompatActivity {
                 setSpinnerSelection(spinnerVehicleType, model.raw.getVehicleType());
 
                 // Public transport
-                //setSpinnerSelection(spinnerTransportType, model.raw.getTransportType());
-                inputTimeSpent.setText(String.valueOf(model.raw.getCyclingTime()));
+                setSpinnerSelection(spinnerTransportType, model.raw.getTransportType());
+                inputTimeSpent.setText(String.valueOf(model.raw.getPubtransportTime()));
 
                 // Cycling or walking
                 inputDistanceWalking.setText(String.valueOf(model.raw.getCyclingTime()));
@@ -346,12 +347,12 @@ public class DetailPageActivity extends AppCompatActivity {
         String purchaseType;
         double BillAmount;
         String BillType;
-        double walkingCyclingDistance;
+        double pubtransTime;
 
         vehicleType = spinnerVehicleType.getSelectedItem().toString();
         distanceDriven = parseDouble(inputDistanceDriving);
-        cyclingTime = parseDouble(inputTimeSpent);
-        walkingCyclingDistance = parseDouble(inputDistanceWalking);
+        cyclingTime = parseDouble(inputDistanceWalking);
+        pubtransTime = parseDouble(inputTimeSpent);
         try {
             numFlights = Integer.parseInt(inputNumFlights.getText().toString());
         }
@@ -393,6 +394,7 @@ public class DetailPageActivity extends AppCompatActivity {
         EcoTrackerCalculations calculator = new EcoTrackerCalculations(vehicleType,
                 distanceDriven,
                 transportType,
+                pubtransTime,
                 cyclingTime,
                 numFlights,
                 flightType,
@@ -411,7 +413,7 @@ public class DetailPageActivity extends AppCompatActivity {
 
         // recreate RawInputs and CalculatedEmissions objects
         UserEmissionData.RawInputs rawInputs = new UserEmissionData.RawInputs(
-                distanceDriven, vehicleType, transportType, cyclingTime, numFlights, flightType, mealType, numServings,
+                distanceDriven, vehicleType, transportType, pubtransTime, cyclingTime, numFlights, flightType, mealType, numServings,
                 numClothes, deviceType, numDevices, purchaseType, numPurchases, BillAmount, BillType);
 
         UserEmissionData.CalculatedEmissions calculatedEmissions = new UserEmissionData.CalculatedEmissions(
@@ -442,6 +444,7 @@ public class DetailPageActivity extends AppCompatActivity {
         SpinnerAdapter adapter = spinner.getAdapter();
         if (adapter != null) {
             for (int i = 0; i < adapter.getCount(); i++) {
+                Log.e("shit" + i, adapter.getItem(i).toString());
                 if (value.equals(adapter.getItem(i).toString())) {
                     spinner.setSelection(i);
                     return;

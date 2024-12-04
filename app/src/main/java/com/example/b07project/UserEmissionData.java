@@ -56,6 +56,7 @@ public class UserEmissionData {
         private double distanceDriven;
         private String vehicleType;
         private String transportType;
+        private double pubtransportTime;
         private double cyclingTime;
         private int numFlights;
         private String flightType;
@@ -97,13 +98,14 @@ public class UserEmissionData {
          * @param billAmount the amount of the bill
          * @param billType the type of the bill
          */
-        public RawInputs(double distanceDriven, String vehicleType, String transportType,
+        public RawInputs(double distanceDriven, String vehicleType, String transportType, double pubtransportTime,
                          double cyclingTime, int numFlights, String flightType, String mealType,
                          int numServings, int numClothes, String deviceType, int numDevices,
                          String purchaseType, int numOtherPurchases, double billAmount, String billType) {
             this.distanceDriven = distanceDriven;
             this.vehicleType = vehicleType;
             this.transportType = transportType;
+            this.pubtransportTime = pubtransportTime;
             this.cyclingTime = cyclingTime;
             this.numFlights = numFlights;
             this.flightType = flightType;
@@ -164,8 +166,12 @@ public class UserEmissionData {
          *
          * @return the cycling time
          */
+        public double getPubtransportTime() {
+            return this.pubtransportTime;
+        }
         public double getCyclingTime() { return cyclingTime; }
 
+        public void setPubtransportTime(double pubtransportTime) { this.pubtransportTime = pubtransportTime; }
         /**
          * setCyclingTime method sets the cycling time.
          *
