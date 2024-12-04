@@ -1,10 +1,10 @@
 package com.example.b07project;
 
 // Import required packages
-import static java.lang.Double.parseDouble;
-
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -12,26 +12,37 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.Calendar;
-import java.util.HashMap;
+
+/**
+ * DetailPageActivity is responsible for managing and displaying a detailed page where the user
+ * can input and view their data for the activities - transportation, food consumption, shopping,
+ * and energy bills. The user can modify the data through input fields, checkboxes, and spinners,
+ * and the app calculates the CO2 emissions for each activity based on the entered information.
+ *
+ * The activity also allows the user to edit the information and save it to Firebase. After the
+ * the user clicks Save, the information is used to recalculate emissions and is updated on Firebase.
+ * The input fields and checkboxes are dynamically shown or hidden based on user selection.
+ *
+ * Once the data is saved, the app transitions back to the EcoTracker Home Screen.
+ *
+ * @see DatabaseCommunicator
+ * @see EcoTrackerCalculations
+ * @see UserEmissionData
+ * @see FirebaseDatabase
+ */
 
 public class DetailPageActivity extends AppCompatActivity {
 
-    //main functionalities:
-    //inflates the activity_detail_page
-    //display all of the current information from database to the textviews and spinners
+    // date and userID
+    private String selectedDay;
 
-
-    // General UI elements
     private TextView titleTextView, inputDate;
     private Button buttonSave, buttonEdit;
 
@@ -61,11 +72,20 @@ public class DetailPageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        // get the selected date
+        Intent intent = getIntent();
+        selectedDay = intent.getStringExtra("selectedDate");
+
         setContentView(R.layout.activity_detail_page);
 
         // Initialize UI components
         initializeUIComponents();
+
+
+        inputDate.setText(selectedDay);
 
         // Set up spinners
         setupSpinner(spinnerVehicleType, R.array.vehicle_types);
@@ -100,15 +120,69 @@ public class DetailPageActivity extends AppCompatActivity {
 
         // Save button logic
         buttonSave.setOnClickListener(v -> {
-            // Save data to Firebase
-            //saveDataToFirebase(); //not sure how to implement this with firebase
+            //Save data to Firebase
+            saveDataToFirebase();
+
+            // Start the EcoTrackerHomeActivity
+            Intent homeIntent = new Intent(this, EcoTrackerHomeActivity.class);
+            startActivity(homeIntent);
 
             // Disable editing and toggle buttons
             enableEditing(false);
             buttonSave.setVisibility(View.GONE);
             buttonEdit.setVisibility(View.VISIBLE);
         });
+        //once database communicator gets all the required data
 
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        DatabaseCommunicator model = new DatabaseCommunicator(database);
+        model.setWaiter(new DatabaseCommunicator.Waiter() {
+            @Override
+            public void onObjectReady() {
+                // get the raw inputs from the firebase
+                // Input all of the frontend updates that have to happen here
+
+                System.out.println("hello");
+                System.out.println(model.raw.getDistanceDriven());
+
+
+                // Set spinner
+                // Input the vehicle type from database to spinner
+                inputDistanceDriving.setText(String.valueOf(model.raw.getDistanceDriven()));
+                setSpinnerSelection(spinnerVehicleType, model.raw.getVehicleType());
+
+                // Public transport
+                setSpinnerSelection(spinnerTransportType, model.raw.getTransportType());
+                inputTimeSpent.setText(String.valueOf(model.raw.getPubtransportTime()));
+
+                // Cycling or walking
+                inputDistanceWalking.setText(String.valueOf(model.raw.getCyclingTime()));
+
+                // Flight
+                inputNumFlights.setText(String.valueOf(model.raw.getNumFlights()));
+                setSpinnerSelection(spinnerFlightType, model.raw.getFlightType());
+
+                // Meal
+                setSpinnerSelection(spinnerMealType, model.raw.getMealType());
+                inputServings.setText(String.valueOf(model.raw.getNumServings()));
+
+                // Buy new clothes
+                inputNumClothes.setText(String.valueOf(model.raw.getNumClothes()));
+
+                // Devices
+                setSpinnerSelection(spinnerDeviceType, model.raw.getDeviceType());
+                inputNumDevices.setText(String.valueOf(model.raw.getNumDevices()));
+
+                // Other purchases
+                setSpinnerSelection(spinnerPurchaseType, model.raw.getPurchaseType());
+                inputNumOtherPurchases.setText(String.valueOf(model.raw.getNumOtherPurchases()));
+
+                // Energy bills
+                inputBillAmount.setText(String.valueOf(model.raw.getBillAmount()));
+                setSpinnerSelection(spinnerBillType, model.raw.getBillType());
+            }
+        });
+        model.serverRawInputReader(selectedDay);
     }
 
     private void initializeUIComponents() {
@@ -160,18 +234,18 @@ public class DetailPageActivity extends AppCompatActivity {
         spinnerBillType = findViewById(R.id.spinner_bill_type);
     }
 
-    // Sets up a spinner with the provided array resource
+    // Helper method to setup a spinner with values from a string array resource
     private void setupSpinner(Spinner spinner, int arrayResId) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
                 arrayResId,
-                android.R.layout.simple_spinner_dropdown_item
+                R.layout.spinner2
         );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.spinner2);
         spinner.setAdapter(adapter);
     }
 
-    // Sets up a checkbox to toggle the visibility of its associated layout
+    // Helper method to set up a checkbox to toggle the visibility of its associated layout
     private void setupCheckbox(CheckBox checkbox, LinearLayout layout) {
         checkbox.setOnCheckedChangeListener((buttonView, isChecked) ->
                 layout.setVisibility(isChecked ? View.VISIBLE : View.GONE)
@@ -179,7 +253,7 @@ public class DetailPageActivity extends AppCompatActivity {
         layout.setVisibility(checkbox.isChecked() ? View.VISIBLE : View.GONE);
     }
 
-    // Enable or disable editing for all input fields and spinners
+    // Helper method to enable or disable editing mode on UI components
     private void enableEditing(boolean isEnabled) {
         inputDate.setEnabled(isEnabled);
         inputDistanceDriving.setEnabled(isEnabled);
@@ -201,7 +275,6 @@ public class DetailPageActivity extends AppCompatActivity {
         spinnerBillType.setEnabled(isEnabled);
     }
 
-    //judy will change this to just reflect the user's selected date
     private void showDatePickerDialog() {
         // Get the current date
         final Calendar calendar = Calendar.getInstance();
@@ -225,71 +298,6 @@ public class DetailPageActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-
-    //copy pasted from logactivitiesactivity: emission calculations - will refactor later on
-    private double calculateVehicleEmission() {
-        double emission;
-        /*
-        if ("Gasoline".equals(vehicleType)) {
-            emission = 0.24 * distanceDriven;
-        } else if ("Diesel".equals(vehicleType)) {
-            emission = 0.27 * distanceDriven;
-        } else if ("Electric".equals(vehicleType)) {
-            emission = 0.05 * distanceDriven;
-        } else if ("Hybrid".equals(vehicleType)) {
-            emission = 0.16 * distanceDriven;
-        } else {
-            emission = 0.0;
-        }
-        */
-        return 0;
-    }
-
-    private double calculatePublicTransportEmission() {
-
-        double emission = 0.0;
-
-        return emission;
-    }
-
-    private double calculateCyclingEmission() {
-        double emission = 0.0;
-        return emission;
-    }
-
-    private double calculateFlightEmission() {
-        double emission = 0.0;
-
-        return emission;
-    }
-
-    private double calculateMealEmission() {
-        double emission = 0.0;
-
-
-        return emission;
-    }
-
-    private double calculateClothesEmission(){
-        double emission = 0.0;
-
-        return emission;
-    }
-
-    private double calculateElectronicsEmission() {
-        double emission = 0.0;
-
-
-        return emission;
-    }
-
-    private double calculateOtherPurchasesEmission() {
-        double emission = 0.0;
-
-        return emission;
-    }
-
-
     private double parseDouble(EditText editText) {
         String text = editText.getText().toString();
         try {
@@ -297,49 +305,6 @@ public class DetailPageActivity extends AppCompatActivity {
         } catch (NumberFormatException e) {
             return 0.0;
         }
-    }
-    double totalTranspo = 0.0;
-    double totalFood = 0.0;
-    double totalShopping = 0.0;
-
-    private void calculateTransportationEmissions() {
-
-        if (isInputVisible(vehicleDetailsLayout)) {
-            totalTranspo += calculateVehicleEmission();
-        }
-
-        if (isInputVisible(publicTransportLayout)) {
-            totalTranspo += calculatePublicTransportEmission();
-        }
-
-        if (isInputVisible(cyclingWalkingLayout)) {
-            totalTranspo += calculateCyclingEmission();
-        }
-
-        if (isInputVisible(flightLayout)) {
-            totalTranspo += calculateFlightEmission();
-        }
-    }
-
-    private void calculateFoodEmissions() {
-        if (isInputVisible(mealLayout)) {
-            totalFood += calculateMealEmission();
-        }
-    }
-
-    private void calculateShoppingEmissions() {
-        if (isInputVisible(clothesLayout)) {
-            totalShopping += calculateClothesEmission();
-        }
-
-        if (isInputVisible(electronicsLayout)) {
-            totalShopping += calculateElectronicsEmission();
-        }
-
-        if (isInputVisible(otherPurchasesLayout)) {
-            totalShopping += calculateOtherPurchasesEmission();
-        }
-
     }
 
     private boolean isInputVisible(View layout) {
@@ -350,40 +315,105 @@ public class DetailPageActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    //when user clicks save --> calculate the emissions (similar to how LogActivitiesActivity does it)
-    //after the user edits whatever they want to edit
-    //update the rawinput and the calculatedemissions of the user
-    //call the UserEmissionData --> pass the new rawinput and pass the new calculated emissions
-    //update the firebase database
-
+    /**
+     * saveDataToFirebase collects all the user inputs from the various UI elements (e.g., spinners, text fields)
+     * and uses them to create a new `UserEmissionData` object. The data is then saved to Firebase under
+     * a specified date. The method also performs necessary data parsing and exception handling when converting
+     * user input (e.g., integers, doubles) and calculates the environmental impact based on the input.
+     *
+     * The following categories are processed: transportation, food, shopping, and energy bills. Each category's
+     * emissions are calculated using the `EcoTrackerCalculations` class, and the total emissions are stored
+     * in the `UserEmissionData.CalculatedEmissions` object.
+     *
+     * @see EcoTrackerCalculations
+     * @see UserEmissionData
+     * @see DatabaseCommunicator
+     * @see FirebaseDatabase
+     */
     private void saveDataToFirebase() {
+        // variables to hold user input data
+        String vehicleType;
+        double distanceDriven;
+        String transportType;
+        double cyclingTime;
+        int numFlights;
+        String flightType;
+        String mealType;
+        int numServings;
+        int numClothes;
+        int numDevices;
+        int numPurchases;
+        String deviceType;
+        String purchaseType;
+        double BillAmount;
+        String BillType;
+        double pubtransTime;
 
-        String vehicleType = spinnerVehicleType.getSelectedItem().toString();
-        double distanceDriven = parseDouble(inputDistanceDriving);
-        double cyclingTime = parseDouble(inputTimeSpent);
-        double walkingCyclingDistance = parseDouble(inputDistanceWalking);
-        int numFlights = Integer.parseInt(inputNumFlights.getText().toString());
-        int numServings = Integer.parseInt(inputServings.getText().toString());
-        int numClothes = Integer.parseInt(inputNumClothes.getText().toString());
-        int numDevices = Integer.parseInt(inputNumDevices.getText().toString());
-        int numPurchases = Integer.parseInt(inputNumOtherPurchases.getText().toString());
-        double BillAmount = parseDouble(inputBillAmount);
-        String flightType = spinnerFlightType.getSelectedItem().toString();
-        String transportType = spinnerTransportType.getSelectedItem().toString();
-        String mealType = spinnerMealType.getSelectedItem().toString();
-        String deviceType = spinnerDeviceType.getSelectedItem().toString();
-        String purchaseType = spinnerPurchaseType.getSelectedItem().toString();
-        String BillType = spinnerBillType.getSelectedItem().toString();
+        vehicleType = spinnerVehicleType.getSelectedItem().toString();
+        distanceDriven = parseDouble(inputDistanceDriving);
+        cyclingTime = parseDouble(inputDistanceWalking);
+        pubtransTime = parseDouble(inputTimeSpent);
+        try {
+            numFlights = Integer.parseInt(inputNumFlights.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numFlights = 0;
+        }
+        try {
+            numServings = Integer.parseInt(inputServings.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numServings = 0;
+        }
+        try {
+            numClothes = Integer.parseInt(inputNumClothes.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numClothes = 0;
+        }
+        try {
+            numDevices = Integer.parseInt(inputNumDevices.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numDevices = 0;
+        }
+        try {
+            numPurchases = Integer.parseInt(inputNumOtherPurchases.getText().toString());
+        }
+        catch (NumberFormatException e) {
+            numPurchases = 0;
+        }
+        BillAmount = parseDouble(inputBillAmount);
+        flightType = spinnerFlightType.getSelectedItem().toString();
+        transportType = spinnerTransportType.getSelectedItem().toString();
+        mealType = spinnerMealType.getSelectedItem().toString();
+        deviceType = spinnerDeviceType.getSelectedItem().toString();
+        purchaseType = spinnerPurchaseType.getSelectedItem().toString();
+        BillType = spinnerBillType.getSelectedItem().toString();
 
+        EcoTrackerCalculations calculator = new EcoTrackerCalculations(vehicleType,
+                distanceDriven,
+                transportType,
+                pubtransTime,
+                cyclingTime,
+                numFlights,
+                flightType,
+                mealType,
+                numServings,
+                numClothes,
+                numDevices,
+                numPurchases,
+                deviceType,
+                purchaseType);
         // these methods currently belong in LogActivitiesActivity
         // for now, just duplicate the calculations that will occur
-        //double totalTranspo = calculateTransportationEmissions(vehicleType, distanceDriven, transportType, cyclingTime, numFlights, flightType);
-       // double totalFood = calculateFoodEmissions(mealType, numServings);
-       // double totalShopping = calculateShoppingEmissions(numClothes, numDevices, numPurchases, deviceType, purchaseType);
+        double totalTranspo = calculator.calculateTransportationEmissions();
+        double totalFood = calculator.calculateFoodEmissions();
+        double totalShopping = calculator.calculateShoppingEmissions();
 
         // recreate RawInputs and CalculatedEmissions objects
         UserEmissionData.RawInputs rawInputs = new UserEmissionData.RawInputs(
-                distanceDriven, vehicleType, transportType, cyclingTime, numFlights, flightType, mealType, numServings,
+                distanceDriven, vehicleType, transportType, pubtransTime, cyclingTime, numFlights, flightType, mealType, numServings,
                 numClothes, deviceType, numDevices, purchaseType, numPurchases, BillAmount, BillType);
 
         UserEmissionData.CalculatedEmissions calculatedEmissions = new UserEmissionData.CalculatedEmissions(
@@ -391,15 +421,37 @@ public class DetailPageActivity extends AppCompatActivity {
 
         UserEmissionData userEmissionData = new UserEmissionData(rawInputs, calculatedEmissions);
 
-        // will review and fix
-        FirebaseAuth mauth = FirebaseAuth.getInstance();
-        String userId = mauth.getUid();
-        long selectedDate = System.currentTimeMillis();
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        DatabaseCommunicator databaseCommunicator = new DatabaseCommunicator(database);
-        //databaseCommunicator.saveUserEmissionData(userId, selectedDate, user);
+        DatabaseCommunicator presenter = new DatabaseCommunicator(database);
 
+        // get the selected date
+        Intent intent = getIntent();
+        selectedDay = intent.getStringExtra("selectedDate");
+
+        presenter.saveUserEmissionData(selectedDay, userEmissionData, DetailPageActivity.this);
     }
+
+    /**
+     * setSpinnerSelection - sets the selected value in a `Spinner` based on the provided value. It searches through
+     * the spinner's adapter to find the needed item and sets it as the selected item. If a matching
+     * value is found, it updates the spinner's selection accordingly.
+     *
+     * @param spinner The `Spinner` whose selection will be updated.
+     * @param value The value to set as the selected item in the spinner.
+     */
+    private void setSpinnerSelection(Spinner spinner, String value) {
+        SpinnerAdapter adapter = spinner.getAdapter();
+        if (adapter != null) {
+            for (int i = 0; i < adapter.getCount(); i++) {
+                Log.e("shit" + i, adapter.getItem(i).toString());
+                if (value.equals(adapter.getItem(i).toString())) {
+                    spinner.setSelection(i);
+                    return;
+                }
+            }
+        }
+    }
+
 
 }

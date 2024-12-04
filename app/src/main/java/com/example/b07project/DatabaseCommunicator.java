@@ -3,38 +3,587 @@ package com.example.b07project;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.google.firebase.database.DatabaseReference;
+import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 
+/**
+ * DatabaseCommunicator class is concerned with communicating with the firebase
+ *
+ */
 public class DatabaseCommunicator {
 
-    private DatabaseReference database;
-    private Context context;
+    final DatabaseReference database;
+    public Context context;
+    String data;
+    UserEmissionData.RawInputs raw;
+    UserEmissionData.CalculatedEmissions calc;
+    int rawiter;
+    int calciter;
 
-    public DatabaseCommunicator(DatabaseReference databaseReference) {
-        this.database = databaseReference;
+    Waiter waiter;
+
+    /**
+     * Waiter interface is used to indicate when an operation has finished.
+     *
+     */
+    public interface Waiter {
+        // This is the event that we fire when operation has been completed
+        void onObjectReady();
+    }
+
+    /**
+     * A constructor for DatabaseCommunicator.
+     *
+     * @param db the firebase reference
+     */
+    public DatabaseCommunicator(DatabaseReference db) {
+        this.database = db;
+        data = "";
+        this.rawiter = 0;
+        this.calciter = 0;
+    }
+
+    /**
+     * setWaiter method sets the waiter.
+     *
+     * @param waiter waiter to be set to.
+     */
+    public void setWaiter(Waiter waiter) {
+        this.waiter = waiter;
+    }
+
+    /**
+     * serverCalcEmissionReader method reads the total calculated emissions from the firebase.
+     *
+     * @param selectedDay the date selected
+     */
+    public void serverCalcEmissionReader(String selectedDay) {
+        this.calc = new UserEmissionData.CalculatedEmissions();
+        DatabaseReference userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("calculatedEmissions")
+                .child("totalTranspo");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    calc.setTotalEmission(Double.parseDouble(String.valueOf(task.getResult().getValue())));
+                    if (calciter >= 4) {
+                        waiter.onObjectReady();
+                    }
+                    calciter++;
+                    // This is where you should put how View should handle the data.
+
+
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("calculatedEmissions")
+                .child("totalFood");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    calc.setTotalFood(Double.parseDouble(String.valueOf(task.getResult().getValue())));
+                    if (calciter >= 4) {
+                        waiter.onObjectReady();
+                    }
+                    calciter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("calculatedEmissions")
+                .child("totalShopping");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    calc.setTotalShopping(Double.parseDouble(String.valueOf(task.getResult().getValue())));
+                    if (calciter >= 4) {
+                        waiter.onObjectReady();
+                    }
+                    calciter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("calculatedEmissions")
+                .child("totalEmission");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    calc.setTotalEmission(Double.parseDouble(String.valueOf(task.getResult().getValue())));
+                    if (calciter >= 4) {
+                        waiter.onObjectReady();
+                    }
+                    calciter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+    }
+
+    /**
+     * serverRawInputReader method reads the raw inputs from the firebase for a particular day.
+     *
+     * @param selectedDay the date selected
+     */
+    public void serverRawInputReader(String selectedDay) {
+        this.raw = new UserEmissionData.RawInputs();
+        DatabaseReference userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("distanceDriven");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task.getResult().getValue() == null) {
+                        System.out.println("task returns null");
+                    }
+                    try {
+                        raw.setDistanceDriven(Double.parseDouble(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setDistanceDriven(2);
+                    }
+
+
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("vehicleType");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    raw.setVehicleType(String.valueOf(task.getResult().getValue()));
+                    if (raw.getVehicleType() != null) {
+                        System.out.println("able to grab vehicle type");
+                        System.out.println(raw.getVehicleType());
+                    }
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    System.out.println("not able to grab vehicle type");
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("transportType");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    raw.setTransportType(String.valueOf(task.getResult().getValue()));
+                    if (rawiter >= 14) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("pubtransTime");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    try {
+                        raw.setPubtransportTime(Double.parseDouble(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setPubtransportTime(0);
+                    }
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+
+
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("cyclingTime");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    try {
+                        raw.setCyclingTime(Double.parseDouble(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setCyclingTime(0);
+                    }
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("numFlights");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    try {
+                        raw.setNumFlights(Integer.parseInt(String.valueOf(task.getResult().getValue())));
+                    }
+                    catch (NumberFormatException e) {
+                        raw.setNumFlights(0);
+                    }
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("flightType");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    raw.setFlightType(String.valueOf(task.getResult().getValue()));
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("mealType");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    raw.setMealType(String.valueOf(task.getResult().getValue()));
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("numServings");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    try {
+                        raw.setNumServings(Integer.parseInt(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setNumServings(0);
+                    }
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("numClothes");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    try {
+                        raw.setNumClothes(Integer.parseInt(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setNumClothes(0);
+                    }
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("deviceType");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    raw.setDeviceType(String.valueOf(task.getResult().getValue()));
+                    if (rawiter>= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("numDevices");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    try {
+                        raw.setNumDevices(Integer.parseInt(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setNumDevices(0);
+                    }
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("purchaseType");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    raw.setPurchaseType(String.valueOf(task.getResult().getValue()));
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("numOtherPurchases");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    try {
+                        raw.setNumOtherPurchases(Integer.parseInt(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setNumOtherPurchases(0);
+                    }
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("billAmount");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    try {
+                        raw.setBillAmount(Double.parseDouble(String.valueOf(task.getResult().getValue())));
+                    } catch (NumberFormatException e) {
+                        raw.setBillAmount(0);
+                    }
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+        userRef = database.child("users")
+                .child(EcoTrackerHomeActivity.userId)
+                .child("ecotracker")
+                .child(String.valueOf(selectedDay))
+                .child("rawInputs")
+                .child("billType");
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    raw.setBillType(String.valueOf(task.getResult().getValue()));
+                    if (rawiter >= 15) {
+                        waiter.onObjectReady();
+                    }
+                    rawiter++;
+                    // This is where you should put how View should handle the data.
+                }
+                else {
+                    throw new RuntimeException("Database read error");
+                }
+            }
+        });
+
     }
 
     /**
      * Method to save user emission data (raw inputs & calculated emissions)
      * Data is stored under the user ID and date
-     * @param userId the id of the user
-     * @param selectedDate the selected date
+     * @param selectedDay the selected date
      * @param data the emission data (raw inputs & calculated emissions)
      */
-    public void saveUserEmissionData(String userId, long selectedDate, UserEmissionData data) {
+    public void saveUserEmissionData(String selectedDay, UserEmissionData data, Context con) {
 
-        DatabaseReference userRef = database.child("users").child(userId);
+        DatabaseReference userRef = database.child("users").child(EcoTrackerHomeActivity.userId);
 
-        DatabaseReference dateRef = userRef.child("ecotracker").child(String.valueOf(selectedDate));
+        DatabaseReference dateRef = userRef.child("ecotracker").child(String.valueOf(selectedDay));
 
         //rawInputs map
         DatabaseReference rawInputsRef = dateRef.child("rawInputs");
         rawInputsRef.child("distanceDriven").setValue(data.getRawInputs().getDistanceDriven());
         rawInputsRef.child("vehicleType").setValue(data.getRawInputs().getVehicleType());
         rawInputsRef.child("transportType").setValue(data.getRawInputs().getTransportType());
+        rawInputsRef.child("pubtransTime").setValue(data.getRawInputs().getPubtransportTime());
         rawInputsRef.child("cyclingTime").setValue(data.getRawInputs().getCyclingTime());
         rawInputsRef.child("numFlights").setValue(data.getRawInputs().getNumFlights());
         rawInputsRef.child("flightType").setValue(data.getRawInputs().getFlightType());
@@ -61,26 +610,25 @@ public class DatabaseCommunicator {
         dateRef.child("createdAt").setValue(System.currentTimeMillis())
                 .addOnSuccessListener(aVoid -> {
                     Log.d("Firebase", "User emission data saved successfully!");
-                    Toast.makeText(context, "Data saved successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(con.getApplicationContext(), "Data saved successfully!", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firebase", "Error saving data: " + e.getMessage());
-                    Toast.makeText(context, "Error saving data.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(con.getApplicationContext(), "Error saving data.", Toast.LENGTH_SHORT).show();
                 });
     }
 
     /**
      * Method to update the emission data (both raw inputs and recalculated emissions) - used later in editing
      * for a specific user and selected date.
-     * @param userId The ID of the user
-     * @param selectedDate The date for which the data is to be updated
+     * @param selectedDay The date for which the data is to be updated
      * @param data The updated emission data
      */
-    public void updateEmissionData(String userId, long selectedDate, UserEmissionData data) {
+    public void updateEmissionData(String selectedDay, UserEmissionData data) {
 
-        DatabaseReference userRef = database.child("users").child(userId);
+        DatabaseReference userRef = database.child("users").child(EcoTrackerHomeActivity.userId);
 
-        DatabaseReference dateRef = userRef.child("emissions").child(String.valueOf(selectedDate));
+        DatabaseReference dateRef = userRef.child("emissions").child(String.valueOf(selectedDay));
 
         UserEmissionData.CalculatedEmissions newCalculatedEmissions = recalculateEmissions(data.getRawInputs());
 
@@ -110,9 +658,9 @@ public class DatabaseCommunicator {
 
         dateRef.setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onComplete(Task<Void> task) {
+            public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.d("Firebase", "User emission data updated successfully for user: " + userId + " on date: " + selectedDate);
+                    Log.d("Firebase", "User emission data updated successfully for user: " + EcoTrackerHomeActivity.userId + " on date: " + selectedDay);
                 } else {
                     Log.e("Firebase", "Failed to update data", task.getException());
                 }
@@ -120,6 +668,12 @@ public class DatabaseCommunicator {
         });
     }
 
+    /**
+     * recalculateEmissions recalculates the user's emissions using the raw inputs.
+     *
+     * @param rawInputs the user's raw inputs
+     * @return the calculated emissions as a CalculatedEmissions
+     */
     private UserEmissionData.CalculatedEmissions recalculateEmissions(UserEmissionData.RawInputs rawInputs) {
         double distance = rawInputs.getDistanceDriven();
         String transportType = rawInputs.getVehicleType();

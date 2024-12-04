@@ -1,156 +1,249 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D8DBE2"
-    android:padding="16dp">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ecotracker"
+    android:background="@color/entry_page_background">
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scrollgauge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#00D8DBE2"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/title_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:paddingBottom="16dp"
-            android:text="Eco Tracker"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <CalendarView
-            android:id="@+id/calendar_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:filterTouchesWhenObscured="true"
-            android:showWeekNumber="false"
-            android:touchscreenBlocksFocus="false" />
-
-        <TextView
-            android:id="@+id/summary_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Today's Emissions Summary"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+        android:background="#D8DBE2"
+        android:padding="16dp"
+        android:backgroundTint="@color/entry_page_background"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:orientation="horizontal"
-            android:padding="8dp">
+            android:backgroundTint="#00D8DBE2"
+            android:orientation="vertical"
+            android:paddingBottom="90dp">
 
+            <!--Planetze Logo-->
             <ImageView
-                android:id="@+id/transport_image"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/train" />
+                android:id="@+id/imageView"
+                android:layout_width="300dp"
+                android:layout_height="93dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/trans_planetze_logo"
+                android:layout_gravity="center"/>
+
+            <!--Let's calculate your annual carbon footprint!-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/garet"
+                android:gravity="center"
+                android:text="Eco Tracker"
+                android:textSize="24sp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp">
+
+                <CalendarView
+                    android:id="@+id/calendar_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:filterTouchesWhenObscured="true"
+                    android:showWeekNumber="false"
+                    android:touchscreenBlocksFocus="false" />
+
+            </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/transport_emissions"
-                android:layout_width="0dp"
+                android:id="@+id/summary_title"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="Transportation: Not logged yet"
-                android:textSize="16sp" />
-        </LinearLayout>
+                android:fontFamily="@font/garet"
+                android:gravity="center"
+                android:text="Today's Emissions Summary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <ImageView
-                android:id="@+id/food_image"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/food" />
-
-            <TextView
-                android:id="@+id/food_emissions"
-                android:layout_width="0dp"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="Food: Not logged yet"
-                android:textSize="16sp" />
-        </LinearLayout>
+                android:backgroundTint="@android:color/white"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
-            android:padding="8dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
-            <ImageView
-                android:id="@+id/shopping_image"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/shop" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal"
+                        android:padding="8dp">
 
-            <TextView
-                android:id="@+id/shopping_emissions"
-                android:layout_width="0dp"
+                        <ImageView
+                            android:id="@+id/transport_image"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/train" />
+
+                        <TextView
+                            android:id="@+id/transport_emissions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/garet"
+                            android:paddingLeft="10dp"
+                            android:layout_toEndOf="@id/transport_image"
+                            android:layout_centerVertical="true"
+                            android:text="Transportation: Not logged yet"
+                            android:textSize="16sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal"
+                        android:padding="8dp">
+
+                        <ImageView
+                            android:id="@+id/food_image"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/food" />
+
+                        <TextView
+                            android:id="@+id/food_emissions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:fontFamily="@font/garet"
+                            android:paddingLeft="10dp"
+                            android:layout_toEndOf="@id/food_image"
+                            android:layout_centerVertical="true"
+                            android:text="Food: Not logged yet"
+                            android:textSize="16sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:orientation="horizontal"
+                        android:padding="8dp">
+
+                        <ImageView
+                            android:id="@+id/shopping_image"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/shop" />
+
+                        <TextView
+                            android:id="@+id/shopping_emissions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"
+                            android:layout_toEndOf="@id/shopping_image"
+                            android:layout_centerVertical="true"
+                            android:fontFamily="@font/garet"
+                            android:text="Shopping: Not logged yet"
+                            android:textSize="16sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:orientation="horizontal"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:padding="8dp"
+                        android:baselineAligned="true">
+
+                        <ImageView
+                            android:id="@+id/energy_bills_image"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/energy" />
+
+                        <TextView
+                            android:id="@+id/energy_bills"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/garet"
+                            android:paddingLeft="10dp"
+                            android:layout_toEndOf="@id/energy_bills_image"
+                            android:layout_centerVertical="true"
+                            android:baselineAligned="true"
+                            android:text="Energy bills: Not logged yet"
+                            android:textSize="16sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/log_activity_button"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="Shopping: Not logged yet"
-                android:textSize="16sp" />
-        </LinearLayout>
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/teal_700"
+                android:text="Log Activities"
+                android:textColor="@color/white"
+                android:fontFamily="@font/garet"
+                android:background="@drawable/round_button"
+                android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <ImageView
-                android:id="@+id/energy_bills_image"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/energy" />
-
-            <TextView
-                android:id="@+id/energy_bills"
-                android:layout_width="0dp"
+            <Button
+                android:id="@+id/detail_activity_button"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="Energy bills: Not logged yet"
-                android:textSize="16sp" />
+                android:backgroundTint="@color/teal_700"
+                android:text="View Emissions Details"
+                android:textColor="@color/white"
+                android:fontFamily="@font/garet"
+                android:background="@drawable/round_button"
+                android:textStyle="bold" />
         </LinearLayout>
+    </ScrollView>
 
-        <Button
-            android:id="@+id/log_activity_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="#009999"
-            android:text="Log Activities"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/menu_color"
+        android:visibility="visible"
+        app:itemIconTint="@color/menu_text_color"
+        app:itemTextColor="@color/menu_text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/scrollgauge"
+        app:menu="@menu/option_menu"/>
 
-        <Button
-            android:id="@+id/detail_activity_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#009999"
-            android:text="View Emissions Details"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-    </LinearLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

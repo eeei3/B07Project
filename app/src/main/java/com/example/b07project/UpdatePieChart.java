@@ -1,31 +1,29 @@
 package com.example.b07project;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.util.Log;
 import android.widget.Toast;
-
+import java.util.Locale;
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
-
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * UpdatePieChart class containing methods relating to updating the pie chart in EcoGauge
+ */
 public class UpdatePieChart extends EcoGauge{
     public PieChart pieChart;
 
@@ -37,9 +35,6 @@ public class UpdatePieChart extends EcoGauge{
     public void updateChartForTimePeriod(String timePeriod) {
         if (timePeriod == null) return;
         switch (timePeriod) {
-            case "Daily":
-                updateForDaily();
-                break;
             case "Monthly":
                 updateForMonthly();
                 break;
@@ -56,8 +51,7 @@ public class UpdatePieChart extends EcoGauge{
      * Updates the chart for daily
      */
     public void updateForDaily() {
-        EcoGauge temp = new EcoGauge();
-        String userId = temp.initializeFirebaseUser();
+        String userId = EcoGauge.initializeFirebaseUser();
 
         // Firebase reference for daily emissions
         DatabaseReference dailyRef = FirebaseDatabase.getInstance()
@@ -145,9 +139,14 @@ public class UpdatePieChart extends EcoGauge{
 
         // Set custom entries for the legend
         ArrayList<LegendEntry> customLegendEntries = new ArrayList<>();
-        customLegendEntries.add(new LegendEntry("Transportation: " + totalTranspo + "  ", Legend.LegendForm.CIRCLE, 14f, 14f, null, Color.parseColor(transportationColorHex)));
-        customLegendEntries.add(new LegendEntry("Food: " + totalFood + "  ", Legend.LegendForm.CIRCLE, 14f, 14f, null, Color.parseColor(foodColorHex)));
-        customLegendEntries.add(new LegendEntry("Shopping: " + totalShopping + "  ", Legend.LegendForm.CIRCLE, 14f, 14f, null, Color.parseColor(shoppingColorHex)));
+
+        String roundedTransport = String.format(Locale.getDefault(), "%.2f", totalTranspo);
+        String roundedFood = String.format(Locale.getDefault(), "%.2f", totalFood);
+        String roundedShopping = String.format(Locale.getDefault(), "%.2f", totalShopping);
+
+        customLegendEntries.add(new LegendEntry("Transport: " + roundedTransport + "  ", Legend.LegendForm.CIRCLE, 14f, 14f, null, Color.parseColor(transportationColorHex)));
+        customLegendEntries.add(new LegendEntry("Food: " + roundedFood + "  ", Legend.LegendForm.CIRCLE, 14f, 14f, null, Color.parseColor(foodColorHex)));
+        customLegendEntries.add(new LegendEntry("Shopping: " + roundedShopping + "  ", Legend.LegendForm.CIRCLE, 14f, 14f, null, Color.parseColor(shoppingColorHex)));
 
         legend.setCustom(customLegendEntries); // Set the custom legend entries
 
@@ -161,8 +160,7 @@ public class UpdatePieChart extends EcoGauge{
      */
 
     public void updateForMonthly() {
-        EcoGauge temp = new EcoGauge();
-        String userId = temp.initializeFirebaseUser();
+        String userId = EcoGauge.initializeFirebaseUser();
 
         // Firebase reference for emissions over the last 30 days
         DatabaseReference emissionsRef = FirebaseDatabase.getInstance()
@@ -238,8 +236,7 @@ public class UpdatePieChart extends EcoGauge{
      * Updates the chart for yearly
      */
     public void updateForYearly() {
-        EcoGauge temp = new EcoGauge();
-        String userId = temp.initializeFirebaseUser();
+        String userId = EcoGauge.initializeFirebaseUser();
 
         // Firebase reference for emissions over the last 365 days
         DatabaseReference emissionsRef = FirebaseDatabase.getInstance()

@@ -5,10 +5,11 @@ import java.util.ArrayList;
 
 /**
  * SuccessListener - Class representing the results of our asynchronous calls to Firebase auth
+ *
+ * @see AsyncComms
  */
 public class AsyncDBComms extends AsyncComms {
-    long value;
-    ArrayList<Object> values;
+    final ArrayList<Object> values;
     HashSet<Goal> usergoals;
     HashSet<Goal> listgoals;
 
@@ -17,17 +18,9 @@ public class AsyncDBComms extends AsyncComms {
      */
     public AsyncDBComms() {
         super();
-        this.usergoals = new HashSet<Goal>();
-        this.listgoals = new HashSet<Goal>();
+        this.usergoals = new HashSet<>();
+        this.listgoals = new HashSet<>();
         this.values = new ArrayList<>();
-    }
-
-    /**
-     * setValue - Modify the value field
-     * @param value - The new value of value
-     */
-    public void setValue(long value) {
-        this.value = value;
     }
 
     /**

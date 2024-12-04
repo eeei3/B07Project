@@ -54,11 +54,12 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
     implementation("com.google.firebase:firebase-analytics")
-    testImplementation("org.mockito:mockito-all:1.10.19")
     implementation ("androidx.cardview:cardview:1.0.0")
     implementation ("com.github.blackfizz:eazegraph:1.2.2")
     implementation ("com.nineoldandroids:library:2.4.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation ("androidx.profileinstaller:profileinstaller:1.3.0")
+    testImplementation("org.mockito:mockito-core:5.5.0")
+    testImplementation("org.mockito:mockito-inline:4.11.0")
 
 }

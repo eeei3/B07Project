@@ -10,32 +10,39 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.auth.AuthResult;
 
 
+/**
+ * RegisterUserFragment is responsible for binding and displaying the registration page.
+ *
+ */
 public class RegisterUserFragment extends Fragment {
-
     private FirebaseAuth mAuth;
     private EditText editTextName, editTextEmail, editTextPass, editTextConfirmPass;
-    private Button buttonRegisterUser;
-    private FirebaseDatabase db;
-    private DatabaseReference itemsRef;
     private static final String TAG = "Register User";
 
 
-    //initializes the registration screen
+    /**
+     * onCreateView creates the view.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate
+     *                           any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's
+     *                           UI should be attached to.  The fragment should not add the view itself,
+     *                           but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state as given here.
+     * @return                   the view.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,46 +55,37 @@ public class RegisterUserFragment extends Fragment {
         editTextEmail = view.findViewById(R.id.editTextEmail);
         editTextPass = view.findViewById(R.id.editTextPass);
         editTextConfirmPass = view.findViewById(R.id.editTextConfirmPass);
-        buttonRegisterUser = view.findViewById(R.id.buttonRegisterUser);
+        Button buttonRegisterUser = view.findViewById(R.id.buttonRegisterUser);
         ImageButton imageButtonBack = view.findViewById(R.id.backButtonSignUp);
 
-        imageButtonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), EntryActivity.class);
-                startActivity(intent);
-            }
+        imageButtonBack.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), EntryActivity.class);
+            startActivity(intent);
         });
 
         //click listener for register button
-        buttonRegisterUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                registerUser();
-            }
-        });
+        buttonRegisterUser.setOnClickListener(v -> registerUser());
         return view;
 
     }
 
-    //create a registerUser method
-    //create a user using mAuth
-    //put user in database
+
+    /**
+     * registerUser method attempts to register the user into the firebase.
+     *
+     */
     private void registerUser() {
-
-        //gets email and password from input fields
-
         String name = editTextName.getText().toString().trim();
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPass.getText().toString().trim();
         String confirmPass = editTextConfirmPass.getText().toString().trim();
 
-        //validate info (if fields are complete, if email is valid, if pass matches confirmpass, if user already exists)
+        //validate info (if fields are complete, if email is valid, if pass matches confirmPass, if user already exists)
         if (validateInfo(name, email, password, confirmPass)) {
 
             //create a user using mAuth
             mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
@@ -95,8 +93,10 @@ public class RegisterUserFragment extends Fragment {
                                 Log.d(TAG, "createUserWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 //update the user's name
-                                updateUserName(user, name); //update the username
-                                sendEmailVerification(user); //send email
+                                if (user != null) {
+                                    updateUserName(user, name); //update the username
+                                    sendEmailVerification(user); //send email
+                                }
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -105,22 +105,23 @@ public class RegisterUserFragment extends Fragment {
                                 updateUI(null);
                             }
                         }
-
                     });
-
         }
-
-        //add user to the firebase database
-
     }
 
+    /**
+     * updateUserName method updates the user name.
+     *
+     * @param user the firebase user
+     * @param name the name the user had typed
+     */
     private void updateUserName(FirebaseUser user, String name) {
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
                 .build();
 
         user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                .addOnCompleteListener(new OnCompleteListener<>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -133,12 +134,17 @@ public class RegisterUserFragment extends Fragment {
                 });
     }
 
+    /**
+     * updateID method updates the UI if the user is signed in or not signed in.
+     *
+     * @param user the firebase user
+     */
     private void updateUI(FirebaseUser user) {
         if (user != null) {
 
             Log.d(TAG, "User is signed in: " + user.getEmail());
 
-            startActivity(new Intent(getActivity(),SurveyActivity.class)); //not sure why "this" instead of getactivity() is not working
+            startActivity(new Intent(getActivity(),SurveyActivity.class));
 
         } else {
 
@@ -148,6 +154,15 @@ public class RegisterUserFragment extends Fragment {
     }
 
 
+    /**
+     * validateInfo method seeks to validate the information typed by the user.
+     *
+     * @param name the user's name
+     * @param email the user's email
+     * @param password the user's typed password
+     * @param confirmPass the user's typed confirmed password
+     * @return true if info typed is correct, false otherwise
+     */
     public boolean validateInfo(String name, String email, String password, String confirmPass) {
 
         String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
@@ -169,29 +184,17 @@ public class RegisterUserFragment extends Fragment {
             Toast.makeText(getContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
             return false;
         }
-
-        //implement method similar to deleteItemByTitle --> run through the data in firebase
-
-//        boolean userExists = false;
-//        //if user already exists by signing them in
-//        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(task -> { //bc firebase operations are asynchronous (running on a different thread)
-//                    if (task.isSuccessful()) { //if they are able to sign in
-//                        Toast.makeText(getContext(), "User is already registered, please log in", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Toast.makeText(getContext(), "Registration Complete", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//                userExists = true;
-//        //if all info is valid and user does not exist, return true
-
         return true;
     }
 
+    /**
+     * sendEmailVerification method sends an email verification to the user.
+     *
+     * @param user the firebase user
+     */
     private void sendEmailVerification(FirebaseUser user) {
-
         user.sendEmailVerification()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                .addOnCompleteListener(new OnCompleteListener<>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {

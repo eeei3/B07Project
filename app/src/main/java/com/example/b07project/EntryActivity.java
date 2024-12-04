@@ -1,19 +1,11 @@
 package com.example.b07project;
 
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.core.content.ContextCompat;
-import android.graphics.PorterDuff;
-import android.widget.Toolbar;
-
-import com.example.b07project.databinding.ActivityEntryPageBinding;
 
 
 /**
@@ -48,28 +40,6 @@ public class EntryActivity extends AppCompatActivity {
                 loadFragment(new RegisterUserFragment());            }
         });
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.option_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.ecogauge) {
-            // Handle ecogauge action
-            return true;
-        } else if (id == R.id.ecotracker) {
-            // Handle ecotracker action
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
 
     /**
      * loadFragment - Method for handling the loading of a fragment

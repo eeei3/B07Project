@@ -1,27 +1,24 @@
 package com.example.b07project;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
-
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import org.eazegraph.lib.charts.ValueLineChart;
-import org.eazegraph.lib.models.ValueLineSeries;
 
 /**
  * Activity to display EcoGauge metrics, including emissions data via PieChart and LineChart.
@@ -36,6 +33,13 @@ public class EcoGauge extends AppCompatActivity {
             globalEmissions;
     TextView comparisonNationalText, comparisonGlobalText;
 
+    /**
+     * Initializes UI components and calls updateLineChart, UpdatePieChart, updateComparisonText
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +54,8 @@ public class EcoGauge extends AppCompatActivity {
         globalEmissions = findViewById(R.id.GlobalEmissions);
         comparisonGlobalText = findViewById(R.id.comparisonGlobalText);
         comparisonNationalText = findViewById(R.id.comparisonNationalText);
+        BottomNavigationView navi = findViewById(R.id.bottomview);
+        navi.setSelectedItemId(R.id.ecogauge);
 
         String[] categories = getResources().getStringArray(R.array.timeValues);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, categories);
@@ -84,29 +90,35 @@ public class EcoGauge extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // Handle the case when no item is selected (optional)
+                updatePieChart.updateChartForTimePeriod("Daily");
+                updateLineChart.updateLineChartForTimePeriod("Daily");
+                customizeLegendFont(pieChart);
+                customizeLabelFont(pieChart);
             }
         });
 
 
     }
 
+    /**
+     * Get User ID
+     * @return user from fireBase
+     */
     public static String initializeFirebaseUser() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();
-        if (user != null) {
-            return "USER_ID";  // Return the actual user ID from Firebase
-        } else {
-            return "USER_ID";  // Fallback if no user is logged in
-        }
+        return auth.getUid();
     }
 
+    /**
+     * Custom Font for PieChart
+     * @param pieChart UI pieChart
+     */
     private void customizeLegendFont(PieChart pieChart) {
         // Get the legend from the pie chart
         Legend legend = pieChart.getLegend();
 
         // Load the custom font from res/font
-        Typeface customTypeface = ResourcesCompat.getFont(this, R.font.garet);
+        Typeface customTypeface = ResourcesCompat.getFont(EcoGauge.this, R.font.garet);
 
         // Set the custom font to the legend
         if (customTypeface != null) {
@@ -114,6 +126,10 @@ public class EcoGauge extends AppCompatActivity {
         }
     }
 
+    /**
+     * Custom Label for PieChart
+     * @param pieChart UI PieChart
+     */
     private void customizeLabelFont(PieChart pieChart) {
         // Load the custom font from res/font
         Typeface customTypeface = ResourcesCompat.getFont(this, R.font.garet);
@@ -126,6 +142,42 @@ public class EcoGauge extends AppCompatActivity {
         // Optional: Customize label text size and color
         pieChart.setEntryLabelTextSize(8f); // Adjust text size
         pieChart.setEntryLabelColor(Color.WHITE); // Adjust text color
+    }
+
+    /**
+     * Add Menu
+     * @param menu The options menu in which you place your items.
+     *
+     * @return true is menu is created
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option_menu, menu);
+        return true;
+    }
+
+    /**
+     * Handles what is clicked on menu
+     * @param item The menu item that was selected.
+     *
+     * @return true if something is selected in menu
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.ecotracker) {
+            Intent intent = new Intent(EcoGauge.this, EcoTrackerHomeActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.habit) {
+            // Handle ecotracker action'
+            Intent intent = new Intent(EcoGauge.this, HabitsMenu.class);
+            startActivity(intent);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
 }

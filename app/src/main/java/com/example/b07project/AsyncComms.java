@@ -10,7 +10,7 @@ public abstract class AsyncComms {
     boolean res;
 
     /**
-     * Default constructor, sets the result variable to false by default.
+     * Default constructor, sets the result variable res to false by default.
      */
     public AsyncComms() {
         this.res = false;

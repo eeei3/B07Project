@@ -14,31 +14,51 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Registration"
+        android:theme="@style/Theme.AppCompat.Light"
         tools:targetApi="31">
         <activity
             android:name=".EcoGauge"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Registration">
+            android:theme="@style/Base.Theme.BottomMenu">
+        </activity>
+        <activity
+            android:name=".SurveyActivity"
+            android:exported="true"
+            android:theme="@style/Base.Theme.BottomMenu">
+        </activity>
+        <activity
+            android:name=".ResultsActivity"
+            android:exported="true"
+            android:theme="@style/Base.Theme.BottomMenu">
+        </activity>
+        <activity
+            android:name=".HabitsMenu"
+            android:exported="true"
+            android:theme="@style/Base.Theme.BottomMenu">
+        </activity>
+        <activity
+            android:exported="true"
+            android:name=".EcoTrackerHomeActivity"
+            android:theme="@style/Base.Theme.BottomMenu">
+        </activity>
+        <activity
+            android:name=".LogActivitiesActivity"
+            android:exported="true"
+            android:theme="@style/Base.Theme.BottomMenu">
+        </activity>
+        <activity
+            android:name=".DetailPageActivity"
+            android:exported="true">
+        </activity>
+        <activity android:name=".EntryActivity"
+            android:exported="true"
+            android:theme="@style/Base.Theme.BottomMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".SurveyActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".ResultsActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".HabitsMenu"
-            android:exported="true">
-        </activity>
+    </activity>
     </application>
 
 </manifest>
