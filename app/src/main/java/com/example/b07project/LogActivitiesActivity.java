@@ -21,13 +21,15 @@ public class LogActivitiesActivity extends AppCompatActivity {
     private String selectedDay;
 
     //ui elements
-    private TextView titleTextView, inputDate;
+    private TextView inputDate;
     private Button buttonSave;
 
-    //transporation details
+    //transportation details
     private CheckBox checkboxDriveVehicle, checkboxPublicTransport, checkboxCyclingWalking, checkboxFlight;
     private LinearLayout vehicleDetailsLayout, publicTransportLayout, cyclingWalkingLayout, flightLayout;
-    private EditText inputDistanceDriving, inputTimeSpent, inputDistanceWalking, inputNumFlights;
+    private EditText inputDistanceDriving;
+    private EditText inputTimeSpent;
+    private EditText inputNumFlights;
     private Spinner spinnerVehicleType, spinnerTransportType, spinnerFlightType;
 
     //food consumption details
@@ -49,8 +51,14 @@ public class LogActivitiesActivity extends AppCompatActivity {
     private EditText inputBillAmount;
 
     //global variables
-    private String vehicleType, transportType, flightType, mealType, deviceType, purchaseType, BillType;
-    private double distanceDriven, cyclingTime, walkingCyclingDistance, BillAmount;
+    private String vehicleType;
+    private String transportType;
+    private String flightType;
+    private String mealType;
+    private String deviceType;
+    private String purchaseType;
+    private double distanceDriven;
+    private double cyclingTime;
     private int numFlights, numClothes, numDevices, numPurchases, numServings;
 
     @Override
@@ -92,7 +100,6 @@ public class LogActivitiesActivity extends AppCompatActivity {
 
     //initialize UI components by matching to front end IDs
     private void initializeUIComponents() {
-        titleTextView = findViewById(R.id.title_text_view);
         inputDate = findViewById(R.id.input_date);
         buttonSave = findViewById(R.id.button_save);
 
@@ -107,7 +114,6 @@ public class LogActivitiesActivity extends AppCompatActivity {
         flightLayout = findViewById(R.id.flight_layout);
         inputDistanceDriving = findViewById(R.id.input_distance_driving);
         inputTimeSpent = findViewById(R.id.input_time_spent);
-        inputDistanceWalking = findViewById(R.id.input_distance_walking);
         inputNumFlights = findViewById(R.id.input_num_flights);
         spinnerVehicleType = findViewById(R.id.spinner_vehicle_type);
         spinnerTransportType = findViewById(R.id.spinner_transport_type);
@@ -199,8 +205,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
     }
 
     private double calculateCyclingEmission() {
-        double emission = 0.0;
-        return emission;
+        return 0.0;
     }
 
     private double calculateFlightEmission() {
@@ -217,7 +222,7 @@ public class LogActivitiesActivity extends AppCompatActivity {
     }
 
     private double calculateMealEmission() {
-        double emission = 0.0;
+        double emission;
 
         switch (mealType) {
             case "Beef":
@@ -350,10 +355,6 @@ public class LogActivitiesActivity extends AppCompatActivity {
         return layout.getVisibility() == View.VISIBLE;
     }
 
-    private void displayToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
     private void saveData() {
         try {
             vehicleType = spinnerVehicleType.getSelectedItem().toString();
@@ -390,13 +391,12 @@ public class LogActivitiesActivity extends AppCompatActivity {
         distanceDriven = parseDouble(inputDistanceDriving);
         transportType = spinnerTransportType.getSelectedItem().toString();
         cyclingTime = parseDouble(inputTimeSpent);
-        walkingCyclingDistance = parseDouble(inputDistanceWalking);
         flightType = spinnerFlightType.getSelectedItem().toString();
         mealType = spinnerMealType.getSelectedItem().toString();
         deviceType = spinnerDeviceType.getSelectedItem().toString();
         purchaseType = spinnerPurchaseType.getSelectedItem().toString();
-        BillAmount = parseDouble(inputBillAmount);
-        BillType = spinnerBillType.getSelectedItem().toString();
+        double billAmount = parseDouble(inputBillAmount);
+        String billType = spinnerBillType.getSelectedItem().toString();
 
         calculateTransportationEmissions();
         calculateFoodEmissions();
@@ -417,8 +417,8 @@ public class LogActivitiesActivity extends AppCompatActivity {
                 numDevices,             // e.g., inputNumDevices
                 purchaseType,           // e.g., "Other" or "Furniture", etc.
                 numPurchases,           // e.g., inputNumOtherPurchases
-                BillAmount,             // e.g., inputBillAmount
-                BillType                // e.g., "Electricity" or "Gas"
+                billAmount,             // e.g., inputBillAmount
+                billType                // e.g., "Electricity" or "Gas"
         );
 
         //create a calculatedEmissions object using the total emissions data
