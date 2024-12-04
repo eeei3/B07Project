@@ -35,9 +35,6 @@ public class UpdatePieChart extends EcoGauge{
     public void updateChartForTimePeriod(String timePeriod) {
         if (timePeriod == null) return;
         switch (timePeriod) {
-            case "Daily":
-                updateForDaily();
-                break;
             case "Monthly":
                 updateForMonthly();
                 break;
@@ -54,8 +51,7 @@ public class UpdatePieChart extends EcoGauge{
      * Updates the chart for daily
      */
     public void updateForDaily() {
-        EcoGauge temp = new EcoGauge();
-        String userId = temp.initializeFirebaseUser();
+        String userId = EcoGauge.initializeFirebaseUser();
 
         // Firebase reference for daily emissions
         DatabaseReference dailyRef = FirebaseDatabase.getInstance()
@@ -164,8 +160,7 @@ public class UpdatePieChart extends EcoGauge{
      */
 
     public void updateForMonthly() {
-        EcoGauge temp = new EcoGauge();
-        String userId = temp.initializeFirebaseUser();
+        String userId = EcoGauge.initializeFirebaseUser();
 
         // Firebase reference for emissions over the last 30 days
         DatabaseReference emissionsRef = FirebaseDatabase.getInstance()
@@ -241,8 +236,7 @@ public class UpdatePieChart extends EcoGauge{
      * Updates the chart for yearly
      */
     public void updateForYearly() {
-        EcoGauge temp = new EcoGauge();
-        String userId = temp.initializeFirebaseUser();
+        String userId = EcoGauge.initializeFirebaseUser();
 
         // Firebase reference for emissions over the last 365 days
         DatabaseReference emissionsRef = FirebaseDatabase.getInstance()

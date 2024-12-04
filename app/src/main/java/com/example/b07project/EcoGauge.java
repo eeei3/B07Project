@@ -106,8 +106,7 @@ public class EcoGauge extends AppCompatActivity {
      */
     public static String initializeFirebaseUser() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        String user = auth.getUid();
-        return user;
+        return auth.getUid();
     }
 
     /**
