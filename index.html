@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoTracker - Download</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border-radius: 25px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .features {
+            text-align: left;
+            margin: 30px 0;
+        }
+        
+        .features h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .features ul {
+            list-style: none;
+        }
+        
+        .features li {
+            color: #555;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .features li:before {
+            content: "🌱";
+            position: absolute;
+            left: 0;
+        }
+        
+        .instructions {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .instructions h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ol {
+            color: #555;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            color: #856404;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .app-icon {
+                width: 100px;
+                height: 100px;
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="app-icon">🌱</div>
+        <h1>EcoTracker</h1>
+        <p class="subtitle">Track Your Carbon Footprint</p>
+        
+        <div class="description">
+            EcoTracker helps you monitor your environmental impact by tracking transportation, food, and shopping emissions. Make informed decisions to reduce your carbon footprint and live more sustainably.
+        </div>
+        
+        <div class="features">
+            <h3>Key Features:</h3>
+            <ul>
+                <li>Track transportation emissions</li>
+                <li>Monitor food carbon footprint</li>
+                <li>Log shopping activities</li>
+                <li>Calendar-based activity tracking</li>
+                <li>Visual charts and progress tracking</li>
+                <li>Personalized recommendations</li>
+            </ul>
+        </div>
+        
+        <a href="app-release.apk" class="download-btn" download="EcoTracker.apk">
+            📱 Download APK
+        </a>
+        
+        <div class="instructions">
+            <h4>Installation Instructions:</h4>
+            <ol>
+                <li>Download the APK file above</li>
+                <li>On your Android device, go to Settings > Security</li>
+                <li>Enable "Install from unknown sources" or "Allow from this source"</li>
+                <li>Open the downloaded APK file</li>
+                <li>Follow the installation prompts</li>
+                <li>Open EcoTracker and start tracking!</li>
+            </ol>
+        </div>
+        
+        <div class="warning">
+            <strong>Note:</strong> This app requires Android 7.0 (API level 24) or higher. Make sure to enable installation from unknown sources in your device settings before downloading.
+        </div>
+    </div>
+</body>
+</html>

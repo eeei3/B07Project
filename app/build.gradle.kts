@@ -1,3 +1,4 @@
+
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
@@ -18,6 +19,15 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("keystore/ecotracker-release-key.keystore")
+            storePassword = "ecotracker123"
+            keyAlias = "ecotracker-key-alias"
+            keyPassword = "ecotracker123"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -25,6 +35,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -34,7 +45,11 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
 }
+
+
+
 
 dependencies {
 
@@ -60,5 +75,5 @@ dependencies {
     implementation ("com.nineoldandroids:library:2.4.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation ("androidx.profileinstaller:profileinstaller:1.3.0")
-
 }
+
